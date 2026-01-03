@@ -11,3 +11,5 @@ export * from './integration';
 export * from './model';
 export * from './model-service/protocol';
 export * from './util';
+export * from './workflow';
+

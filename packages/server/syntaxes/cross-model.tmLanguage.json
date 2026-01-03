@@ -2,7 +2,8 @@
   "name": "cross-model",
   "scopeName": "source.cross-model",
   "fileTypes": [
-    ".cm"
+    ".cm",
+    ".workflow.cm"
   ],
   "patterns": [
     {
@@ -10,7 +11,7 @@
     },
     {
       "name": "keyword.control.cross-model",
-      "match": "\\b(0\\.\\.N|1\\.\\.N|TRUE|apply|attribute|attributes|baseNode|child|childCardinality|childRole|conceptual|conditions|cross-join|customProperties|datamodel|datatype|dependencies|description|diagram|edges|entity|expression|from|height|id|identifiers|inherits|inner-join|join|left-join|length|logical|mandatory|mapping|mappings|name|nodes|parent|parentCardinality|parentRole|precision|primary|relational|relationship|scale|sourceNode|sources|superNode|systemDiagram|target|targetNode|true|type|value|version|width|x|y)\\b"
+      "match": "\\b(0\\.\\.N|1\\.\\.N|TRUE|actionType|api|apiConfig|apiEndpoint|api_call|apply|attribute|attributes|author|auto|automationActions|automationConfig|baseNode|begin|branches|child|childCardinality|childRole|color|column|conceptual|concurrent|condition|conditions|configuration|containedNodes|cross-join|customProperties|dataType|datamodel|datatype|decision|decisionColumns|decision_table|dependencies|description|diagram|edge|edgeBinding|edges|end|entity|exception|expectedOutput|expectedValue|expression|from|height|id|identifiers|inherits|inner-join|inputColumns|inputData|isDefault|join|key|left-join|length|logical|mandatory|mapping|mappings|metadata|name|nodes|outputColumns|parallelBranches|parent|parentCardinality|parentRole|position|precision|primary|process|ref|referencePath|relational|relationship|rows|scale|script|source|sourceNode|sources|subprocess|superNode|swimlane|swimlanes|systemDiagram|tableData|tags|target|targetNode|testData|true|type|value|values|version|webhook|width|workflow|x|y)\\b"
     },
     {
       "name": "string.quoted.double.cross-model",

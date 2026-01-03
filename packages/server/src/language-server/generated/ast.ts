@@ -35,24 +35,51 @@ export type CrossModelKeywordNames =
     | ">"
     | ">="
     | "TRUE"
+    | "actionType"
+    | "api"
+    | "apiConfig"
+    | "apiEndpoint"
+    | "api_call"
     | "apply"
     | "attribute"
     | "attributes"
+    | "author"
+    | "auto"
+    | "automationActions"
+    | "automationConfig"
     | "baseNode"
+    | "begin"
+    | "branches"
     | "child"
     | "childCardinality"
     | "childRole"
+    | "color"
+    | "column"
     | "conceptual"
+    | "concurrent"
+    | "condition"
     | "conditions"
+    | "configuration"
+    | "containedNodes"
     | "cross-join"
     | "customProperties"
+    | "dataType"
     | "datamodel"
     | "datatype"
+    | "decision"
+    | "decisionColumns"
+    | "decision_table"
     | "dependencies"
     | "description"
     | "diagram"
+    | "edge"
+    | "edgeBinding"
     | "edges"
+    | "end"
     | "entity"
+    | "exception"
+    | "expectedOutput"
+    | "expectedValue"
     | "expression"
     | "from"
     | "height"
@@ -60,38 +87,67 @@ export type CrossModelKeywordNames =
     | "identifiers"
     | "inherits"
     | "inner-join"
+    | "inputColumns"
+    | "inputData"
+    | "isDefault"
     | "join"
+    | "key"
     | "left-join"
     | "length"
     | "logical"
     | "mandatory"
     | "mapping"
     | "mappings"
+    | "metadata"
     | "name"
     | "nodes"
+    | "outputColumns"
+    | "parallelBranches"
     | "parent"
     | "parentCardinality"
     | "parentRole"
+    | "position"
     | "precision"
     | "primary"
+    | "process"
+    | "ref"
+    | "referencePath"
     | "relational"
     | "relationship"
+    | "rows"
     | "scale"
+    | "script"
+    | "source"
     | "sourceNode"
     | "sources"
+    | "subprocess"
     | "superNode"
+    | "swimlane"
+    | "swimlanes"
     | "systemDiagram"
+    | "tableData"
+    | "tags"
     | "target"
     | "targetNode"
+    | "testData"
     | "true"
     | "type"
     | "value"
+    | "values"
     | "version"
+    | "webhook"
     | "width"
+    | "workflow"
     | "x"
     | "y";
 
 export type CrossModelTokenNames = CrossModelTerminalNames | CrossModelKeywordNames;
+
+export type AutomationActionType = 'api_call' | 'script' | 'webhook';
+
+export function isAutomationActionType(item: unknown): item is AutomationActionType {
+    return item === 'api_call' || item === 'script' || item === 'webhook';
+}
 
 export type BooleanExpression = NumberLiteral | SourceObjectAttributeReference | StringLiteral;
 
@@ -133,6 +189,19 @@ export function isSourceObjectCondition(item: unknown): item is SourceObjectCond
     return reflection.isInstance(item, SourceObjectCondition);
 }
 
+export interface ApiConfigItem extends langium.AstNode {
+    readonly $container: ApiNode;
+    readonly $type: 'ApiConfigItem';
+    configValue?: string;
+    key?: string;
+}
+
+export const ApiConfigItem = 'ApiConfigItem';
+
+export function isApiConfigItem(item: unknown): item is ApiConfigItem {
+    return reflection.isInstance(item, ApiConfigItem);
+}
+
 export interface AttributeMappingSource extends langium.AstNode {
     readonly $container: AttributeMapping;
     readonly $type: 'AttributeMappingSource';
@@ -157,6 +226,32 @@ export function isAttributeMappingTarget(item: unknown): item is AttributeMappin
     return reflection.isInstance(item, AttributeMappingTarget);
 }
 
+export interface AutomationConfig extends langium.AstNode {
+    readonly $container: AutoNode;
+    readonly $type: 'AutomationConfig';
+    configValue?: string;
+    key?: string;
+}
+
+export const AutomationConfig = 'AutomationConfig';
+
+export function isAutomationConfig(item: unknown): item is AutomationConfig {
+    return reflection.isInstance(item, AutomationConfig);
+}
+
+export interface AutomationConfigEntry extends langium.AstNode {
+    readonly $container: AutomationActionItem;
+    readonly $type: 'AutomationConfigEntry';
+    entryValue?: string;
+    key?: string;
+}
+
+export const AutomationConfigEntry = 'AutomationConfigEntry';
+
+export function isAutomationConfigEntry(item: unknown): item is AutomationConfigEntry {
+    return reflection.isInstance(item, AutomationConfigEntry);
+}
+
 export interface BinaryExpression extends langium.AstNode {
     readonly $container: JoinCondition;
     readonly $type: 'BinaryExpression';
@@ -178,6 +273,7 @@ export interface CrossModelRoot extends langium.AstNode {
     mapping?: Mapping;
     relationship?: Relationship;
     systemDiagram?: SystemDiagram;
+    workflowModel?: WorkflowModel;
 }
 
 export const CrossModelRoot = 'CrossModelRoot';
@@ -199,8 +295,23 @@ export function isDataModelDependency(item: unknown): item is DataModelDependenc
     return reflection.isInstance(item, DataModelDependency);
 }
 
+export interface DecisionTableData extends langium.AstNode {
+    readonly $container: DecisionTableNode;
+    readonly $type: 'DecisionTableData';
+    decisionColumns: Array<TableColumn>;
+    inputColumns: Array<TableColumn>;
+    outputColumns: Array<TableColumn>;
+    rows: Array<TableRow>;
+}
+
+export const DecisionTableData = 'DecisionTableData';
+
+export function isDecisionTableData(item: unknown): item is DecisionTableData {
+    return reflection.isInstance(item, DecisionTableData);
+}
+
 export interface IdentifiedObject extends langium.AstNode {
-    readonly $type: 'CustomProperty' | 'DataElement' | 'DataElementContainer' | 'DataElementContainerLink' | 'DataElementContainerMapping' | 'DataElementMapping' | 'DataModel' | 'IdentifiedObject' | 'InheritanceEdge' | 'LogicalAttribute' | 'LogicalEntity' | 'LogicalEntityNode' | 'LogicalEntityNodeAttribute' | 'LogicalIdentifier' | 'Mapping' | 'NamedObject' | 'Relationship' | 'RelationshipEdge' | 'SourceDataElementContainer' | 'SourceObject' | 'SourceObjectAttribute' | 'SystemDiagram' | 'SystemDiagramEdge' | 'TargetObjectAttribute';
+    readonly $type: 'ApiNode' | 'AutoNode' | 'AutomationActionItem' | 'BeginNode' | 'BranchCondition' | 'ConcurrentNode' | 'CustomProperty' | 'DataElement' | 'DataElementContainer' | 'DataElementContainerLink' | 'DataElementContainerMapping' | 'DataElementMapping' | 'DataModel' | 'DecisionNode' | 'DecisionTableNode' | 'EndNode' | 'ExceptionNode' | 'IdentifiedObject' | 'InheritanceEdge' | 'LogicalAttribute' | 'LogicalEntity' | 'LogicalEntityNode' | 'LogicalEntityNodeAttribute' | 'LogicalIdentifier' | 'Mapping' | 'NamedObject' | 'ParallelBranch' | 'ProcessNode' | 'Relationship' | 'RelationshipEdge' | 'SourceDataElementContainer' | 'SourceObject' | 'SourceObjectAttribute' | 'SubprocessNode' | 'Swimlane' | 'SystemDiagram' | 'SystemDiagramEdge' | 'TableColumn' | 'TableRow' | 'TargetObjectAttribute' | 'TestDataItem' | 'WorkflowEdge' | 'WorkflowModel' | 'WorkflowNode';
     id?: string;
 }
 
@@ -222,6 +333,18 @@ export function isJoinCondition(item: unknown): item is JoinCondition {
     return reflection.isInstance(item, JoinCondition);
 }
 
+export interface NodeReference extends langium.AstNode {
+    readonly $container: ParallelBranch;
+    readonly $type: 'NodeReference';
+    node: langium.Reference<WorkflowNode>;
+}
+
+export const NodeReference = 'NodeReference';
+
+export function isNodeReference(item: unknown): item is NodeReference {
+    return reflection.isInstance(item, NodeReference);
+}
+
 export interface NumberLiteral extends langium.AstNode {
     readonly $container: BinaryExpression;
     readonly $type: 'NumberLiteral';
@@ -232,6 +355,19 @@ export const NumberLiteral = 'NumberLiteral';
 
 export function isNumberLiteral(item: unknown): item is NumberLiteral {
     return reflection.isInstance(item, NumberLiteral);
+}
+
+export interface Position extends langium.AstNode {
+    readonly $container: Swimlane | WorkflowNode;
+    readonly $type: 'Position';
+    x: number;
+    y: number;
+}
+
+export const Position = 'Position';
+
+export function isPosition(item: unknown): item is Position {
+    return reflection.isInstance(item, Position);
 }
 
 export interface SourceObjectAttributeReference extends langium.AstNode {
@@ -270,6 +406,44 @@ export function isStringLiteral(item: unknown): item is StringLiteral {
     return reflection.isInstance(item, StringLiteral);
 }
 
+export interface SwimlaneNodeRef extends langium.AstNode {
+    readonly $container: Swimlane;
+    readonly $type: 'SwimlaneNodeRef';
+    node: langium.Reference<WorkflowNode>;
+}
+
+export const SwimlaneNodeRef = 'SwimlaneNodeRef';
+
+export function isSwimlaneNodeRef(item: unknown): item is SwimlaneNodeRef {
+    return reflection.isInstance(item, SwimlaneNodeRef);
+}
+
+export interface TableCellValue extends langium.AstNode {
+    readonly $container: TableRow;
+    readonly $type: 'TableCellValue';
+    cellValue?: string;
+    columnId?: string;
+}
+
+export const TableCellValue = 'TableCellValue';
+
+export function isTableCellValue(item: unknown): item is TableCellValue {
+    return reflection.isInstance(item, TableCellValue);
+}
+
+export interface TestDataEntry extends langium.AstNode {
+    readonly $container: TestDataItem;
+    readonly $type: 'TestDataEntry';
+    entryValue?: string;
+    key?: string;
+}
+
+export const TestDataEntry = 'TestDataEntry';
+
+export function isTestDataEntry(item: unknown): item is TestDataEntry {
+    return reflection.isInstance(item, TestDataEntry);
+}
+
 export interface WithCustomProperties extends langium.AstNode {
     readonly $type: 'AttributeMapping' | 'DataModel' | 'LogicalAttribute' | 'LogicalEntity' | 'LogicalEntityNodeAttribute' | 'LogicalIdentifier' | 'Mapping' | 'Relationship' | 'RelationshipAttribute' | 'SourceObject' | 'SourceObjectAttribute' | 'TargetObject' | 'TargetObjectAttribute' | 'WithCustomProperties';
     customProperties: Array<CustomProperty>;
@@ -279,6 +453,48 @@ export const WithCustomProperties = 'WithCustomProperties';
 
 export function isWithCustomProperties(item: unknown): item is WithCustomProperties {
     return reflection.isInstance(item, WithCustomProperties);
+}
+
+export interface WorkflowMetadata extends langium.AstNode {
+    readonly $container: WorkflowModel;
+    readonly $type: 'WorkflowMetadata';
+    author?: string;
+    tags: Array<string>;
+    version?: string;
+}
+
+export const WorkflowMetadata = 'WorkflowMetadata';
+
+export function isWorkflowMetadata(item: unknown): item is WorkflowMetadata {
+    return reflection.isInstance(item, WorkflowMetadata);
+}
+
+export interface AutomationActionItem extends IdentifiedObject {
+    readonly $container: WorkflowEdge | WorkflowNode;
+    readonly $type: 'AutomationActionItem';
+    actionName?: string;
+    actionType?: string;
+    configuration: Array<AutomationConfigEntry>;
+    edgeBinding?: string;
+}
+
+export const AutomationActionItem = 'AutomationActionItem';
+
+export function isAutomationActionItem(item: unknown): item is AutomationActionItem {
+    return reflection.isInstance(item, AutomationActionItem);
+}
+
+export interface BranchCondition extends IdentifiedObject {
+    readonly $container: DecisionNode;
+    readonly $type: 'BranchCondition';
+    isDefault: boolean;
+    value?: string;
+}
+
+export const BranchCondition = 'BranchCondition';
+
+export function isBranchCondition(item: unknown): item is BranchCondition {
+    return reflection.isInstance(item, BranchCondition);
 }
 
 export interface DataElementContainerMapping extends IdentifiedObject {
@@ -319,7 +535,7 @@ export function isLogicalEntityNode(item: unknown): item is LogicalEntityNode {
 }
 
 export interface NamedObject extends IdentifiedObject {
-    readonly $type: 'CustomProperty' | 'DataElement' | 'DataElementContainer' | 'DataElementContainerLink' | 'DataModel' | 'LogicalAttribute' | 'LogicalEntity' | 'LogicalEntityNodeAttribute' | 'LogicalIdentifier' | 'NamedObject' | 'Relationship' | 'SourceObjectAttribute' | 'TargetObjectAttribute';
+    readonly $type: 'ApiNode' | 'AutoNode' | 'BeginNode' | 'ConcurrentNode' | 'CustomProperty' | 'DataElement' | 'DataElementContainer' | 'DataElementContainerLink' | 'DataModel' | 'DecisionNode' | 'DecisionTableNode' | 'EndNode' | 'ExceptionNode' | 'LogicalAttribute' | 'LogicalEntity' | 'LogicalEntityNodeAttribute' | 'LogicalIdentifier' | 'NamedObject' | 'ProcessNode' | 'Relationship' | 'SourceObjectAttribute' | 'SubprocessNode' | 'Swimlane' | 'TargetObjectAttribute' | 'WorkflowModel' | 'WorkflowNode';
     description?: string;
     name?: string;
 }
@@ -328,6 +544,19 @@ export const NamedObject = 'NamedObject';
 
 export function isNamedObject(item: unknown): item is NamedObject {
     return reflection.isInstance(item, NamedObject);
+}
+
+export interface ParallelBranch extends IdentifiedObject {
+    readonly $container: ConcurrentNode;
+    readonly $type: 'ParallelBranch';
+    branchName?: string;
+    nodeRefs: Array<NodeReference>;
+}
+
+export const ParallelBranch = 'ParallelBranch';
+
+export function isParallelBranch(item: unknown): item is ParallelBranch {
+    return reflection.isInstance(item, ParallelBranch);
 }
 
 export interface SourceDataElementContainer extends IdentifiedObject {
@@ -362,6 +591,64 @@ export const SystemDiagramEdge = 'SystemDiagramEdge';
 
 export function isSystemDiagramEdge(item: unknown): item is SystemDiagramEdge {
     return reflection.isInstance(item, SystemDiagramEdge);
+}
+
+export interface TableColumn extends IdentifiedObject {
+    readonly $container: DecisionTableData;
+    readonly $type: 'TableColumn';
+    columnName?: string;
+    dataType?: string;
+}
+
+export const TableColumn = 'TableColumn';
+
+export function isTableColumn(item: unknown): item is TableColumn {
+    return reflection.isInstance(item, TableColumn);
+}
+
+export interface TableRow extends IdentifiedObject {
+    readonly $container: DecisionTableData;
+    readonly $type: 'TableRow';
+    values: Array<TableCellValue>;
+}
+
+export const TableRow = 'TableRow';
+
+export function isTableRow(item: unknown): item is TableRow {
+    return reflection.isInstance(item, TableRow);
+}
+
+export interface TestDataItem extends IdentifiedObject {
+    readonly $container: WorkflowEdge | WorkflowNode;
+    readonly $type: 'TestDataItem';
+    edgeBinding?: string;
+    expectedOutput: Array<TestDataEntry>;
+    inputData: Array<TestDataEntry>;
+    testName?: string;
+}
+
+export const TestDataItem = 'TestDataItem';
+
+export function isTestDataItem(item: unknown): item is TestDataItem {
+    return reflection.isInstance(item, TestDataItem);
+}
+
+export interface WorkflowEdge extends IdentifiedObject {
+    readonly $container: WorkflowModel;
+    readonly $type: 'WorkflowEdge';
+    automationActions: Array<AutomationActionItem>;
+    condition?: string;
+    dataType?: string;
+    edgeValue?: string;
+    source: langium.Reference<WorkflowNode>;
+    target: langium.Reference<WorkflowNode>;
+    testData: Array<TestDataItem>;
+}
+
+export const WorkflowEdge = 'WorkflowEdge';
+
+export function isWorkflowEdge(item: unknown): item is WorkflowEdge {
+    return reflection.isInstance(item, WorkflowEdge);
 }
 
 export interface AttributeMapping extends WithCustomProperties {
@@ -550,6 +837,51 @@ export function isDataElementContainerLink(item: unknown): item is DataElementCo
     return reflection.isInstance(item, DataElementContainerLink);
 }
 
+export interface Swimlane extends NamedObject {
+    readonly $container: WorkflowModel;
+    readonly $type: 'Swimlane';
+    color?: string;
+    containedNodes: Array<SwimlaneNodeRef>;
+    height?: number;
+    position?: Position;
+    width?: number;
+}
+
+export const Swimlane = 'Swimlane';
+
+export function isSwimlane(item: unknown): item is Swimlane {
+    return reflection.isInstance(item, Swimlane);
+}
+
+export interface WorkflowModel extends NamedObject {
+    readonly $container: CrossModelRoot;
+    readonly $type: 'WorkflowModel';
+    edges: Array<WorkflowEdge>;
+    metadata?: WorkflowMetadata;
+    nodes: Array<WorkflowNode>;
+    swimlanes: Array<Swimlane>;
+}
+
+export const WorkflowModel = 'WorkflowModel';
+
+export function isWorkflowModel(item: unknown): item is WorkflowModel {
+    return reflection.isInstance(item, WorkflowModel);
+}
+
+export interface WorkflowNode extends NamedObject {
+    readonly $type: 'ApiNode' | 'AutoNode' | 'BeginNode' | 'ConcurrentNode' | 'DecisionNode' | 'DecisionTableNode' | 'EndNode' | 'ExceptionNode' | 'ProcessNode' | 'SubprocessNode' | 'WorkflowNode';
+    automationActions: Array<AutomationActionItem>;
+    nodeType: string;
+    position?: Position;
+    testData: Array<TestDataItem>;
+}
+
+export const WorkflowNode = 'WorkflowNode';
+
+export function isWorkflowNode(item: unknown): item is WorkflowNode {
+    return reflection.isInstance(item, WorkflowNode);
+}
+
 export interface InheritanceEdge extends SystemDiagramEdge {
     readonly $type: 'InheritanceEdge';
     baseNode: langium.Reference<LogicalEntityNode>;
@@ -605,12 +937,130 @@ export function isTargetObjectAttribute(item: unknown): item is TargetObjectAttr
     return reflection.isInstance(item, TargetObjectAttribute);
 }
 
+export interface ApiNode extends WorkflowNode {
+    readonly $type: 'ApiNode';
+    apiConfig: Array<ApiConfigItem>;
+    apiEndpoint?: string;
+}
+
+export const ApiNode = 'ApiNode';
+
+export function isApiNode(item: unknown): item is ApiNode {
+    return reflection.isInstance(item, ApiNode);
+}
+
+export interface AutoNode extends WorkflowNode {
+    readonly $type: 'AutoNode';
+    automationConfig: Array<AutomationConfig>;
+}
+
+export const AutoNode = 'AutoNode';
+
+export function isAutoNode(item: unknown): item is AutoNode {
+    return reflection.isInstance(item, AutoNode);
+}
+
+export interface BeginNode extends WorkflowNode {
+    readonly $type: 'BeginNode';
+}
+
+export const BeginNode = 'BeginNode';
+
+export function isBeginNode(item: unknown): item is BeginNode {
+    return reflection.isInstance(item, BeginNode);
+}
+
+export interface ConcurrentNode extends WorkflowNode {
+    readonly $type: 'ConcurrentNode';
+    parallelBranches: Array<ParallelBranch>;
+}
+
+export const ConcurrentNode = 'ConcurrentNode';
+
+export function isConcurrentNode(item: unknown): item is ConcurrentNode {
+    return reflection.isInstance(item, ConcurrentNode);
+}
+
+export interface DecisionNode extends WorkflowNode {
+    readonly $type: 'DecisionNode';
+    branches: Array<BranchCondition>;
+}
+
+export const DecisionNode = 'DecisionNode';
+
+export function isDecisionNode(item: unknown): item is DecisionNode {
+    return reflection.isInstance(item, DecisionNode);
+}
+
+export interface DecisionTableNode extends WorkflowNode {
+    readonly $type: 'DecisionTableNode';
+    tableData?: DecisionTableData;
+}
+
+export const DecisionTableNode = 'DecisionTableNode';
+
+export function isDecisionTableNode(item: unknown): item is DecisionTableNode {
+    return reflection.isInstance(item, DecisionTableNode);
+}
+
+export interface EndNode extends WorkflowNode {
+    readonly $type: 'EndNode';
+    expectedValue?: string;
+}
+
+export const EndNode = 'EndNode';
+
+export function isEndNode(item: unknown): item is EndNode {
+    return reflection.isInstance(item, EndNode);
+}
+
+export interface ExceptionNode extends WorkflowNode {
+    readonly $type: 'ExceptionNode';
+    expectedValue?: string;
+}
+
+export const ExceptionNode = 'ExceptionNode';
+
+export function isExceptionNode(item: unknown): item is ExceptionNode {
+    return reflection.isInstance(item, ExceptionNode);
+}
+
+export interface ProcessNode extends WorkflowNode {
+    readonly $type: 'ProcessNode';
+}
+
+export const ProcessNode = 'ProcessNode';
+
+export function isProcessNode(item: unknown): item is ProcessNode {
+    return reflection.isInstance(item, ProcessNode);
+}
+
+export interface SubprocessNode extends WorkflowNode {
+    readonly $type: 'SubprocessNode';
+    referencePath?: string;
+}
+
+export const SubprocessNode = 'SubprocessNode';
+
+export function isSubprocessNode(item: unknown): item is SubprocessNode {
+    return reflection.isInstance(item, SubprocessNode);
+}
+
 export type CrossModelAstType = {
+    ApiConfigItem: ApiConfigItem
+    ApiNode: ApiNode
     AttributeMapping: AttributeMapping
     AttributeMappingSource: AttributeMappingSource
     AttributeMappingTarget: AttributeMappingTarget
+    AutoNode: AutoNode
+    AutomationActionItem: AutomationActionItem
+    AutomationConfig: AutomationConfig
+    AutomationConfigEntry: AutomationConfigEntry
+    BeginNode: BeginNode
     BinaryExpression: BinaryExpression
     BooleanExpression: BooleanExpression
+    BranchCondition: BranchCondition
+    ConcurrentNode: ConcurrentNode
     CrossModelRoot: CrossModelRoot
     CustomProperty: CustomProperty
     DataElement: DataElement
@@ -620,6 +1070,11 @@ export type CrossModelAstType = {
     DataElementMapping: DataElementMapping
     DataModel: DataModel
     DataModelDependency: DataModelDependency
+    DecisionNode: DecisionNode
+    DecisionTableData: DecisionTableData
+    DecisionTableNode: DecisionTableNode
+    EndNode: EndNode
+    ExceptionNode: ExceptionNode
     IdentifiedObject: IdentifiedObject
     InheritanceEdge: InheritanceEdge
     JoinCondition: JoinCondition
@@ -630,7 +1085,11 @@ export type CrossModelAstType = {
     LogicalIdentifier: LogicalIdentifier
     Mapping: Mapping
     NamedObject: NamedObject
+    NodeReference: NodeReference
     NumberLiteral: NumberLiteral
+    ParallelBranch: ParallelBranch
+    Position: Position
+    ProcessNode: ProcessNode
     Relationship: Relationship
     RelationshipAttribute: RelationshipAttribute
     RelationshipEdge: RelationshipEdge
@@ -641,40 +1100,74 @@ export type CrossModelAstType = {
     SourceObjectCondition: SourceObjectCondition
     SourceObjectDependency: SourceObjectDependency
     StringLiteral: StringLiteral
+    SubprocessNode: SubprocessNode
+    Swimlane: Swimlane
+    SwimlaneNodeRef: SwimlaneNodeRef
     SystemDiagram: SystemDiagram
     SystemDiagramEdge: SystemDiagramEdge
+    TableCellValue: TableCellValue
+    TableColumn: TableColumn
+    TableRow: TableRow
     TargetObject: TargetObject
     TargetObjectAttribute: TargetObjectAttribute
+    TestDataEntry: TestDataEntry
+    TestDataItem: TestDataItem
     WithCustomProperties: WithCustomProperties
+    WorkflowEdge: WorkflowEdge
+    WorkflowMetadata: WorkflowMetadata
+    WorkflowModel: WorkflowModel
+    WorkflowNode: WorkflowNode
 }
 
 export class CrossModelAstReflection extends langium.AbstractAstReflection {
 
     getAllTypes(): string[] {
-        return [AttributeMapping, AttributeMappingSource, AttributeMappingTarget, BinaryExpression, BooleanExpression, CrossModelRoot, CustomProperty, DataElement, DataElementContainer, DataElementContainerLink, DataElementContainerMapping, DataElementMapping, DataModel, DataModelDependency, IdentifiedObject, InheritanceEdge, JoinCondition, LogicalAttribute, LogicalEntity, LogicalEntityNode, LogicalEntityNodeAttribute, LogicalIdentifier, Mapping, NamedObject, NumberLiteral, Relationship, RelationshipAttribute, RelationshipEdge, SourceDataElementContainer, SourceObject, SourceObjectAttribute, SourceObjectAttributeReference, SourceObjectCondition, SourceObjectDependency, StringLiteral, SystemDiagram, SystemDiagramEdge, TargetObject, TargetObjectAttribute, WithCustomProperties];
+        return [ApiConfigItem, ApiNode, AttributeMapping, AttributeMappingSource, AttributeMappingTarget, AutoNode, AutomationActionItem, AutomationConfig, AutomationConfigEntry, BeginNode, BinaryExpression, BooleanExpression, BranchCondition, ConcurrentNode, CrossModelRoot, CustomProperty, DataElement, DataElementContainer, DataElementContainerLink, DataElementContainerMapping, DataElementMapping, DataModel, DataModelDependency, DecisionNode, DecisionTableData, DecisionTableNode, EndNode, ExceptionNode, IdentifiedObject, InheritanceEdge, JoinCondition, LogicalAttribute, LogicalEntity, LogicalEntityNode, LogicalEntityNodeAttribute, LogicalIdentifier, Mapping, NamedObject, NodeReference, NumberLiteral, ParallelBranch, Position, ProcessNode, Relationship, RelationshipAttribute, RelationshipEdge, SourceDataElementContainer, SourceObject, SourceObjectAttribute, SourceObjectAttributeReference, SourceObjectCondition, SourceObjectDependency, StringLiteral, SubprocessNode, Swimlane, SwimlaneNodeRef, SystemDiagram, SystemDiagramEdge, TableCellValue, TableColumn, TableRow, TargetObject, TargetObjectAttribute, TestDataEntry, TestDataItem, WithCustomProperties, WorkflowEdge, WorkflowMetadata, WorkflowModel, WorkflowNode];
     }
 
     protected override computeIsSubtype(subtype: string, supertype: string): boolean {
         switch (subtype) {
+            case ApiNode:
+            case AutoNode:
+            case BeginNode:
+            case ConcurrentNode:
+            case DecisionNode:
+            case DecisionTableNode:
+            case EndNode:
+            case ExceptionNode:
+            case ProcessNode:
+            case SubprocessNode: {
+                return this.isSubtype(WorkflowNode, supertype);
+            }
             case AttributeMapping:
             case RelationshipAttribute:
             case TargetObject: {
                 return this.isSubtype(WithCustomProperties, supertype);
             }
-            case CustomProperty:
-            case DataElement:
-            case DataElementContainer:
-            case DataElementContainerLink: {
-                return this.isSubtype(NamedObject, supertype);
-            }
+            case AutomationActionItem:
+            case BranchCondition:
             case DataElementContainerMapping:
             case DataElementMapping:
             case LogicalEntityNode:
             case NamedObject:
+            case ParallelBranch:
             case SourceDataElementContainer:
             case SystemDiagram:
-            case SystemDiagramEdge: {
+            case SystemDiagramEdge:
+            case TableColumn:
+            case TableRow:
+            case TestDataItem:
+            case WorkflowEdge: {
                 return this.isSubtype(IdentifiedObject, supertype);
+            }
+            case CustomProperty:
+            case DataElement:
+            case DataElementContainer:
+            case DataElementContainerLink:
+            case Swimlane:
+            case WorkflowModel:
+            case WorkflowNode: {
+                return this.isSubtype(NamedObject, supertype);
             }
             case DataModel:
             case LogicalIdentifier: {
@@ -750,6 +1243,12 @@ export class CrossModelAstReflection extends langium.AbstractAstReflection {
             case 'RelationshipAttribute:parent': {
                 return LogicalAttribute;
             }
+            case 'NodeReference:node':
+            case 'SwimlaneNodeRef:node':
+            case 'WorkflowEdge:source':
+            case 'WorkflowEdge:target': {
+                return WorkflowNode;
+            }
             case 'RelationshipEdge:relationship': {
                 return Relationship;
             }
@@ -764,6 +1263,15 @@ export class CrossModelAstReflection extends langium.AbstractAstReflection {
 
     getTypeMetaData(type: string): langium.TypeMetaData {
         switch (type) {
+            case ApiConfigItem: {
+                return {
+                    name: ApiConfigItem,
+                    properties: [
+                        { name: 'configValue' },
+                        { name: 'key' }
+                    ]
+                };
+            }
             case AttributeMappingSource: {
                 return {
                     name: AttributeMappingSource,
@@ -777,6 +1285,24 @@ export class CrossModelAstReflection extends langium.AbstractAstReflection {
                     name: AttributeMappingTarget,
                     properties: [
                         { name: 'value' }
+                    ]
+                };
+            }
+            case AutomationConfig: {
+                return {
+                    name: AutomationConfig,
+                    properties: [
+                        { name: 'configValue' },
+                        { name: 'key' }
+                    ]
+                };
+            }
+            case AutomationConfigEntry: {
+                return {
+                    name: AutomationConfigEntry,
+                    properties: [
+                        { name: 'entryValue' },
+                        { name: 'key' }
                     ]
                 };
             }
@@ -798,7 +1324,8 @@ export class CrossModelAstReflection extends langium.AbstractAstReflection {
                         { name: 'entity' },
                         { name: 'mapping' },
                         { name: 'relationship' },
-                        { name: 'systemDiagram' }
+                        { name: 'systemDiagram' },
+                        { name: 'workflowModel' }
                     ]
                 };
             }
@@ -808,6 +1335,17 @@ export class CrossModelAstReflection extends langium.AbstractAstReflection {
                     properties: [
                         { name: 'datamodel' },
                         { name: 'version' }
+                    ]
+                };
+            }
+            case DecisionTableData: {
+                return {
+                    name: DecisionTableData,
+                    properties: [
+                        { name: 'decisionColumns', defaultValue: [] },
+                        { name: 'inputColumns', defaultValue: [] },
+                        { name: 'outputColumns', defaultValue: [] },
+                        { name: 'rows', defaultValue: [] }
                     ]
                 };
             }
@@ -827,11 +1365,28 @@ export class CrossModelAstReflection extends langium.AbstractAstReflection {
                     ]
                 };
             }
+            case NodeReference: {
+                return {
+                    name: NodeReference,
+                    properties: [
+                        { name: 'node' }
+                    ]
+                };
+            }
             case NumberLiteral: {
                 return {
                     name: NumberLiteral,
                     properties: [
                         { name: 'value' }
+                    ]
+                };
+            }
+            case Position: {
+                return {
+                    name: Position,
+                    properties: [
+                        { name: 'x' },
+                        { name: 'y' }
                     ]
                 };
             }
@@ -859,11 +1414,69 @@ export class CrossModelAstReflection extends langium.AbstractAstReflection {
                     ]
                 };
             }
+            case SwimlaneNodeRef: {
+                return {
+                    name: SwimlaneNodeRef,
+                    properties: [
+                        { name: 'node' }
+                    ]
+                };
+            }
+            case TableCellValue: {
+                return {
+                    name: TableCellValue,
+                    properties: [
+                        { name: 'cellValue' },
+                        { name: 'columnId' }
+                    ]
+                };
+            }
+            case TestDataEntry: {
+                return {
+                    name: TestDataEntry,
+                    properties: [
+                        { name: 'entryValue' },
+                        { name: 'key' }
+                    ]
+                };
+            }
             case WithCustomProperties: {
                 return {
                     name: WithCustomProperties,
                     properties: [
                         { name: 'customProperties', defaultValue: [] }
+                    ]
+                };
+            }
+            case WorkflowMetadata: {
+                return {
+                    name: WorkflowMetadata,
+                    properties: [
+                        { name: 'author' },
+                        { name: 'tags', defaultValue: [] },
+                        { name: 'version' }
+                    ]
+                };
+            }
+            case AutomationActionItem: {
+                return {
+                    name: AutomationActionItem,
+                    properties: [
+                        { name: 'actionName' },
+                        { name: 'actionType' },
+                        { name: 'configuration', defaultValue: [] },
+                        { name: 'edgeBinding' },
+                        { name: 'id' }
+                    ]
+                };
+            }
+            case BranchCondition: {
+                return {
+                    name: BranchCondition,
+                    properties: [
+                        { name: 'id' },
+                        { name: 'isDefault', defaultValue: false },
+                        { name: 'value' }
                     ]
                 };
             }
@@ -906,6 +1519,16 @@ export class CrossModelAstReflection extends langium.AbstractAstReflection {
                     ]
                 };
             }
+            case ParallelBranch: {
+                return {
+                    name: ParallelBranch,
+                    properties: [
+                        { name: 'branchName' },
+                        { name: 'id' },
+                        { name: 'nodeRefs', defaultValue: [] }
+                    ]
+                };
+            }
             case SourceDataElementContainer: {
                 return {
                     name: SourceDataElementContainer,
@@ -929,6 +1552,52 @@ export class CrossModelAstReflection extends langium.AbstractAstReflection {
                     name: SystemDiagramEdge,
                     properties: [
                         { name: 'id' }
+                    ]
+                };
+            }
+            case TableColumn: {
+                return {
+                    name: TableColumn,
+                    properties: [
+                        { name: 'columnName' },
+                        { name: 'dataType' },
+                        { name: 'id' }
+                    ]
+                };
+            }
+            case TableRow: {
+                return {
+                    name: TableRow,
+                    properties: [
+                        { name: 'id' },
+                        { name: 'values', defaultValue: [] }
+                    ]
+                };
+            }
+            case TestDataItem: {
+                return {
+                    name: TestDataItem,
+                    properties: [
+                        { name: 'edgeBinding' },
+                        { name: 'expectedOutput', defaultValue: [] },
+                        { name: 'id' },
+                        { name: 'inputData', defaultValue: [] },
+                        { name: 'testName' }
+                    ]
+                };
+            }
+            case WorkflowEdge: {
+                return {
+                    name: WorkflowEdge,
+                    properties: [
+                        { name: 'automationActions', defaultValue: [] },
+                        { name: 'condition' },
+                        { name: 'dataType' },
+                        { name: 'edgeValue' },
+                        { name: 'id' },
+                        { name: 'source' },
+                        { name: 'target' },
+                        { name: 'testData', defaultValue: [] }
                     ]
                 };
             }
@@ -1104,6 +1773,49 @@ export class CrossModelAstReflection extends langium.AbstractAstReflection {
                     ]
                 };
             }
+            case Swimlane: {
+                return {
+                    name: Swimlane,
+                    properties: [
+                        { name: 'color' },
+                        { name: 'containedNodes', defaultValue: [] },
+                        { name: 'description' },
+                        { name: 'height' },
+                        { name: 'id' },
+                        { name: 'name' },
+                        { name: 'position' },
+                        { name: 'width' }
+                    ]
+                };
+            }
+            case WorkflowModel: {
+                return {
+                    name: WorkflowModel,
+                    properties: [
+                        { name: 'description' },
+                        { name: 'edges', defaultValue: [] },
+                        { name: 'id' },
+                        { name: 'metadata' },
+                        { name: 'name' },
+                        { name: 'nodes', defaultValue: [] },
+                        { name: 'swimlanes', defaultValue: [] }
+                    ]
+                };
+            }
+            case WorkflowNode: {
+                return {
+                    name: WorkflowNode,
+                    properties: [
+                        { name: 'automationActions', defaultValue: [] },
+                        { name: 'description' },
+                        { name: 'id' },
+                        { name: 'name' },
+                        { name: 'nodeType' },
+                        { name: 'position' },
+                        { name: 'testData', defaultValue: [] }
+                    ]
+                };
+            }
             case InheritanceEdge: {
                 return {
                     name: InheritanceEdge,
@@ -1170,6 +1882,155 @@ export class CrossModelAstReflection extends langium.AbstractAstReflection {
                         { name: 'name' },
                         { name: 'precision' },
                         { name: 'scale' }
+                    ]
+                };
+            }
+            case ApiNode: {
+                return {
+                    name: ApiNode,
+                    properties: [
+                        { name: 'apiConfig', defaultValue: [] },
+                        { name: 'apiEndpoint' },
+                        { name: 'automationActions', defaultValue: [] },
+                        { name: 'description' },
+                        { name: 'id' },
+                        { name: 'name' },
+                        { name: 'nodeType' },
+                        { name: 'position' },
+                        { name: 'testData', defaultValue: [] }
+                    ]
+                };
+            }
+            case AutoNode: {
+                return {
+                    name: AutoNode,
+                    properties: [
+                        { name: 'automationActions', defaultValue: [] },
+                        { name: 'automationConfig', defaultValue: [] },
+                        { name: 'description' },
+                        { name: 'id' },
+                        { name: 'name' },
+                        { name: 'nodeType' },
+                        { name: 'position' },
+                        { name: 'testData', defaultValue: [] }
+                    ]
+                };
+            }
+            case BeginNode: {
+                return {
+                    name: BeginNode,
+                    properties: [
+                        { name: 'automationActions', defaultValue: [] },
+                        { name: 'description' },
+                        { name: 'id' },
+                        { name: 'name' },
+                        { name: 'nodeType' },
+                        { name: 'position' },
+                        { name: 'testData', defaultValue: [] }
+                    ]
+                };
+            }
+            case ConcurrentNode: {
+                return {
+                    name: ConcurrentNode,
+                    properties: [
+                        { name: 'automationActions', defaultValue: [] },
+                        { name: 'description' },
+                        { name: 'id' },
+                        { name: 'name' },
+                        { name: 'nodeType' },
+                        { name: 'parallelBranches', defaultValue: [] },
+                        { name: 'position' },
+                        { name: 'testData', defaultValue: [] }
+                    ]
+                };
+            }
+            case DecisionNode: {
+                return {
+                    name: DecisionNode,
+                    properties: [
+                        { name: 'automationActions', defaultValue: [] },
+                        { name: 'branches', defaultValue: [] },
+                        { name: 'description' },
+                        { name: 'id' },
+                        { name: 'name' },
+                        { name: 'nodeType' },
+                        { name: 'position' },
+                        { name: 'testData', defaultValue: [] }
+                    ]
+                };
+            }
+            case DecisionTableNode: {
+                return {
+                    name: DecisionTableNode,
+                    properties: [
+                        { name: 'automationActions', defaultValue: [] },
+                        { name: 'description' },
+                        { name: 'id' },
+                        { name: 'name' },
+                        { name: 'nodeType' },
+                        { name: 'position' },
+                        { name: 'tableData' },
+                        { name: 'testData', defaultValue: [] }
+                    ]
+                };
+            }
+            case EndNode: {
+                return {
+                    name: EndNode,
+                    properties: [
+                        { name: 'automationActions', defaultValue: [] },
+                        { name: 'description' },
+                        { name: 'expectedValue' },
+                        { name: 'id' },
+                        { name: 'name' },
+                        { name: 'nodeType' },
+                        { name: 'position' },
+                        { name: 'testData', defaultValue: [] }
+                    ]
+                };
+            }
+            case ExceptionNode: {
+                return {
+                    name: ExceptionNode,
+                    properties: [
+                        { name: 'automationActions', defaultValue: [] },
+                        { name: 'description' },
+                        { name: 'expectedValue' },
+                        { name: 'id' },
+                        { name: 'name' },
+                        { name: 'nodeType' },
+                        { name: 'position' },
+                        { name: 'testData', defaultValue: [] }
+                    ]
+                };
+            }
+            case ProcessNode: {
+                return {
+                    name: ProcessNode,
+                    properties: [
+                        { name: 'automationActions', defaultValue: [] },
+                        { name: 'description' },
+                        { name: 'id' },
+                        { name: 'name' },
+                        { name: 'nodeType' },
+                        { name: 'position' },
+                        { name: 'testData', defaultValue: [] }
+                    ]
+                };
+            }
+            case SubprocessNode: {
+                return {
+                    name: SubprocessNode,
+                    properties: [
+                        { name: 'automationActions', defaultValue: [] },
+                        { name: 'description' },
+                        { name: 'id' },
+                        { name: 'name' },
+                        { name: 'nodeType' },
+                        { name: 'position' },
+                        { name: 'referencePath' },
+                        { name: 'testData', defaultValue: [] }
                     ]
                 };
             }

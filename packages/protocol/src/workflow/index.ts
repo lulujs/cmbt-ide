@@ -8,6 +8,9 @@ export * from './types';
 // Node types and utilities
 export * from './node';
 
+// Node manager classes
+export * from './node-manager';
+
 // Edge types and utilities
 export * from './edge';
 

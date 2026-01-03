@@ -3,3 +3,5 @@
  ********************************************************************************/
 
 export * from './workflow-language-server.js';
+export * from './workflow-serializer.js';
+export * from './workflow-validator.js';

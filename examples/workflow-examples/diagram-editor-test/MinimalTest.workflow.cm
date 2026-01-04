@@ -1,0 +1,15 @@
+workflow:
+    id: minimal_test
+    name: "最小测试"
+    nodes:
+        - begin:
+            id: start
+            name: "开始"
+        - end:
+            id: finish
+            name: "结束"
+    edges:
+        - edge:
+            id: connect
+            source: start
+            target: finish

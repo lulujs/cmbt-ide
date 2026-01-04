@@ -93,6 +93,21 @@ export class WorkflowStorage implements SourceModelStorage, ClientSessionListene
       const doc = document ?? (await this.state.modelService.request(uri));
 
       if (doc) {
+         // 验证文档内容 - Validate document content
+         if (!doc.root) {
+            this.logger.error('Document root is undefined for ' + uri);
+            return doc;
+         }
+
+         if (!doc.root.workflowModel) {
+            this.logger.error('Workflow model is undefined in document root for ' + uri);
+            return doc;
+         }
+
+         this.logger.info(
+            `Updating workflow model for ${uri} with ${doc.root.workflowModel.nodes?.length || 0} nodes and ${doc.root.workflowModel.edges?.length || 0} edges`
+         );
+
          this.state.setSemanticRoot(uri, doc.root);
          const actions = await this.updateEditMode(doc);
          if (actions.length > 0) {
@@ -141,6 +156,30 @@ export class WorkflowStorage implements SourceModelStorage, ClientSessionListene
    saveSourceModel(action: SaveModelAction): MaybePromise<void> {
       const saveUri = this.getFileUri(action);
 
+      // 添加保护性检查 - Add protective checks
+      if (!this.state.semanticRoot) {
+         this.logger.error('Cannot save workflow model: semantic root is undefined for ' + saveUri);
+         return;
+      }
+
+      if (!this.state.semanticRoot.workflowModel) {
+         this.logger.error('Cannot save workflow model: workflow model is undefined for ' + saveUri);
+         return;
+      }
+
+      // 验证序列化输出 - Validate serialization output
+      try {
+         const serializedText = this.state.semanticSerializer.serialize(this.state.semanticRoot);
+         if (!serializedText || serializedText.trim().length === 0) {
+            this.logger.error('Cannot save workflow model: serialized text is empty for ' + saveUri);
+            return;
+         }
+         this.logger.info(`Saving workflow model to ${saveUri} with text length: ${serializedText.length}`);
+      } catch (error) {
+         this.logger.error('Cannot save workflow model: serialization failed for ' + saveUri, error);
+         return;
+      }
+
       // 保存主文档
       this.state.modelService.save({
          uri: saveUri,
@@ -161,7 +200,7 @@ export class WorkflowStorage implements SourceModelStorage, ClientSessionListene
             })
          );
 
-      this.logger.info('Workflow model saved to ' + saveUri);
+      this.logger.info('Workflow model saved successfully to ' + saveUri);
    }
 
    /**

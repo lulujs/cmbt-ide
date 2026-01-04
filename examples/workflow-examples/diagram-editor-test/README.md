@@ -29,11 +29,14 @@ yarn start --port 3001
 ### 2. 打开工作流程文件 (Open Workflow File)
 
 1. 在文件浏览器中导航到 `examples/workflow-examples/diagram-editor-test/`
-2. 打开 `TestWorkflow.workflow.cm` 文件
-3. **验证**: 应该看到三个标签页：
+2. 首先尝试打开 `SimpleTestWorkflow.workflow.cm` 文件（简单版本）
+3. 或者打开 `TestWorkflow.workflow.cm` 文件（完整版本）
+4. **验证**: 应该看到三个标签页：
    - 📝 Code Editor (代码编辑器)
    - 📊 Form Editor (表单编辑器)  
    - 🎨 **Diagram Editor (图形编辑器)** ← 这是我们要验证的
+
+**注意**: 如果遇到语法错误，请使用 `SimpleTestWorkflow.workflow.cm` 进行测试，它使用了最基本的语法结构。
 
 ### 3. 测试图形编辑器功能 (Test Diagram Editor Features)
 

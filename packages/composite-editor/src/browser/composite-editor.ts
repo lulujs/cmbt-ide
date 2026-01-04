@@ -4,8 +4,8 @@
 
 import { CrossModelWidget, CrossModelWidgetOptions } from '@crossmodel/core/lib/browser';
 import { FormEditorOpenHandler, FormEditorWidget } from '@crossmodel/form-client/lib/browser';
-import { MappingDiagramManager, SystemDiagramManager } from '@crossmodel/glsp-client/lib/browser/';
-import { MappingDiagramLanguage, SystemDiagramLanguage } from '@crossmodel/glsp-client/lib/common';
+import { MappingDiagramManager, SystemDiagramManager, WorkflowDiagramManager } from '@crossmodel/glsp-client/lib/browser';
+import { MappingDiagramLanguage, SystemDiagramLanguage, WorkflowDiagramLanguage } from '@crossmodel/glsp-client/lib/common';
 import { ModelService } from '@crossmodel/model-service/lib/common';
 import { DataModelType, ModelFileExtensions, ModelFileType, codiconCSSString, getSemanticRoot } from '@crossmodel/protocol';
 import { FocusStateChangedAction, SetDirtyStateAction, toTypeGuard } from '@eclipse-glsp/client';
@@ -358,7 +358,7 @@ export class CompositeEditor
          case 'Mapping':
             return this.createMappingDiagramWidget();
          case 'WorkflowDiagram':
-            return this.createFormWidget(options);
+            return this.createWorkflowDiagramWidget();
          default:
             return this.createFormWidget(options);
       }
@@ -390,6 +390,13 @@ export class CompositeEditor
    protected async createMappingDiagramWidget(): Promise<Widget> {
       const diagramOptions = this.createDiagramWidgetOptions(MappingDiagramLanguage, 'Mapping Diagram');
       const widget = await this.widgetManager.getOrCreateWidget<GLSPDiagramWidget>(MappingDiagramManager.ID, diagramOptions);
+      widget.title.closable = false;
+      return widget;
+   }
+
+   protected async createWorkflowDiagramWidget(): Promise<Widget> {
+      const diagramOptions = this.createDiagramWidgetOptions(WorkflowDiagramLanguage, 'Workflow Diagram');
+      const widget = await this.widgetManager.getOrCreateWidget<GLSPDiagramWidget>(WorkflowDiagramManager.ID, diagramOptions);
       widget.title.closable = false;
       return widget;
    }

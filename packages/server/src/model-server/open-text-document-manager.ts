@@ -148,6 +148,23 @@ export class OpenTextDocumentManager {
    async save(uri: string, text: string, clientId: string): Promise<void> {
       const vscUri = URI.parse(uri);
       const dirName = path.dirname(vscUri.fsPath);
+
+      // 创建备份文件 - Create backup file
+      if (fs.existsSync(vscUri.fsPath)) {
+         const backupPath = vscUri.fsPath + '.backup';
+         try {
+            fs.copyFileSync(vscUri.fsPath, backupPath);
+         } catch (error) {
+            console.warn('Failed to create backup for', vscUri.fsPath, error);
+         }
+      }
+
+      // 验证要保存的内容 - Validate content to save
+      if (!text || text.trim().length === 0) {
+         console.error('Refusing to save empty content to', vscUri.fsPath);
+         throw new Error('Cannot save empty content to file: ' + vscUri.fsPath);
+      }
+
       fs.mkdirSync(dirName, { recursive: true });
       fs.writeFileSync(vscUri.fsPath, text);
       this.textDocuments.notifyDidSaveTextDocument({ textDocument: TextDocumentIdentifier.create(uri), text }, clientId);

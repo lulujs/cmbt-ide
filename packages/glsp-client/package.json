@@ -51,6 +51,9 @@
     },
     {
       "frontend": "lib/browser/mapping-diagram/mapping-diagram-frontend-module"
+    },
+    {
+      "frontend": "lib/browser/workflow-diagram/workflow-diagram-frontend-module"
     }
   ]
 }

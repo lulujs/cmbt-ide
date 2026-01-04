@@ -1,0 +1,440 @@
+/* 
+ * 工作流程图形暗色主题
+ * 
+ * 适用于暗色背景环境的视觉样式
+ */
+
+/* ========== 全局样式 ========== */
+.sprotty-graph {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 12px;
+    background-color: #1e1e1e;
+    color: #ffffff;
+}
+
+/* ========== 开始节点样式 ========== */
+.begin-node .begin-node-circle {
+    fill: #2d5016;
+    stroke: #4caf50;
+    stroke-width: 2;
+}
+
+.begin-node .begin-node-inner {
+    fill: #1b2e0d;
+    stroke: none;
+}
+
+.begin-node .begin-node-icon {
+    fill: #81c784;
+}
+
+.begin-node:hover .begin-node-circle {
+    fill: #388e3c;
+    stroke: #66bb6a;
+    stroke-width: 3;
+}
+
+.begin-node.selected .begin-node-circle {
+    fill: #4caf50;
+    stroke: #a5d6a7;
+    stroke-width: 3;
+    filter: drop-shadow(0 0 12px rgba(76, 175, 80, 0.8));
+}
+
+/* ========== 结束节点样式 ========== */
+.end-node .end-node-circle {
+    fill: #4a1e1e;
+    stroke: #f44336;
+    stroke-width: 2;
+}
+
+.end-node .end-node-inner {
+    fill: #2e1111;
+    stroke: none;
+}
+
+.end-node .end-node-icon {
+    fill: #ef5350;
+}
+
+.end-node:hover .end-node-circle {
+    fill: #d32f2f;
+    stroke: #e57373;
+    stroke-width: 3;
+}
+
+.end-node.selected .end-node-circle {
+    fill: #f44336;
+    stroke: #ffcdd2;
+    stroke-width: 3;
+    filter: drop-shadow(0 0 12px rgba(244, 67, 54, 0.8));
+}
+
+/* ========== 异常节点样式 ========== */
+.exception-node .exception-node-circle {
+    fill: #4a2c1a;
+    stroke: #ff5722;
+    stroke-width: 2;
+}
+
+.exception-node .exception-node-inner {
+    fill: #2e1a0f;
+    stroke: none;
+}
+
+.exception-node .warning-icon {
+    color: #ff8a65;
+}
+
+.exception-node:hover .exception-node-circle {
+    fill: #e64a19;
+    stroke: #ffab91;
+    stroke-width: 3;
+}
+
+.exception-node.selected .exception-node-circle {
+    fill: #ff5722;
+    stroke: #ffccbc;
+    stroke-width: 3;
+    filter: drop-shadow(0 0 12px rgba(255, 87, 34, 0.8));
+}
+
+/* ========== 处理节点样式 ========== */
+.process-node .process-node-rect {
+    fill: #1a2332;
+    stroke: #03a9f4;
+    stroke-width: 2;
+}
+
+.process-node .gear-icon {
+    color: #64b5f6;
+}
+
+.process-node .gear-outer {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1;
+}
+
+.process-node .gear-inner {
+    fill: currentColor;
+}
+
+.process-node .gear-tooth {
+    stroke: currentColor;
+    stroke-width: 1;
+}
+
+.process-node:hover .process-node-rect {
+    fill: #0288d1;
+    stroke: #42a5f5;
+    stroke-width: 3;
+}
+
+.process-node.selected .process-node-rect {
+    fill: #03a9f4;
+    stroke: #b3e5fc;
+    stroke-width: 3;
+    filter: drop-shadow(0 0 12px rgba(3, 169, 244, 0.8));
+}
+
+/* ========== 决策节点样式 ========== */
+.decision-node .decision-node-diamond {
+    fill: #3d3a1a;
+    stroke: #fbc02d;
+    stroke-width: 2;
+}
+
+.decision-node .question-icon {
+    color: #ffeb3b;
+}
+
+.decision-node:hover .decision-node-diamond {
+    fill: #f9a825;
+    stroke: #ffeb3b;
+    stroke-width: 3;
+}
+
+.decision-node.selected .decision-node-diamond {
+    fill: #fbc02d;
+    stroke: #fff9c4;
+    stroke-width: 3;
+    filter: drop-shadow(0 0 12px rgba(251, 192, 45, 0.8));
+}
+
+/* ========== 决策表节点样式 ========== */
+.decision-table-node .decision-table-rect {
+    fill: #3d2a1a;
+    stroke: #ff9800;
+    stroke-width: 2;
+}
+
+.decision-table-node .table-icon {
+    color: #ffb74d;
+}
+
+.decision-table-node .rule-indicator-bg {
+    fill: #ff9800;
+    stroke: #ffb74d;
+    stroke-width: 1;
+}
+
+.decision-table-node .rule-indicator-text {
+    fill: #1e1e1e;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.decision-table-node:hover .decision-table-rect {
+    fill: #f57c00;
+    stroke: #ffb74d;
+    stroke-width: 3;
+}
+
+.decision-table-node.selected .decision-table-rect {
+    fill: #ff9800;
+    stroke: #ffe0b2;
+    stroke-width: 3;
+    filter: drop-shadow(0 0 12px rgba(255, 152, 0, 0.8));
+}
+
+/* ========== 并行节点样式 ========== */
+.concurrent-node .concurrent-node-rect {
+    fill: #1a2e1a;
+    stroke: #4caf50;
+    stroke-width: 2;
+}
+
+.concurrent-start .concurrent-node-rect {
+    fill: #1a2e1a;
+}
+
+.concurrent-end .concurrent-node-rect {
+    fill: #1e2e1a;
+}
+
+.concurrent-node .fork-icon,
+.concurrent-node .join-icon {
+    color: #81c784;
+}
+
+.concurrent-node .branch-indicator {
+    fill: #4caf50;
+    stroke: #81c784;
+    stroke-width: 1;
+}
+
+.concurrent-node .branch-label {
+    fill: #c8e6c9;
+    font-size: 10px;
+}
+
+.concurrent-node:hover .concurrent-node-rect {
+    fill: #388e3c;
+    stroke: #66bb6a;
+    stroke-width: 3;
+}
+
+.concurrent-node.selected .concurrent-node-rect {
+    fill: #4caf50;
+    stroke: #c8e6c9;
+    stroke-width: 3;
+    filter: drop-shadow(0 0 12px rgba(76, 175, 80, 0.8));
+}
+
+/* ========== 边样式 ========== */
+.workflow-edge .edge-path {
+    stroke: #999;
+    stroke-width: 2;
+    fill: none;
+}
+
+.workflow-edge:hover .edge-path {
+    stroke: #ccc;
+    stroke-width: 3;
+}
+
+.workflow-edge.selected .edge-path {
+    stroke: #64b5f6;
+    stroke-width: 3;
+    filter: drop-shadow(0 0 6px rgba(100, 181, 246, 0.8));
+}
+
+.workflow-edge .edge-selection-area {
+    stroke: transparent;
+    stroke-width: 10;
+    fill: none;
+    cursor: pointer;
+}
+
+/* ========== 条件边样式 ========== */
+.conditional-edge .edge-path {
+    stroke: #64b5f6;
+    stroke-width: 2;
+}
+
+.conditional-edge.default-branch .edge-path {
+    stroke: #ffb74d;
+    stroke-dasharray: 5,5;
+}
+
+.conditional-edge:hover .edge-path {
+    stroke-width: 3;
+}
+
+.conditional-edge .conditional-label-bg.normal {
+    fill: #1a2332;
+    stroke: #64b5f6;
+    stroke-width: 1;
+}
+
+.conditional-edge .conditional-label-bg.default {
+    fill: #3d2a1a;
+    stroke: #ffb74d;
+    stroke-width: 1;
+}
+
+.conditional-edge .conditional-label-text {
+    fill: #ffffff;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.conditional-edge .default-indicator {
+    opacity: 0.9;
+}
+
+/* ========== 标签样式 ========== */
+.node-label {
+    fill: #ffffff;
+    font-size: 12px;
+    font-weight: bold;
+    text-anchor: middle;
+    dominant-baseline: middle;
+}
+
+.node-sublabel {
+    fill: #cccccc;
+    font-size: 10px;
+    text-anchor: middle;
+    dominant-baseline: middle;
+}
+
+.edge-label-bg {
+    fill: #2e2e2e;
+    stroke: #555;
+    stroke-width: 1;
+}
+
+.edge-label-text {
+    fill: #ffffff;
+    font-size: 10px;
+}
+
+.error-code {
+    fill: #ff8a65;
+    font-size: 10px;
+    font-family: monospace;
+}
+
+/* ========== 箭头标记 ========== */
+.sprotty-graph defs marker#arrowhead {
+    fill: #999;
+}
+
+.sprotty-graph defs marker#arrowhead-conditional {
+    fill: #64b5f6;
+}
+
+/* ========== 选择和悬停效果 ========== */
+.sprotty-node.selected {
+    filter: drop-shadow(0 0 12px rgba(100, 181, 246, 0.8));
+}
+
+.sprotty-node.mouseover {
+    cursor: pointer;
+}
+
+.sprotty-edge.selected {
+    filter: drop-shadow(0 0 6px rgba(100, 181, 246, 0.8));
+}
+
+.sprotty-edge.mouseover {
+    cursor: pointer;
+}
+
+/* ========== 泳道样式 ========== */
+.swimlane {
+    fill: rgba(255, 255, 255, 0.05);
+    stroke: #555;
+    stroke-width: 1;
+    stroke-dasharray: 5,5;
+}
+
+.swimlane-title {
+    fill: #cccccc;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* ========== 网格和背景 ========== */
+.sprotty-graph .grid {
+    stroke: #333;
+    stroke-width: 1;
+}
+
+.sprotty-graph .grid.major {
+    stroke: #444;
+    stroke-width: 1;
+}
+
+/* ========== 工具提示 ========== */
+.sprotty-popup {
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    max-width: 200px;
+    word-wrap: break-word;
+    border: 1px solid #555;
+}
+
+/* ========== 动画效果 ========== */
+.sprotty-node {
+    transition: all 0.2s ease-in-out;
+}
+
+.sprotty-edge {
+    transition: all 0.2s ease-in-out;
+}
+
+/* ========== 滚动条样式 ========== */
+.sprotty-graph::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.sprotty-graph::-webkit-scrollbar-track {
+    background: #2e2e2e;
+}
+
+.sprotty-graph::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+}
+
+.sprotty-graph::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
+
+/* ========== 响应式设计 ========== */
+@media (max-width: 768px) {
+    .node-label {
+        font-size: 10px;
+    }
+    
+    .edge-label-text {
+        font-size: 8px;
+    }
+}

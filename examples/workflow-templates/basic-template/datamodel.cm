@@ -1,0 +1,6 @@
+datamodel:
+    id: ${PROJECT_ID}
+    name: "${PROJECT_NAME}"
+    type: logical
+    version: 1.0.0
+    description: "${PROJECT_DESCRIPTION}"

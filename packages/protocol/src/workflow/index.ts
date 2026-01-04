@@ -34,3 +34,21 @@ export * from './test-data-manager';
 
 // Automation action management
 export * from './automation-action-manager';
+
+// Synchronization management
+export * from './sync-manager';
+
+// Project types and utilities
+export * from './project-types';
+
+// Project analysis utilities
+export * from './project-analysis';
+
+// Validation errors and types
+export * from './validation-errors';
+
+// Workflow validation service
+export * from './workflow-validation-service';
+
+// Validation status and indicators
+export * from './validation-status';

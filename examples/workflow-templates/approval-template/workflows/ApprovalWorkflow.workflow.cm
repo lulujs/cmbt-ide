@@ -1,0 +1,142 @@
+workflow:
+    id: approval_workflow
+    name: "审批工作流程"
+    metadata:
+        version: "1.0.0"
+        author: "${AUTHOR}"
+        tags:
+            - "模板"
+            - "审批"
+    nodes:
+        - begin:
+            id: submit_request
+            name: "提交申请"
+            description: "申请人提交申请"
+            position:
+                x: 100
+                y: 250
+        - process:
+            id: first_review
+            name: "初审"
+            description: "第一级审批人审核"
+            position:
+                x: 300
+                y: 250
+        - decision:
+            id: first_decision
+            name: "初审决策"
+            description: "初审是否通过"
+            position:
+                x: 500
+                y: 250
+            branches:
+                - id: first_approve
+                  value: "approved"
+                - id: first_reject
+                  value: "rejected"
+                  isDefault: true
+        - process:
+            id: final_review
+            name: "终审"
+            description: "最终审批人审核"
+            position:
+                x: 700
+                y: 150
+        - decision:
+            id: final_decision
+            name: "终审决策"
+            description: "终审是否通过"
+            position:
+                x: 900
+                y: 150
+            branches:
+                - id: final_approve
+                  value: "approved"
+                - id: final_reject
+                  value: "rejected"
+                  isDefault: true
+        - end:
+            id: approved_end
+            name: "审批通过"
+            description: "申请已批准"
+            expectedValue: "approved"
+            position:
+                x: 1100
+                y: 150
+        - end:
+            id: rejected_end
+            name: "审批拒绝"
+            description: "申请被拒绝"
+            expectedValue: "rejected"
+            position:
+                x: 700
+                y: 400
+    edges:
+        - edge:
+            id: edge_1
+            source: submit_request
+            target: first_review
+        - edge:
+            id: edge_2
+            source: first_review
+            target: first_decision
+        - edge:
+            id: edge_3
+            source: first_decision
+            target: final_review
+            value: "approved"
+        - edge:
+            id: edge_4
+            source: first_decision
+            target: rejected_end
+            value: "rejected"
+        - edge:
+            id: edge_5
+            source: final_review
+            target: final_decision
+        - edge:
+            id: edge_6
+            source: final_decision
+            target: approved_end
+            value: "approved"
+        - edge:
+            id: edge_7
+            source: final_decision
+            target: rejected_end
+            value: "rejected"
+    swimlanes:
+        - swimlane:
+            id: applicant_lane
+            name: "申请人"
+            position:
+                x: 50
+                y: 200
+            width: 200
+            height: 150
+            color: "#E3F2FD"
+            containedNodes:
+                - ref: submit_request
+        - swimlane:
+            id: first_approver_lane
+            name: "初审人"
+            position:
+                x: 250
+                y: 200
+            width: 350
+            height: 150
+            color: "#FFF3E0"
+            containedNodes:
+                - ref: first_review
+                - ref: first_decision
+        - swimlane:
+            id: final_approver_lane
+            name: "终审人"
+            position:
+                x: 650
+                y: 100
+            width: 350
+            height: 150
+            color: "#E8F5E9"
+            containedNodes:
+                - ref: final_review
+                - ref: final_decision

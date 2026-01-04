@@ -1,0 +1,40 @@
+workflow:
+    id: main_workflow
+    name: "主工作流程"
+    metadata:
+        version: "1.0.0"
+        author: "${AUTHOR}"
+        tags:
+            - "模板"
+    nodes:
+        - begin:
+            id: start
+            name: "开始"
+            description: "流程开始"
+            position:
+                x: 100
+                y: 200
+        - process:
+            id: main_process
+            name: "主要处理"
+            description: "在此添加主要业务逻辑"
+            position:
+                x: 300
+                y: 200
+        - end:
+            id: finish
+            name: "结束"
+            description: "流程结束"
+            expectedValue: "success"
+            position:
+                x: 500
+                y: 200
+    edges:
+        - edge:
+            id: edge_1
+            source: start
+            target: main_process
+        - edge:
+            id: edge_2
+            source: main_process
+            target: finish

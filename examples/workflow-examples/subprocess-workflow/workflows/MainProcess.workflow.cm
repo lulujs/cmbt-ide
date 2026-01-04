@@ -1,0 +1,97 @@
+workflow:
+    id: main_process
+    name: "主流程"
+    metadata:
+        version: "1.0.0"
+        author: "CrossModel Team"
+        tags:
+            - "示例"
+            - "子流程"
+            - "模块化"
+    nodes:
+        - begin:
+            id: start
+            name: "开始"
+            description: "主流程开始"
+            position:
+                x: 100
+                y: 200
+        - process:
+            id: prepare_data
+            name: "准备数据"
+            description: "准备需要处理的数据"
+            position:
+                x: 300
+                y: 200
+        - subprocess:
+            id: validation_subprocess
+            name: "数据验证子流程"
+            description: "调用数据验证子流程"
+            referencePath: "./ValidationProcess.workflow.cm"
+            position:
+                x: 500
+                y: 200
+        - decision:
+            id: validation_check
+            name: "验证结果检查"
+            description: "检查验证子流程的结果"
+            position:
+                x: 700
+                y: 200
+            branches:
+                - id: valid
+                  value: "valid"
+                - id: invalid
+                  value: "invalid"
+                  isDefault: true
+        - subprocess:
+            id: processing_subprocess
+            name: "数据处理子流程"
+            description: "调用数据处理子流程"
+            referencePath: "./ProcessingProcess.workflow.cm"
+            position:
+                x: 900
+                y: 100
+        - end:
+            id: success_end
+            name: "处理成功"
+            description: "数据处理成功完成"
+            expectedValue: "success"
+            position:
+                x: 1100
+                y: 100
+        - end:
+            id: validation_failed_end
+            name: "验证失败"
+            description: "数据验证失败"
+            expectedValue: "validation_failed"
+            position:
+                x: 900
+                y: 300
+    edges:
+        - edge:
+            id: edge_1
+            source: start
+            target: prepare_data
+        - edge:
+            id: edge_2
+            source: prepare_data
+            target: validation_subprocess
+        - edge:
+            id: edge_3
+            source: validation_subprocess
+            target: validation_check
+        - edge:
+            id: edge_4
+            source: validation_check
+            target: processing_subprocess
+            value: "valid"
+        - edge:
+            id: edge_5
+            source: validation_check
+            target: validation_failed_end
+            value: "invalid"
+        - edge:
+            id: edge_6
+            source: processing_subprocess
+            target: success_end

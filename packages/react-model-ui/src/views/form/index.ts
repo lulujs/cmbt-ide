@@ -8,3 +8,6 @@ export * from './MappingForm';
 export * from './ReferenceNodeForm';
 export * from './RelationshipForm';
 export * from './SourceObjectForm';
+
+// Workflow forms
+export * from './workflow';

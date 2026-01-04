@@ -55,3 +55,1255 @@ input[type='number'] {
 .editor-diagnostics-error-message {
    font-weight: 500;
 }
+
+/* ============================================
+ * Workflow Application Branding - 工作流程应用品牌
+ * 需求 8.1: 统一的用户界面主题
+ * ============================================ */
+
+/* Application title and branding */
+.theia-app-title {
+   font-weight: 600;
+   letter-spacing: 0.5px;
+}
+
+.theia-app-title::before {
+   content: '⚡ ';
+   margin-right: 4px;
+}
+
+/* Workflow-specific icons in tree view */
+.theia-TreeNodeSegment.workflow-file::before {
+   content: '📋 ';
+   margin-right: 4px;
+}
+
+.theia-TreeNodeSegment.workflow-diagram::before {
+   content: '🔄 ';
+   margin-right: 4px;
+}
+
+/* Status bar workflow indicators */
+.workflow-status-indicator {
+   display: flex;
+   align-items: center;
+   gap: 4px;
+   padding: 2px 8px;
+   border-radius: 12px;
+   font-size: 11px;
+   font-weight: 500;
+}
+
+.workflow-status-indicator.valid {
+   background: var(--workflow-validationSuccess, #9effbf);
+   color: var(--theia-editor-background);
+}
+
+.workflow-status-indicator.invalid {
+   background: var(--workflow-validationError, #ff6f61);
+   color: white;
+}
+
+.workflow-status-indicator.warning {
+   background: var(--workflow-validationWarning, #ffc940);
+   color: var(--theia-editor-background);
+}
+
+/* Workflow welcome screen */
+.workflow-welcome-screen {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   height: 100%;
+   padding: 40px;
+   text-align: center;
+   background: var(--theia-editor-background);
+   color: var(--theia-editor-foreground);
+}
+
+.workflow-welcome-title {
+   font-size: 28px;
+   font-weight: 700;
+   margin-bottom: 16px;
+   color: var(--theia-focusBorder);
+}
+
+.workflow-welcome-subtitle {
+   font-size: 16px;
+   margin-bottom: 32px;
+   color: var(--theia-descriptionForeground);
+   max-width: 600px;
+   line-height: 1.5;
+}
+
+.workflow-welcome-actions {
+   display: flex;
+   gap: 16px;
+   flex-wrap: wrap;
+   justify-content: center;
+}
+
+.workflow-welcome-action {
+   padding: 12px 24px;
+   border: 2px solid var(--theia-focusBorder);
+   border-radius: 8px;
+   background: transparent;
+   color: var(--theia-focusBorder);
+   font-family: var(--theia-ui-font-family);
+   font-size: 14px;
+   font-weight: 600;
+   cursor: pointer;
+   transition: all 0.2s ease;
+   text-decoration: none;
+   display: inline-flex;
+   align-items: center;
+   gap: 8px;
+}
+
+.workflow-welcome-action:hover {
+   background: var(--theia-focusBorder);
+   color: var(--theia-editor-background);
+   transform: translateY(-2px);
+}
+
+.workflow-welcome-action.primary {
+   background: var(--theia-focusBorder);
+   color: var(--theia-editor-background);
+}
+
+.workflow-welcome-action.primary:hover {
+   background: var(--theia-button-hoverBackground);
+   transform: translateY(-2px);
+}
+
+/* ============================================
+ * Workflow Editor Tabs - 工作流程编辑器标签
+ * ============================================ */
+
+.workflow-editor-tabs {
+   display: flex;
+   background: var(--theia-tab-inactiveBackground);
+   border-bottom: 1px solid var(--theia-tab-border);
+}
+
+.workflow-editor-tab {
+   padding: 12px 20px;
+   background: var(--theia-tab-inactiveBackground);
+   color: var(--theia-tab-inactiveForeground);
+   border: none;
+   border-right: 1px solid var(--theia-tab-border);
+   cursor: pointer;
+   font-family: var(--theia-ui-font-family);
+   font-size: 13px;
+   font-weight: 500;
+   transition: all 0.2s ease;
+   display: flex;
+   align-items: center;
+   gap: 8px;
+}
+
+.workflow-editor-tab:hover {
+   background: var(--theia-tab-activeBackground);
+   color: var(--theia-tab-activeForeground);
+}
+
+.workflow-editor-tab.active {
+   background: var(--theia-tab-activeBackground);
+   color: var(--theia-tab-activeForeground);
+   border-bottom: 2px solid var(--theia-focusBorder);
+}
+
+.workflow-editor-tab-icon {
+   width: 16px;
+   height: 16px;
+}
+
+/* ============================================
+ * Workflow Toolbar - 工作流程工具栏
+ * ============================================ */
+
+.workflow-toolbar {
+   display: flex;
+   align-items: center;
+   gap: 8px;
+   padding: 8px 16px;
+   background: var(--theia-toolbar-background);
+   border-bottom: 1px solid var(--theia-panel-border);
+}
+
+.workflow-toolbar-group {
+   display: flex;
+   align-items: center;
+   gap: 4px;
+   padding: 0 8px;
+   border-right: 1px solid var(--theia-panel-border);
+}
+
+.workflow-toolbar-group:last-child {
+   border-right: none;
+}
+
+.workflow-toolbar-button {
+   padding: 6px 12px;
+   border: 1px solid transparent;
+   border-radius: 4px;
+   background: transparent;
+   color: var(--theia-toolbar-foreground);
+   font-family: var(--theia-ui-font-family);
+   font-size: 12px;
+   cursor: pointer;
+   transition: all 0.2s ease;
+   display: flex;
+   align-items: center;
+   gap: 6px;
+}
+
+.workflow-toolbar-button:hover {
+   background: var(--theia-toolbar-hoverBackground);
+   border-color: var(--theia-focusBorder);
+}
+
+.workflow-toolbar-button.active {
+   background: var(--theia-list-activeSelectionBackground);
+   color: var(--theia-list-activeSelectionForeground);
+   border-color: var(--theia-focusBorder);
+}
+
+.workflow-toolbar-button:disabled {
+   opacity: 0.5;
+   cursor: not-allowed;
+}
+
+.workflow-toolbar-separator {
+   width: 1px;
+   height: 20px;
+   background: var(--theia-panel-border);
+   margin: 0 4px;
+}
+
+/* ============================================
+ * Workflow Breadcrumb - 工作流程面包屑导航
+ * ============================================ */
+
+.workflow-breadcrumb {
+   display: flex;
+   align-items: center;
+   gap: 8px;
+   padding: 8px 16px;
+   background: var(--theia-breadcrumb-background);
+   border-bottom: 1px solid var(--theia-panel-border);
+   font-size: 12px;
+   color: var(--theia-breadcrumb-foreground);
+}
+
+.workflow-breadcrumb-item {
+   display: flex;
+   align-items: center;
+   gap: 4px;
+   cursor: pointer;
+   padding: 4px 8px;
+   border-radius: 4px;
+   transition: background-color 0.2s ease;
+}
+
+.workflow-breadcrumb-item:hover {
+   background: var(--theia-breadcrumb-focusBackground);
+   color: var(--theia-breadcrumb-focusForeground);
+}
+
+.workflow-breadcrumb-item.active {
+   font-weight: 600;
+   color: var(--theia-focusBorder);
+}
+
+.workflow-breadcrumb-separator {
+   color: var(--theia-breadcrumb-foreground);
+   opacity: 0.6;
+}
+
+/* ============================================
+ * Workflow Notifications - 工作流程通知
+ * ============================================ */
+
+.workflow-notification {
+   display: flex;
+   align-items: flex-start;
+   gap: 12px;
+   padding: 12px 16px;
+   border-radius: 6px;
+   margin-bottom: 8px;
+   font-size: 13px;
+   line-height: 1.4;
+}
+
+.workflow-notification.success {
+   background: var(--workflow-validationSuccess, #9effbf);
+   color: var(--theia-editor-background);
+   border-left: 4px solid var(--workflow-validationSuccess, #9effbf);
+}
+
+.workflow-notification.error {
+   background: var(--theia-inputValidation-errorBackground);
+   color: var(--theia-inputValidation-errorForeground);
+   border-left: 4px solid var(--theia-errorForeground);
+}
+
+.workflow-notification.warning {
+   background: var(--theia-inputValidation-warningBackground);
+   color: var(--theia-inputValidation-warningForeground);
+   border-left: 4px solid var(--theia-warningForeground);
+}
+
+.workflow-notification.info {
+   background: var(--theia-inputValidation-infoBackground);
+   color: var(--theia-inputValidation-infoForeground);
+   border-left: 4px solid var(--theia-notificationsInfoIcon-foreground);
+}
+
+.workflow-notification-icon {
+   flex-shrink: 0;
+   width: 20px;
+   height: 20px;
+   margin-top: 2px;
+}
+
+.workflow-notification-content {
+   flex: 1;
+}
+
+.workflow-notification-title {
+   font-weight: 600;
+   margin-bottom: 4px;
+}
+
+.workflow-notification-message {
+   margin-bottom: 8px;
+}
+
+.workflow-notification-actions {
+   display: flex;
+   gap: 8px;
+   margin-top: 8px;
+}
+
+.workflow-notification-action {
+   padding: 4px 12px;
+   border: 1px solid currentColor;
+   border-radius: 4px;
+   background: transparent;
+   color: inherit;
+   font-size: 11px;
+   font-weight: 500;
+   cursor: pointer;
+   transition: all 0.2s ease;
+}
+
+.workflow-notification-action:hover {
+   background: currentColor;
+   color: var(--theia-editor-background);
+}
+
+/* ============================================
+ * Loading and Progress Indicators - 加载和进度指示器
+ * ============================================ */
+
+.workflow-loading {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   padding: 40px;
+   color: var(--theia-descriptionForeground);
+}
+
+.workflow-loading-spinner {
+   width: 32px;
+   height: 32px;
+   border: 3px solid var(--theia-panel-border);
+   border-top: 3px solid var(--theia-focusBorder);
+   border-radius: 50%;
+   animation: workflow-spin 1s linear infinite;
+   margin-bottom: 16px;
+}
+
+@keyframes workflow-spin {
+   0% {
+      transform: rotate(0deg);
+   }
+   100% {
+      transform: rotate(360deg);
+   }
+}
+
+.workflow-loading-text {
+   font-size: 14px;
+   font-weight: 500;
+}
+
+.workflow-progress-bar {
+   width: 100%;
+   height: 4px;
+   background: var(--theia-panel-border);
+   border-radius: 2px;
+   overflow: hidden;
+   margin: 8px 0;
+}
+
+.workflow-progress-fill {
+   height: 100%;
+   background: var(--theia-focusBorder);
+   border-radius: 2px;
+   transition: width 0.3s ease;
+}
+
+/* ============================================
+ * Responsive Design - 响应式设计
+ * ============================================ */
+
+@media (max-width: 768px) {
+   .workflow-welcome-screen {
+      padding: 20px;
+   }
+
+   .workflow-welcome-title {
+      font-size: 24px;
+   }
+
+   .workflow-welcome-subtitle {
+      font-size: 14px;
+   }
+
+   .workflow-welcome-actions {
+      flex-direction: column;
+      width: 100%;
+      max-width: 300px;
+   }
+
+   .workflow-toolbar {
+      flex-wrap: wrap;
+      padding: 6px 12px;
+   }
+
+   .workflow-toolbar-group {
+      padding: 0 4px;
+   }
+
+   .workflow-breadcrumb {
+      padding: 6px 12px;
+      font-size: 11px;
+   }
+}
+
+/* ============================================
+ * Print Styles - 打印样式
+ * ============================================ */
+
+@media print {
+   .workflow-toolbar,
+   .workflow-breadcrumb,
+   .workflow-notification {
+      display: none;
+   }
+
+   .workflow-editor-tabs {
+      display: none;
+   }
+
+   .workflow-welcome-screen {
+      display: none;
+   }
+}
+
+/* ============================================
+ * Tutorial System Styles - 教程系统样式
+ * 需求 8.1-8.3: 新用户的引导和教程系统
+ * ============================================ */
+
+.workflow-tutorial-overlay {
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   z-index: 10000;
+   pointer-events: none;
+}
+
+.tutorial-backdrop {
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   background: rgba(0, 0, 0, 0.5);
+   pointer-events: all;
+}
+
+.tutorial-popup {
+   position: absolute;
+   background: var(--theia-editor-background);
+   border: 2px solid var(--theia-focusBorder);
+   border-radius: 8px;
+   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+   max-width: 400px;
+   min-width: 300px;
+   pointer-events: all;
+   z-index: 10001;
+}
+
+.tutorial-header {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   padding: 16px 20px;
+   background: var(--theia-focusBorder);
+   color: var(--theia-editor-background);
+   border-radius: 6px 6px 0 0;
+}
+
+.tutorial-title {
+   margin: 0;
+   font-size: 16px;
+   font-weight: 600;
+}
+
+.tutorial-close {
+   background: none;
+   border: none;
+   color: inherit;
+   font-size: 20px;
+   font-weight: bold;
+   cursor: pointer;
+   padding: 0;
+   width: 24px;
+   height: 24px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   border-radius: 4px;
+   transition: background-color 0.2s ease;
+}
+
+.tutorial-close:hover {
+   background: rgba(255, 255, 255, 0.2);
+}
+
+.tutorial-content {
+   padding: 20px;
+   color: var(--theia-editor-foreground);
+}
+
+.tutorial-description {
+   font-size: 14px;
+   margin-bottom: 16px;
+   color: var(--theia-descriptionForeground);
+}
+
+.tutorial-markdown {
+   font-size: 13px;
+   line-height: 1.5;
+}
+
+.tutorial-markdown strong {
+   font-weight: 600;
+   color: var(--theia-focusBorder);
+}
+
+.tutorial-markdown em {
+   font-style: italic;
+   color: var(--theia-editor-foreground);
+}
+
+.tutorial-markdown code {
+   background: var(--theia-textCodeBlock-background);
+   color: var(--theia-textPreformat-foreground);
+   padding: 2px 4px;
+   border-radius: 3px;
+   font-family: var(--theia-editor-font-family);
+   font-size: 12px;
+}
+
+.tutorial-markdown pre {
+   background: var(--theia-textCodeBlock-background);
+   color: var(--theia-textPreformat-foreground);
+   padding: 12px;
+   border-radius: 4px;
+   font-family: var(--theia-editor-font-family);
+   font-size: 12px;
+   overflow-x: auto;
+   margin: 12px 0;
+}
+
+.tutorial-footer {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   padding: 16px 20px;
+   border-top: 1px solid var(--theia-panel-border);
+   background: var(--theia-sideBar-background);
+   border-radius: 0 0 6px 6px;
+}
+
+.tutorial-progress {
+   font-size: 12px;
+   color: var(--theia-descriptionForeground);
+   font-weight: 500;
+}
+
+.tutorial-actions {
+   display: flex;
+   gap: 8px;
+}
+
+.tutorial-actions button {
+   padding: 6px 12px;
+   border: 1px solid var(--theia-button-background);
+   border-radius: 4px;
+   background: var(--theia-button-background);
+   color: var(--theia-button-foreground);
+   font-family: var(--theia-ui-font-family);
+   font-size: 12px;
+   font-weight: 500;
+   cursor: pointer;
+   transition: all 0.2s ease;
+}
+
+.tutorial-actions button:hover {
+   background: var(--theia-button-hoverBackground);
+   transform: translateY(-1px);
+}
+
+.tutorial-actions .tutorial-prev,
+.tutorial-actions .tutorial-skip {
+   background: var(--theia-button-secondaryBackground);
+   color: var(--theia-button-secondaryForeground);
+   border-color: var(--theia-button-border);
+}
+
+.tutorial-actions .tutorial-prev:hover,
+.tutorial-actions .tutorial-skip:hover {
+   background: var(--theia-button-secondaryHoverBackground);
+}
+
+.tutorial-highlight {
+   position: relative;
+   z-index: 9999;
+   box-shadow: 0 0 0 4px var(--theia-focusBorder) !important;
+   border-radius: 4px !important;
+   animation: tutorial-pulse 2s ease-in-out infinite;
+}
+
+@keyframes tutorial-pulse {
+   0%,
+   100% {
+      box-shadow: 0 0 0 4px var(--theia-focusBorder);
+   }
+   50% {
+      box-shadow: 0 0 0 8px rgba(198, 154, 44, 0.5);
+   }
+}
+
+/* Tutorial popup positioning */
+.tutorial-popup[data-position='center'] {
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+}
+
+/* Tutorial popup arrow indicators */
+.tutorial-popup::before {
+   content: '';
+   position: absolute;
+   width: 0;
+   height: 0;
+   border: 8px solid transparent;
+}
+
+.tutorial-popup[data-position='top']::before {
+   bottom: -16px;
+   left: 50%;
+   transform: translateX(-50%);
+   border-top-color: var(--theia-focusBorder);
+}
+
+.tutorial-popup[data-position='bottom']::before {
+   top: -16px;
+   left: 50%;
+   transform: translateX(-50%);
+   border-bottom-color: var(--theia-focusBorder);
+}
+
+.tutorial-popup[data-position='left']::before {
+   right: -16px;
+   top: 50%;
+   transform: translateY(-50%);
+   border-left-color: var(--theia-focusBorder);
+}
+
+.tutorial-popup[data-position='right']::before {
+   left: -16px;
+   top: 50%;
+   transform: translateY(-50%);
+   border-right-color: var(--theia-focusBorder);
+}
+
+.tutorial-highlight {
+   position: relative;
+   z-index: 9999;
+   box-shadow: 0 0 0 4px var(--theia-focusBorder) !important;
+   border-radius: 4px !important;
+   animation: tutorial-pulse 2s ease-in-out infinite;
+}
+
+/* Responsive tutorial styles */
+@media (max-width: 768px) {
+   .tutorial-popup {
+      max-width: 90vw;
+      min-width: 280px;
+   }
+
+   .tutorial-content {
+      padding: 16px;
+   }
+
+   .tutorial-footer {
+      padding: 12px 16px;
+      flex-direction: column;
+      gap: 12px;
+   }
+
+   .tutorial-actions {
+      width: 100%;
+      justify-content: space-between;
+   }
+
+   .tutorial-actions button {
+      flex: 1;
+   }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+   .tutorial-popup {
+      border-width: 3px;
+   }
+
+   .tutorial-highlight {
+      box-shadow: 0 0 0 6px var(--theia-focusBorder) !important;
+   }
+
+   .tutorial-actions button {
+      border-width: 2px;
+   }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+   .tutorial-highlight {
+      animation: none;
+   }
+
+   .tutorial-actions button {
+      transition: none;
+   }
+
+   .tutorial-popup {
+      transition: none;
+   }
+}
+/* ============================================
+ * Performance Monitoring Styles - 性能监控样式
+ * 需求: 所有需求的性能方面 - 性能监控和优化建议
+ * ============================================ */
+
+.workflow-performance-monitor {
+   position: fixed;
+   top: 10px;
+   right: 10px;
+   background: var(--theia-editor-background);
+   border: 1px solid var(--theia-panel-border);
+   border-radius: 6px;
+   padding: 8px 12px;
+   font-size: 11px;
+   font-family: var(--theia-ui-font-family);
+   color: var(--theia-editor-foreground);
+   z-index: 1000;
+   opacity: 0.8;
+   transition: opacity 0.2s ease;
+   max-width: 200px;
+}
+
+.workflow-performance-monitor:hover {
+   opacity: 1;
+}
+
+.workflow-performance-monitor.hidden {
+   display: none;
+}
+
+.performance-metric {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   margin-bottom: 4px;
+}
+
+.performance-metric:last-child {
+   margin-bottom: 0;
+}
+
+.performance-metric-label {
+   color: var(--theia-descriptionForeground);
+}
+
+.performance-metric-value {
+   font-weight: 500;
+   font-family: var(--theia-editor-font-family);
+}
+
+.performance-metric-value.good {
+   color: var(--workflow-validationSuccess, #9effbf);
+}
+
+.performance-metric-value.warning {
+   color: var(--workflow-validationWarning, #ffc940);
+}
+
+.performance-metric-value.error {
+   color: var(--workflow-validationError, #ff6f61);
+}
+
+.performance-indicator {
+   display: inline-block;
+   width: 8px;
+   height: 8px;
+   border-radius: 50%;
+   margin-left: 4px;
+}
+
+.performance-indicator.good {
+   background: var(--workflow-validationSuccess, #9effbf);
+}
+
+.performance-indicator.warning {
+   background: var(--workflow-validationWarning, #ffc940);
+   animation: performance-warning-pulse 2s ease-in-out infinite;
+}
+
+.performance-indicator.error {
+   background: var(--workflow-validationError, #ff6f61);
+   animation: performance-error-pulse 1s ease-in-out infinite;
+}
+
+@keyframes performance-warning-pulse {
+   0%,
+   100% {
+      opacity: 1;
+   }
+   50% {
+      opacity: 0.5;
+   }
+}
+
+@keyframes performance-error-pulse {
+   0%,
+   100% {
+      opacity: 1;
+      transform: scale(1);
+   }
+   50% {
+      opacity: 0.7;
+      transform: scale(1.2);
+   }
+}
+
+/* Performance optimization suggestions */
+.workflow-performance-suggestions {
+   position: fixed;
+   bottom: 20px;
+   right: 20px;
+   background: var(--theia-notifications-background);
+   border: 1px solid var(--theia-notifications-border);
+   border-radius: 8px;
+   padding: 16px;
+   max-width: 350px;
+   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+   z-index: 1001;
+   animation: slide-in-right 0.3s ease-out;
+}
+
+@keyframes slide-in-right {
+   from {
+      transform: translateX(100%);
+      opacity: 0;
+   }
+   to {
+      transform: translateX(0);
+      opacity: 1;
+   }
+}
+
+.performance-suggestions-header {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   margin-bottom: 12px;
+}
+
+.performance-suggestions-title {
+   font-weight: 600;
+   font-size: 14px;
+   color: var(--theia-notifications-foreground);
+   display: flex;
+   align-items: center;
+   gap: 8px;
+}
+
+.performance-suggestions-title::before {
+   content: '⚡';
+   font-size: 16px;
+}
+
+.performance-suggestions-close {
+   background: none;
+   border: none;
+   color: var(--theia-notifications-foreground);
+   font-size: 16px;
+   cursor: pointer;
+   padding: 0;
+   width: 20px;
+   height: 20px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   border-radius: 4px;
+   transition: background-color 0.2s ease;
+}
+
+.performance-suggestions-close:hover {
+   background: rgba(255, 255, 255, 0.1);
+}
+
+.performance-suggestion-item {
+   display: flex;
+   align-items: flex-start;
+   gap: 10px;
+   margin-bottom: 12px;
+   padding: 8px;
+   background: var(--theia-editor-background);
+   border-radius: 4px;
+   border-left: 3px solid var(--workflow-validationWarning, #ffc940);
+}
+
+.performance-suggestion-item:last-child {
+   margin-bottom: 0;
+}
+
+.performance-suggestion-item.error {
+   border-left-color: var(--workflow-validationError, #ff6f61);
+}
+
+.performance-suggestion-item.info {
+   border-left-color: var(--workflow-validationInfo, #6c8ebf);
+}
+
+.performance-suggestion-icon {
+   flex-shrink: 0;
+   width: 16px;
+   height: 16px;
+   margin-top: 2px;
+}
+
+.performance-suggestion-content {
+   flex: 1;
+}
+
+.performance-suggestion-message {
+   font-size: 13px;
+   color: var(--theia-editor-foreground);
+   margin-bottom: 6px;
+   line-height: 1.4;
+}
+
+.performance-suggestion-actions {
+   display: flex;
+   gap: 8px;
+}
+
+.performance-suggestion-action {
+   padding: 4px 8px;
+   border: 1px solid var(--theia-button-border);
+   border-radius: 3px;
+   background: var(--theia-button-secondaryBackground);
+   color: var(--theia-button-secondaryForeground);
+   font-size: 11px;
+   cursor: pointer;
+   transition: all 0.2s ease;
+}
+
+.performance-suggestion-action:hover {
+   background: var(--theia-button-secondaryHoverBackground);
+}
+
+.performance-suggestion-action.primary {
+   background: var(--theia-button-background);
+   color: var(--theia-button-foreground);
+   border-color: var(--theia-button-background);
+}
+
+.performance-suggestion-action.primary:hover {
+   background: var(--theia-button-hoverBackground);
+}
+
+/* Lazy loading styles */
+.lazy-load-placeholder {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   min-height: 50px;
+   background: var(--theia-editor-background);
+   border: 1px dashed var(--theia-panel-border);
+   border-radius: 4px;
+   color: var(--theia-descriptionForeground);
+   font-size: 12px;
+   margin: 4px 0;
+   transition: all 0.2s ease;
+}
+
+.lazy-load-placeholder:hover {
+   background: var(--theia-list-hoverBackground);
+   border-color: var(--theia-focusBorder);
+}
+
+.lazy-load-placeholder.loading {
+   background: var(--theia-list-hoverBackground);
+}
+
+.lazy-load-placeholder.loading::before {
+   content: '';
+   width: 16px;
+   height: 16px;
+   border: 2px solid var(--theia-panel-border);
+   border-top: 2px solid var(--theia-focusBorder);
+   border-radius: 50%;
+   animation: lazy-load-spin 1s linear infinite;
+   margin-right: 8px;
+}
+
+@keyframes lazy-load-spin {
+   0% {
+      transform: rotate(0deg);
+   }
+   100% {
+      transform: rotate(360deg);
+   }
+}
+
+/* Sync status indicator */
+.workflow-sync-status {
+   display: flex;
+   align-items: center;
+   gap: 6px;
+   padding: 4px 8px;
+   border-radius: 12px;
+   font-size: 11px;
+   font-weight: 500;
+   background: var(--theia-statusBar-background);
+   color: var(--theia-statusBar-foreground);
+   border: 1px solid var(--theia-statusBar-border);
+}
+
+.workflow-sync-status.synced {
+   background: var(--workflow-validationSuccess, #9effbf);
+   color: var(--theia-editor-background);
+}
+
+.workflow-sync-status.syncing {
+   background: var(--workflow-validationWarning, #ffc940);
+   color: var(--theia-editor-background);
+}
+
+.workflow-sync-status.error {
+   background: var(--workflow-validationError, #ff6f61);
+   color: white;
+}
+
+.workflow-sync-status.conflict {
+   background: var(--workflow-validationWarning, #ffc940);
+   color: var(--theia-editor-background);
+   animation: sync-conflict-pulse 2s ease-in-out infinite;
+}
+
+@keyframes sync-conflict-pulse {
+   0%,
+   100% {
+      opacity: 1;
+   }
+   50% {
+      opacity: 0.7;
+   }
+}
+
+.sync-status-icon {
+   width: 12px;
+   height: 12px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+.sync-status-icon.spinning {
+   animation: sync-spin 1s linear infinite;
+}
+
+@keyframes sync-spin {
+   0% {
+      transform: rotate(0deg);
+   }
+   100% {
+      transform: rotate(360deg);
+   }
+}
+
+.sync-status-text {
+   white-space: nowrap;
+}
+
+.sync-conflict-count {
+   background: var(--workflow-validationError, #ff6f61);
+   color: white;
+   border-radius: 8px;
+   padding: 1px 5px;
+   font-size: 10px;
+   font-weight: 600;
+   margin-left: 4px;
+}
+
+/* Performance chart styles */
+.workflow-performance-chart {
+   width: 100%;
+   height: 60px;
+   background: var(--theia-editor-background);
+   border: 1px solid var(--theia-panel-border);
+   border-radius: 4px;
+   position: relative;
+   overflow: hidden;
+}
+
+.performance-chart-line {
+   stroke: var(--theia-focusBorder);
+   stroke-width: 2;
+   fill: none;
+}
+
+.performance-chart-area {
+   fill: var(--theia-focusBorder);
+   fill-opacity: 0.1;
+}
+
+.performance-chart-grid {
+   stroke: var(--theia-panel-border);
+   stroke-width: 1;
+   stroke-dasharray: 2, 2;
+   opacity: 0.5;
+}
+
+.performance-chart-label {
+   font-size: 10px;
+   fill: var(--theia-descriptionForeground);
+   font-family: var(--theia-ui-font-family);
+}
+
+/* Memory usage indicator */
+.workflow-memory-usage {
+   display: flex;
+   align-items: center;
+   gap: 8px;
+   padding: 4px 8px;
+   background: var(--theia-editor-background);
+   border: 1px solid var(--theia-panel-border);
+   border-radius: 4px;
+   font-size: 11px;
+}
+
+.memory-usage-bar {
+   width: 60px;
+   height: 6px;
+   background: var(--theia-panel-border);
+   border-radius: 3px;
+   overflow: hidden;
+}
+
+.memory-usage-fill {
+   height: 100%;
+   background: var(--workflow-validationSuccess, #9effbf);
+   border-radius: 3px;
+   transition: all 0.3s ease;
+}
+
+.memory-usage-fill.warning {
+   background: var(--workflow-validationWarning, #ffc940);
+}
+
+.memory-usage-fill.error {
+   background: var(--workflow-validationError, #ff6f61);
+}
+
+.memory-usage-text {
+   font-family: var(--theia-editor-font-family);
+   color: var(--theia-editor-foreground);
+}
+
+/* Responsive performance styles */
+@media (max-width: 768px) {
+   .workflow-performance-monitor {
+      position: relative;
+      top: auto;
+      right: auto;
+      margin: 8px;
+      max-width: none;
+   }
+
+   .workflow-performance-suggestions {
+      position: relative;
+      bottom: auto;
+      right: auto;
+      margin: 8px;
+      max-width: none;
+   }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+   .workflow-performance-monitor,
+   .workflow-performance-suggestions {
+      border-width: 2px;
+   }
+
+   .performance-indicator {
+      border: 1px solid var(--theia-editor-foreground);
+   }
+
+   .lazy-load-placeholder {
+      border-width: 2px;
+   }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+   .performance-indicator.warning,
+   .performance-indicator.error,
+   .workflow-sync-status.conflict,
+   .sync-status-icon.spinning {
+      animation: none;
+   }
+
+   .workflow-performance-suggestions {
+      animation: none;
+   }
+
+   .lazy-load-placeholder.loading::before {
+      animation: none;
+   }
+}

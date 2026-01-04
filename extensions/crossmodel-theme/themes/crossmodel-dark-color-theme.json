@@ -1,6 +1,6 @@
 {
   "$schema": "vscode://schemas/color-theme",
-  "name": "CrossModel Dark",
+  "name": "Workflow Modeler Dark",
   "type": "dark",
   "semanticHighlighting": true,
   "semanticTokenColors": {
@@ -160,7 +160,59 @@
 
     // Editor info/hint (not present originally)
     "editorInfo.foreground": "#6C8EBF",
-    "editorHint.foreground": "#9EFFBF"
+    "editorHint.foreground": "#9EFFBF",
+
+    // Workflow-specific colors for business process modeling
+    "workflow.nodeBackground": "#2A2A2A",
+    "workflow.nodeBorder": "#C69A2C",
+    "workflow.nodeSelectedBorder": "#FFD480",
+    "workflow.nodeHoverBackground": "#3A3A3A",
+    
+    // Node type specific colors
+    "workflow.beginNode": "#9EFFBF",
+    "workflow.endNode": "#FF6F61", 
+    "workflow.processNode": "#6C8EBF",
+    "workflow.decisionNode": "#FFC940",
+    "workflow.exceptionNode": "#FF867A",
+    "workflow.subprocessNode": "#D484E4",
+    "workflow.concurrentNode": "#80CBC4",
+    "workflow.autoNode": "#C69A2C",
+    "workflow.apiNode": "#FFD480",
+    
+    // Swimlane colors
+    "workflow.swimlaneBackground": "#252525",
+    "workflow.swimlaneBorder": "#C69A2C",
+    "workflow.swimlaneHeader": "#2E2E2E",
+    "workflow.swimlaneHeaderText": "#FFFFFF",
+    
+    // Decision table colors
+    "workflow.decisionTableHeader": "#2E2E2E",
+    "workflow.decisionTableCell": "#2A2A2A",
+    "workflow.decisionTableBorder": "#C69A2C33",
+    "workflow.decisionTableSelectedCell": "#C69A2C66",
+    
+    // Reference node colors
+    "workflow.referenceNode": "#6366f1",
+    "workflow.referenceNodeBackground": "#f0f0ff",
+    "workflow.referenceNodeBorder": "#6366f1",
+    
+    // Edge colors
+    "workflow.sequenceFlow": "#CCCCCC",
+    "workflow.dataFlow": "#80CBC4",
+    "workflow.conditionalFlow": "#FFC940",
+    "workflow.exceptionFlow": "#FF6F61",
+    
+    // Test data and automation colors
+    "workflow.testDataBackground": "#2A2A2A",
+    "workflow.testDataBorder": "#9EFFBF",
+    "workflow.automationBackground": "#2A2A2A",
+    "workflow.automationBorder": "#C69A2C",
+    
+    // Validation colors
+    "workflow.validationError": "#FF6F61",
+    "workflow.validationWarning": "#FFC940",
+    "workflow.validationInfo": "#6C8EBF",
+    "workflow.validationSuccess": "#9EFFBF"
   },
   "tokenColors": [
     {

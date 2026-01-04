@@ -1,0 +1,158 @@
+workflow:
+    id: payment_with_retry
+    name: "带重试的支付流程"
+    metadata:
+        version: "1.0.0"
+        author: "CrossModel Team"
+        tags:
+            - "示例"
+            - "错误处理"
+            - "重试"
+    nodes:
+        - begin:
+            id: start_payment
+            name: "开始支付"
+            description: "接收支付请求"
+            position:
+                x: 100
+                y: 250
+        - process:
+            id: validate_payment
+            name: "验证支付信息"
+            description: "验证支付金额、账户等信息"
+            position:
+                x: 300
+                y: 250
+        - decision:
+            id: validation_result
+            name: "验证结果"
+            description: "检查验证是否通过"
+            position:
+                x: 500
+                y: 250
+            branches:
+                - id: valid
+                  value: "valid"
+                - id: invalid
+                  value: "invalid"
+                  isDefault: true
+        - process:
+            id: process_payment
+            name: "处理支付"
+            description: "调用支付网关处理支付"
+            position:
+                x: 700
+                y: 150
+        - decision:
+            id: payment_result
+            name: "支付结果"
+            description: "检查支付是否成功"
+            position:
+                x: 900
+                y: 150
+            branches:
+                - id: success
+                  value: "success"
+                - id: retry
+                  value: "retry"
+                - id: failed
+                  value: "failed"
+                  isDefault: true
+        - process:
+            id: retry_handler
+            name: "重试处理"
+            description: "等待后重试支付"
+            position:
+                x: 900
+                y: 300
+        - decision:
+            id: retry_check
+            name: "重试检查"
+            description: "检查是否还有重试次数"
+            position:
+                x: 700
+                y: 300
+            branches:
+                - id: can_retry
+                  value: "can_retry"
+                - id: max_retries
+                  value: "max_retries"
+                  isDefault: true
+        - end:
+            id: payment_success
+            name: "支付成功"
+            description: "支付处理成功完成"
+            expectedValue: "success"
+            position:
+                x: 1100
+                y: 150
+        - exception:
+            id: validation_error
+            name: "验证失败"
+            description: "支付信息验证失败"
+            expectedValue: "validation_error"
+            errorCode: "ERR_VALIDATION"
+            position:
+                x: 500
+                y: 400
+        - exception:
+            id: payment_failed
+            name: "支付失败"
+            description: "支付处理失败，已达最大重试次数"
+            expectedValue: "payment_failed"
+            errorCode: "ERR_PAYMENT"
+            position:
+                x: 700
+                y: 450
+    edges:
+        - edge:
+            id: edge_1
+            source: start_payment
+            target: validate_payment
+        - edge:
+            id: edge_2
+            source: validate_payment
+            target: validation_result
+        - edge:
+            id: edge_3
+            source: validation_result
+            target: process_payment
+            value: "valid"
+        - edge:
+            id: edge_4
+            source: validation_result
+            target: validation_error
+            value: "invalid"
+        - edge:
+            id: edge_5
+            source: process_payment
+            target: payment_result
+        - edge:
+            id: edge_6
+            source: payment_result
+            target: payment_success
+            value: "success"
+        - edge:
+            id: edge_7
+            source: payment_result
+            target: retry_handler
+            value: "retry"
+        - edge:
+            id: edge_8
+            source: payment_result
+            target: payment_failed
+            value: "failed"
+        - edge:
+            id: edge_9
+            source: retry_handler
+            target: retry_check
+        - edge:
+            id: edge_10
+            source: retry_check
+            target: process_payment
+            value: "can_retry"
+        - edge:
+            id: edge_11
+            source: retry_check
+            target: payment_failed
+            value: "max_retries"

@@ -508,11 +508,11 @@ export const DataModelTypeInfos = {
 
 export const AllDataModelTypeInfos = Object.values(DataModelTypeInfos) as DataModelTypeInfo[];
 
-export const ModelMemberPermissions = {
-   logical: ['LogicalEntity', 'Mapping', 'Relationship', 'SystemDiagram', 'DataModel'],
+export const ModelMemberPermissions: Record<DataModelType, readonly string[]> = {
+   logical: ['LogicalEntity', 'Mapping', 'Relationship', 'SystemDiagram', 'WorkflowDiagram', 'DataModel'],
    relational: ['DataModel'],
    conceptual: ['DataModel']
-} as const satisfies Record<DataModelType, readonly RootObjectTypeName[]>;
+};
 
 export function isMemberPermittedInModel(packageType: string, memberType: string): boolean {
    const permittedTypes = ModelMemberPermissions[packageType as keyof typeof ModelMemberPermissions] as readonly string[] | undefined;

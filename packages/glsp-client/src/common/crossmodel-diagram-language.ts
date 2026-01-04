@@ -21,3 +21,11 @@ export const MappingDiagramLanguage: GLSPDiagramLanguage = {
    diagramType: 'mapping-diagram',
    fileExtensions: [ModelFileExtensions.Mapping]
 };
+
+export const WorkflowDiagramLanguage: GLSPDiagramLanguage = {
+   contributionId: CrossModelLanguageContributionId,
+   label: '工作流程图',
+   diagramType: 'workflow-diagram',
+   fileExtensions: [ModelFileExtensions.WorkflowDiagram],
+   iconClass: 'codicon codicon-workflow'
+};

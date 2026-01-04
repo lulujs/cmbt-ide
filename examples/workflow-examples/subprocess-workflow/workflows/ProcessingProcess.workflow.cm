@@ -1,0 +1,64 @@
+workflow:
+    id: processing_process
+    name: "数据处理子流程"
+    metadata:
+        version: "1.0.0"
+        author: "CrossModel Team"
+        tags:
+            - "示例"
+            - "子流程"
+            - "处理"
+    nodes:
+        - begin:
+            id: start_processing
+            name: "开始处理"
+            description: "开始数据处理"
+            position:
+                x: 100
+                y: 200
+        - process:
+            id: transform_data
+            name: "转换数据"
+            description: "将数据转换为目标格式"
+            position:
+                x: 300
+                y: 200
+        - process:
+            id: enrich_data
+            name: "丰富数据"
+            description: "添加额外的数据字段"
+            position:
+                x: 500
+                y: 200
+        - process:
+            id: save_data
+            name: "保存数据"
+            description: "将处理后的数据保存到数据库"
+            position:
+                x: 700
+                y: 200
+        - end:
+            id: processing_complete
+            name: "处理完成"
+            description: "数据处理完成"
+            expectedValue: "success"
+            position:
+                x: 900
+                y: 200
+    edges:
+        - edge:
+            id: edge_1
+            source: start_processing
+            target: transform_data
+        - edge:
+            id: edge_2
+            source: transform_data
+            target: enrich_data
+        - edge:
+            id: edge_3
+            source: enrich_data
+            target: save_data
+        - edge:
+            id: edge_4
+            source: save_data
+            target: processing_complete

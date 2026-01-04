@@ -1,0 +1,428 @@
+/* 
+ * 工作流程图形默认主题
+ * 
+ * 定义所有节点、边和交互元素的视觉样式
+ */
+
+/* ========== 全局样式 ========== */
+.sprotty-graph {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 12px;
+}
+
+/* ========== 开始节点样式 ========== */
+.begin-node .begin-node-circle {
+    fill: #c8e6c9;
+    stroke: #4caf50;
+    stroke-width: 2;
+}
+
+.begin-node .begin-node-inner {
+    fill: #e8f5e9;
+    stroke: none;
+}
+
+.begin-node .begin-node-icon {
+    fill: #2e7d32;
+}
+
+.begin-node:hover .begin-node-circle {
+    fill: #a5d6a7;
+    stroke: #388e3c;
+    stroke-width: 3;
+}
+
+.begin-node.selected .begin-node-circle {
+    fill: #81c784;
+    stroke: #1b5e20;
+    stroke-width: 3;
+    filter: drop-shadow(0 0 8px rgba(76, 175, 80, 0.5));
+}
+
+/* ========== 结束节点样式 ========== */
+.end-node .end-node-circle {
+    fill: #ffcdd2;
+    stroke: #f44336;
+    stroke-width: 2;
+}
+
+.end-node .end-node-inner {
+    fill: #ffebee;
+    stroke: none;
+}
+
+.end-node .end-node-icon {
+    fill: #c62828;
+}
+
+.end-node:hover .end-node-circle {
+    fill: #ef9a9a;
+    stroke: #d32f2f;
+    stroke-width: 3;
+}
+
+.end-node.selected .end-node-circle {
+    fill: #e57373;
+    stroke: #b71c1c;
+    stroke-width: 3;
+    filter: drop-shadow(0 0 8px rgba(244, 67, 54, 0.5));
+}
+
+/* ========== 异常节点样式 ========== */
+.exception-node .exception-node-circle {
+    fill: #ffccbc;
+    stroke: #ff5722;
+    stroke-width: 2;
+}
+
+.exception-node .exception-node-inner {
+    fill: #fff3e0;
+    stroke: none;
+}
+
+.exception-node .warning-icon {
+    color: #d84315;
+}
+
+.exception-node:hover .exception-node-circle {
+    fill: #ffab91;
+    stroke: #e64a19;
+    stroke-width: 3;
+}
+
+.exception-node.selected .exception-node-circle {
+    fill: #ff8a65;
+    stroke: #bf360c;
+    stroke-width: 3;
+    filter: drop-shadow(0 0 8px rgba(255, 87, 34, 0.5));
+}
+
+.exception-pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 0; }
+    100% { opacity: 0.6; }
+}
+
+/* ========== 处理节点样式 ========== */
+.process-node .process-node-rect {
+    fill: #e1f5fe;
+    stroke: #03a9f4;
+    stroke-width: 2;
+}
+
+.process-node .gear-icon {
+    color: #0277bd;
+}
+
+.process-node .gear-outer {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1;
+}
+
+.process-node .gear-inner {
+    fill: currentColor;
+}
+
+.process-node .gear-tooth {
+    stroke: currentColor;
+    stroke-width: 1;
+}
+
+.process-node:hover .process-node-rect {
+    fill: #b3e5fc;
+    stroke: #0288d1;
+    stroke-width: 3;
+}
+
+.process-node.selected .process-node-rect {
+    fill: #81d4fa;
+    stroke: #01579b;
+    stroke-width: 3;
+    filter: drop-shadow(0 0 8px rgba(3, 169, 244, 0.5));
+}
+
+/* ========== 决策节点样式 ========== */
+.decision-node .decision-node-diamond {
+    fill: #fff9c4;
+    stroke: #fbc02d;
+    stroke-width: 2;
+}
+
+.decision-node .question-icon {
+    color: #f57f17;
+}
+
+.decision-node:hover .decision-node-diamond {
+    fill: #fff59d;
+    stroke: #f9a825;
+    stroke-width: 3;
+}
+
+.decision-node.selected .decision-node-diamond {
+    fill: #fff176;
+    stroke: #e65100;
+    stroke-width: 3;
+    filter: drop-shadow(0 0 8px rgba(251, 192, 45, 0.5));
+}
+
+/* ========== 决策表节点样式 ========== */
+.decision-table-node .decision-table-rect {
+    fill: #fff3e0;
+    stroke: #ff9800;
+    stroke-width: 2;
+}
+
+.decision-table-node .table-icon {
+    color: #ef6c00;
+}
+
+.decision-table-node .rule-indicator-bg {
+    fill: #ff9800;
+    stroke: #e65100;
+    stroke-width: 1;
+}
+
+.decision-table-node .rule-indicator-text {
+    fill: white;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.decision-table-node:hover .decision-table-rect {
+    fill: #ffe0b2;
+    stroke: #f57c00;
+    stroke-width: 3;
+}
+
+.decision-table-node.selected .decision-table-rect {
+    fill: #ffcc02;
+    stroke: #e65100;
+    stroke-width: 3;
+    filter: drop-shadow(0 0 8px rgba(255, 152, 0, 0.5));
+}
+
+/* ========== 并行节点样式 ========== */
+.concurrent-node .concurrent-node-rect {
+    fill: #e8f5e9;
+    stroke: #4caf50;
+    stroke-width: 2;
+}
+
+.concurrent-start .concurrent-node-rect {
+    fill: #e8f5e9;
+}
+
+.concurrent-end .concurrent-node-rect {
+    fill: #f1f8e9;
+}
+
+.concurrent-node .fork-icon,
+.concurrent-node .join-icon {
+    color: #2e7d32;
+}
+
+.concurrent-node .branch-indicator {
+    fill: #4caf50;
+    stroke: #2e7d32;
+    stroke-width: 1;
+}
+
+.concurrent-node .branch-label {
+    fill: #1b5e20;
+    font-size: 10px;
+}
+
+.concurrent-node:hover .concurrent-node-rect {
+    fill: #c8e6c9;
+    stroke: #388e3c;
+    stroke-width: 3;
+}
+
+.concurrent-node.selected .concurrent-node-rect {
+    fill: #a5d6a7;
+    stroke: #1b5e20;
+    stroke-width: 3;
+    filter: drop-shadow(0 0 8px rgba(76, 175, 80, 0.5));
+}
+
+/* ========== 边样式 ========== */
+.workflow-edge .edge-path {
+    stroke: #666;
+    stroke-width: 2;
+    fill: none;
+}
+
+.workflow-edge:hover .edge-path {
+    stroke: #333;
+    stroke-width: 3;
+}
+
+.workflow-edge.selected .edge-path {
+    stroke: #2196f3;
+    stroke-width: 3;
+    filter: drop-shadow(0 0 4px rgba(33, 150, 243, 0.5));
+}
+
+.workflow-edge .edge-selection-area {
+    stroke: transparent;
+    stroke-width: 10;
+    fill: none;
+    cursor: pointer;
+}
+
+/* ========== 条件边样式 ========== */
+.conditional-edge .edge-path {
+    stroke: #2196f3;
+    stroke-width: 2;
+}
+
+.conditional-edge.default-branch .edge-path {
+    stroke: #ff9800;
+    stroke-dasharray: 5,5;
+}
+
+.conditional-edge:hover .edge-path {
+    stroke-width: 3;
+}
+
+.conditional-edge .conditional-label-bg.normal {
+    fill: #e3f2fd;
+    stroke: #2196f3;
+    stroke-width: 1;
+}
+
+.conditional-edge .conditional-label-bg.default {
+    fill: #fff3e0;
+    stroke: #ff9800;
+    stroke-width: 1;
+}
+
+.conditional-edge .conditional-label-text {
+    fill: #333;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.conditional-edge .default-indicator {
+    opacity: 0.9;
+}
+
+/* ========== 标签样式 ========== */
+.node-label {
+    fill: #333;
+    font-size: 12px;
+    font-weight: bold;
+    text-anchor: middle;
+    dominant-baseline: middle;
+}
+
+.node-sublabel {
+    fill: #666;
+    font-size: 10px;
+    text-anchor: middle;
+    dominant-baseline: middle;
+}
+
+.edge-label-bg {
+    fill: white;
+    stroke: #ccc;
+    stroke-width: 1;
+}
+
+.edge-label-text {
+    fill: #333;
+    font-size: 10px;
+}
+
+.error-code {
+    fill: #d32f2f;
+    font-size: 10px;
+    font-family: monospace;
+}
+
+/* ========== 箭头标记 ========== */
+.sprotty-graph defs marker#arrowhead {
+    fill: #666;
+}
+
+.sprotty-graph defs marker#arrowhead-conditional {
+    fill: #2196f3;
+}
+
+/* ========== 选择和悬停效果 ========== */
+.sprotty-node.selected {
+    filter: drop-shadow(0 0 8px rgba(33, 150, 243, 0.6));
+}
+
+.sprotty-node.mouseover {
+    cursor: pointer;
+}
+
+.sprotty-edge.selected {
+    filter: drop-shadow(0 0 4px rgba(33, 150, 243, 0.6));
+}
+
+.sprotty-edge.mouseover {
+    cursor: pointer;
+}
+
+/* ========== 泳道样式 ========== */
+.swimlane {
+    fill: rgba(0, 0, 0, 0.05);
+    stroke: #ccc;
+    stroke-width: 1;
+    stroke-dasharray: 5,5;
+}
+
+.swimlane-title {
+    fill: #666;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* ========== 网格和背景 ========== */
+.sprotty-graph .grid {
+    stroke: #f0f0f0;
+    stroke-width: 1;
+}
+
+.sprotty-graph .grid.major {
+    stroke: #e0e0e0;
+    stroke-width: 1;
+}
+
+/* ========== 工具提示 ========== */
+.sprotty-popup {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    max-width: 200px;
+    word-wrap: break-word;
+}
+
+/* ========== 动画效果 ========== */
+.sprotty-node {
+    transition: all 0.2s ease-in-out;
+}
+
+.sprotty-edge {
+    transition: all 0.2s ease-in-out;
+}
+
+/* ========== 响应式设计 ========== */
+@media (max-width: 768px) {
+    .node-label {
+        font-size: 10px;
+    }
+    
+    .edge-label-text {
+        font-size: 8px;
+    }
+}

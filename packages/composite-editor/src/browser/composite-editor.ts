@@ -357,6 +357,10 @@ export class CompositeEditor
             return this.createSystemDiagramWidget();
          case 'Mapping':
             return this.createMappingDiagramWidget();
+         case 'WorkflowDiagram':
+            return this.createFormWidget(options);
+         default:
+            return this.createFormWidget(options);
       }
    }
 

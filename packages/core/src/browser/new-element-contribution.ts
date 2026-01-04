@@ -84,6 +84,34 @@ const INITIAL_MAPPING_CONTENT = `mapping:
         entity: \${target}
 `;
 
+const INITIAL_WORKFLOW_CONTENT = `workflow:
+    id: \${id}
+    name: "\${name}"
+    metadata:
+        version: "1.0.0"
+    nodes:
+        - begin:
+            id: start_node
+            name: "开始"
+            position:
+                x: 100
+                y: 100
+        - end:
+            id: end_node
+            name: "结束"
+            expectedValue: "success"
+            position:
+                x: 300
+                y: 100
+    edges:
+        - edge:
+            id: edge_1
+            source: start_node
+            target: end_node
+`;
+
+const WorkflowDiagramType = 'WorkflowDiagram';
+
 function resolvePlaceholder(content: string, parameters: Record<string, string>): string {
    return Object.entries(parameters).reduce((result, [key, value]) => result.replace(new RegExp(`\\$\\{${key}\\}`, 'gi'), value), content);
 }
@@ -153,6 +181,16 @@ const NEW_ELEMENT_TEMPLATES: ReadonlyArray<NewElementTemplate> = [
       iconClass: ModelStructure.DataModel.ICON_CLASS,
       toUri: (parent, name) => parent.resolve(toId(name)).resolve(DATAMODEL_FILE),
       content: INITIAL_DATAMODEL_CONTENT
+   },
+   {
+      id: 'crossbreeze.new.workflow-diagram',
+      label: 'Workflow Diagram',
+      memberType: WorkflowDiagramType,
+      toUri: (parent, name) => join(parent, toId(name), ModelFileExtensions.WorkflowDiagram),
+      category: TEMPLATE_CATEGORY,
+      validateName: validateObjectName,
+      iconClass: ModelStructure.WorkflowDiagram.ICON_CLASS,
+      content: (_, __, { name }) => resolvePlaceholder(INITIAL_WORKFLOW_CONTENT, { name: name, id: toId(name) })
    }
 ];
 
@@ -588,6 +626,9 @@ function folderNameForMemberType(memberType: ModelFileType | string): string {
    }
    if (memberType === 'SystemDiagram') {
       return 'diagrams';
+   }
+   if (memberType === 'WorkflowDiagram') {
+      return 'workflows';
    }
    return '';
 }

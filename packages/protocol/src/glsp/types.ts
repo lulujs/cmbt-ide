@@ -36,6 +36,32 @@ export const CONCURRENT_BRANCH_COUNT = 'concurrent-branch-count';
 export const CONCURRENT_PROCESS_ID = 'concurrent-process-id';
 export const CONCURRENT_BRANCH_ID = 'concurrent-branch-id';
 
+// Workflow Diagram - Node Types
+export const WORKFLOW_BEGIN_NODE_TYPE = DefaultTypes.NODE + ':workflow-begin';
+export const WORKFLOW_END_NODE_TYPE = DefaultTypes.NODE + ':workflow-end';
+export const WORKFLOW_EXCEPTION_NODE_TYPE = DefaultTypes.NODE + ':workflow-exception';
+export const WORKFLOW_PROCESS_NODE_TYPE = DefaultTypes.NODE + ':workflow-process';
+export const WORKFLOW_DECISION_NODE_TYPE = DefaultTypes.NODE + ':workflow-decision';
+export const WORKFLOW_DECISION_TABLE_NODE_TYPE = DefaultTypes.NODE + ':workflow-decision-table';
+export const WORKFLOW_SUBPROCESS_NODE_TYPE = DefaultTypes.NODE + ':workflow-subprocess';
+export const WORKFLOW_CONCURRENT_NODE_TYPE = DefaultTypes.NODE + ':workflow-concurrent';
+export const WORKFLOW_AUTO_NODE_TYPE = DefaultTypes.NODE + ':workflow-auto';
+export const WORKFLOW_API_NODE_TYPE = DefaultTypes.NODE + ':workflow-api';
+
+// Workflow Diagram - Edge Types
+export const WORKFLOW_EDGE_TYPE = DefaultTypes.EDGE + ':workflow-flow';
+
+// Workflow Diagram - Label Types
+export const WORKFLOW_NODE_LABEL_TYPE = DefaultTypes.LABEL + ':workflow-node';
+export const WORKFLOW_EDGE_LABEL_TYPE = DefaultTypes.LABEL + ':workflow-edge';
+
+// Workflow Node Args
+export const WORKFLOW_NODE_TYPE_ARG = 'workflow-node-type';
+export const WORKFLOW_EXPECTED_VALUE_ARG = 'workflow-expected-value';
+export const WORKFLOW_REFERENCE_PATH_ARG = 'workflow-reference-path';
+export const WORKFLOW_IS_REFERENCE_ARG = 'workflow-is-reference';
+export const WORKFLOW_SOURCE_NODE_ID_ARG = 'workflow-source-node-id';
+
 // Args
 export const REFERENCE_CONTAINER_TYPE = 'reference-container-type';
 export const REFERENCE_PROPERTY = 'reference-property';

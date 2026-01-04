@@ -1,0 +1,156 @@
+workflow:
+    id: order_processing
+    name: "订单处理流程"
+    metadata:
+        version: "1.0.0"
+        author: "CrossModel Team"
+        tags:
+            - "示例"
+            - "并行"
+            - "订单"
+    nodes:
+        - begin:
+            id: receive_order
+            name: "接收订单"
+            description: "接收客户订单"
+            position:
+                x: 100
+                y: 250
+        - process:
+            id: validate_order
+            name: "验证订单"
+            description: "验证订单信息的完整性和有效性"
+            position:
+                x: 300
+                y: 250
+        - concurrent:
+            id: parallel_start
+            name: "并行处理开始"
+            description: "开始并行处理多个任务"
+            position:
+                x: 500
+                y: 250
+            parallelBranches:
+                - id: inventory_branch
+                  name: "库存处理"
+                - id: payment_branch
+                  name: "支付处理"
+                - id: notification_branch
+                  name: "通知处理"
+        - process:
+            id: check_inventory
+            name: "检查库存"
+            description: "检查商品库存是否充足"
+            position:
+                x: 700
+                y: 100
+        - process:
+            id: reserve_inventory
+            name: "预留库存"
+            description: "预留商品库存"
+            position:
+                x: 900
+                y: 100
+        - process:
+            id: process_payment
+            name: "处理支付"
+            description: "处理客户支付"
+            position:
+                x: 700
+                y: 250
+        - process:
+            id: verify_payment
+            name: "验证支付"
+            description: "验证支付是否成功"
+            position:
+                x: 900
+                y: 250
+        - process:
+            id: send_confirmation
+            name: "发送确认"
+            description: "发送订单确认邮件"
+            position:
+                x: 700
+                y: 400
+        - process:
+            id: update_crm
+            name: "更新CRM"
+            description: "更新客户关系管理系统"
+            position:
+                x: 900
+                y: 400
+        - concurrent:
+            id: parallel_end
+            name: "并行处理结束"
+            description: "等待所有并行任务完成"
+            position:
+                x: 1100
+                y: 250
+        - process:
+            id: prepare_shipment
+            name: "准备发货"
+            description: "准备商品发货"
+            position:
+                x: 1300
+                y: 250
+        - end:
+            id: order_complete
+            name: "订单完成"
+            description: "订单处理完成"
+            expectedValue: "completed"
+            position:
+                x: 1500
+                y: 250
+    edges:
+        - edge:
+            id: edge_1
+            source: receive_order
+            target: validate_order
+        - edge:
+            id: edge_2
+            source: validate_order
+            target: parallel_start
+        - edge:
+            id: edge_3
+            source: parallel_start
+            target: check_inventory
+        - edge:
+            id: edge_4
+            source: parallel_start
+            target: process_payment
+        - edge:
+            id: edge_5
+            source: parallel_start
+            target: send_confirmation
+        - edge:
+            id: edge_6
+            source: check_inventory
+            target: reserve_inventory
+        - edge:
+            id: edge_7
+            source: process_payment
+            target: verify_payment
+        - edge:
+            id: edge_8
+            source: send_confirmation
+            target: update_crm
+        - edge:
+            id: edge_9
+            source: reserve_inventory
+            target: parallel_end
+        - edge:
+            id: edge_10
+            source: verify_payment
+            target: parallel_end
+        - edge:
+            id: edge_11
+            source: update_crm
+            target: parallel_end
+        - edge:
+            id: edge_12
+            source: parallel_end
+            target: prepare_shipment
+        - edge:
+            id: edge_13
+            source: prepare_shipment
+            target: order_complete

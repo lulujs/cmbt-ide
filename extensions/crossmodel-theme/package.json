@@ -1,9 +1,9 @@
 {
-  "name": "crossmodel-theme",
-  "displayName": "crossmodel-theme",
+  "name": "workflow-modeler-theme",
+  "displayName": "Workflow Modeler Theme",
   "version": "0.19.3",
   "private": true,
-  "description": "CrossModel Theme",
+  "description": "Workflow Modeler Theme for Business Process Modeling",
   "categories": [
     "Themes"
   ],
@@ -30,14 +30,14 @@
   "contributes": {
     "themes": [
       {
-        "id": "crossmodel-light",
-        "label": "CrossModel Light",
+        "id": "workflow-modeler-light",
+        "label": "Workflow Modeler Light",
         "uiTheme": "vs",
         "path": "./themes/crossmodel-light-color-theme.json"
       },
       {
-        "id": "crossmodel-dark",
-        "label": "CrossModel Dark",
+        "id": "workflow-modeler-dark",
+        "label": "Workflow Modeler Dark",
         "uiTheme": "vs-dark",
         "path": "./themes/crossmodel-dark-color-theme.json"
       }

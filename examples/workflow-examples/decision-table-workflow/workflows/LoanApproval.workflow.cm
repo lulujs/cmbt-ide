@@ -1,0 +1,148 @@
+workflow:
+    id: loan_approval
+    name: "贷款审批流程"
+    metadata:
+        version: "1.0.0"
+        author: "CrossModel Team"
+        tags:
+            - "示例"
+            - "决策表"
+            - "金融"
+    nodes:
+        - begin:
+            id: submit_application
+            name: "提交贷款申请"
+            description: "客户提交贷款申请"
+            position:
+                x: 100
+                y: 200
+        - process:
+            id: collect_info
+            name: "收集信息"
+            description: "收集客户信用信息和财务数据"
+            position:
+                x: 300
+                y: 200
+        - decision_table:
+            id: risk_assessment
+            name: "风险评估"
+            description: "基于决策表进行风险评估"
+            position:
+                x: 500
+                y: 200
+            tableData:
+                inputColumns:
+                    - id: credit_score
+                      name: "信用评分"
+                      dataType: "number"
+                    - id: income
+                      name: "年收入"
+                      dataType: "number"
+                    - id: debt_ratio
+                      name: "负债比率"
+                      dataType: "number"
+                outputColumns:
+                    - id: risk_level
+                      name: "风险等级"
+                      dataType: "string"
+                    - id: max_amount
+                      name: "最大贷款额度"
+                      dataType: "number"
+                decisionColumns:
+                    - id: decision
+                      name: "审批决策"
+                      dataType: "string"
+                rows:
+                    - id: row_1
+                      values:
+                          - column: credit_score
+                            value: ">=750"
+                          - column: income
+                            value: ">=100000"
+                          - column: debt_ratio
+                            value: "<30%"
+                          - column: risk_level
+                            value: "低"
+                          - column: max_amount
+                            value: "500000"
+                          - column: decision
+                            value: "auto_approve"
+                    - id: row_2
+                      values:
+                          - column: credit_score
+                            value: ">=650"
+                          - column: income
+                            value: ">=50000"
+                          - column: debt_ratio
+                            value: "<50%"
+                          - column: risk_level
+                            value: "中"
+                          - column: max_amount
+                            value: "200000"
+                          - column: decision
+                            value: "manual_review"
+                    - id: row_3
+                      values:
+                          - column: credit_score
+                            value: "<650"
+                          - column: income
+                            value: "*"
+                          - column: debt_ratio
+                            value: "*"
+                          - column: risk_level
+                            value: "高"
+                          - column: max_amount
+                            value: "0"
+                          - column: decision
+                            value: "reject"
+        - process:
+            id: manual_review
+            name: "人工审核"
+            description: "信贷专员进行人工审核"
+            position:
+                x: 700
+                y: 100
+        - end:
+            id: approved
+            name: "贷款批准"
+            description: "贷款申请已批准"
+            expectedValue: "approved"
+            position:
+                x: 900
+                y: 100
+        - end:
+            id: rejected
+            name: "贷款拒绝"
+            description: "贷款申请被拒绝"
+            expectedValue: "rejected"
+            position:
+                x: 700
+                y: 350
+    edges:
+        - edge:
+            id: edge_1
+            source: submit_application
+            target: collect_info
+        - edge:
+            id: edge_2
+            source: collect_info
+            target: risk_assessment
+        - edge:
+            id: edge_3
+            source: risk_assessment
+            target: approved
+            value: "auto_approve"
+        - edge:
+            id: edge_4
+            source: risk_assessment
+            target: manual_review
+            value: "manual_review"
+        - edge:
+            id: edge_5
+            source: risk_assessment
+            target: rejected
+            value: "reject"
+        - edge:
+            id: edge_6
+            source: manual_review
+            target: approved

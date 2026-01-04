@@ -10,7 +10,8 @@ const ModelFileTypeValues = {
    LogicalEntity: 'LogicalEntity',
    Relationship: 'Relationship',
    Mapping: 'Mapping',
-   SystemDiagram: 'SystemDiagram'
+   SystemDiagram: 'SystemDiagram',
+   WorkflowDiagram: 'WorkflowDiagram'
 } as const;
 
 export const ModelFileType = {
@@ -27,6 +28,8 @@ export const ModelFileType = {
             return ModelStructure.SystemDiagram.ICON_CLASS;
          case 'Mapping':
             return ModelStructure.Mapping.ICON_CLASS;
+         case 'WorkflowDiagram':
+            return ModelStructure.WorkflowDiagram.ICON_CLASS;
          default:
             return undefined;
       }
@@ -41,6 +44,8 @@ export const ModelFileType = {
             return ModelStructure.SystemDiagram.FOLDER;
          case 'Mapping':
             return ModelStructure.Mapping.FOLDER;
+         case 'WorkflowDiagram':
+            return ModelStructure.WorkflowDiagram.FOLDER;
          default:
             return '';
       }
@@ -59,6 +64,8 @@ export const ModelFileType = {
             return ModelFileExtensions.Relationship;
          case 'SystemDiagram':
             return ModelFileExtensions.SystemDiagram;
+         case 'WorkflowDiagram':
+            return ModelFileExtensions.WorkflowDiagram;
          default:
             return '';
       }
@@ -73,6 +80,7 @@ export const ModelFileExtensions = {
    Relationship: '.relationship.cm',
    Mapping: '.mapping.cm',
    SystemDiagram: '.system-diagram.cm',
+   WorkflowDiagram: '.workflow.cm',
    /* @deprecated Use SystemDiagram instead */
    Diagram: '.diagram.cm',
 
@@ -100,6 +108,10 @@ export const ModelFileExtensions = {
       return uri.endsWith(this.SystemDiagram) || uri.endsWith(this.Diagram);
    },
 
+   isWorkflowDiagramFile(uri: string): boolean {
+      return uri.endsWith(this.WorkflowDiagram);
+   },
+
    getName(uri: string): string {
       // since we have file extensions with two '.', we cannot use the default implementation that only works for one '.'
       if (uri.endsWith(this.LogicalEntity)) {
@@ -116,6 +128,9 @@ export const ModelFileExtensions = {
       }
       if (uri.endsWith(this.Diagram)) {
          return uri.substring(0, uri.length - this.Diagram.length);
+      }
+      if (uri.endsWith(this.WorkflowDiagram)) {
+         return uri.substring(0, uri.length - this.WorkflowDiagram.length);
       }
       const lastIndex = uri.lastIndexOf('/');
       const extIndex = uri.lastIndexOf('.');
@@ -137,6 +152,9 @@ export const ModelFileExtensions = {
       }
       if (this.isEntityFile(uri)) {
          return 'LogicalEntity';
+      }
+      if (this.isWorkflowDiagramFile(uri)) {
+         return 'WorkflowDiagram';
       }
       if (this.isModelFile(uri)) {
          return 'Generic';
@@ -168,6 +186,9 @@ export const ModelFileExtensions = {
       }
       if (content.startsWith('mapping')) {
          return 'Mapping';
+      }
+      if (content.startsWith('workflow')) {
+         return 'WorkflowDiagram';
       }
       return undefined;
    },
@@ -206,5 +227,10 @@ export const ModelStructure = {
       FILE: DATAMODEL_FILE,
       ICON_CLASS: 'codicon codicon-globe',
       ICON: 'globe'
+   },
+   WorkflowDiagram: {
+      FOLDER: 'workflows',
+      ICON_CLASS: 'codicon codicon-workflow',
+      ICON: 'workflow'
    }
 };

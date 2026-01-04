@@ -1,0 +1,6 @@
+datamodel:
+    id: approval_workflow_example
+    name: "审批工作流程示例"
+    type: logical
+    version: 1.0.0
+    description: "这是一个审批工作流程示例项目，展示了分支决策和多结束节点的使用"

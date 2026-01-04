@@ -1,0 +1,6 @@
+datamodel:
+    id: basic_workflow_example
+    name: "基础工作流程示例"
+    type: logical
+    version: 1.0.0
+    description: "这是一个基础工作流程示例项目，展示了工作流程建模的基本功能"

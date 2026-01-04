@@ -1,0 +1,6 @@
+datamodel:
+   id: ecommerce_order_system
+   name: '电商订单处理系统'
+   type: logical
+   version: 1.0.0
+   description: '完整的电商订单处理工作流程，包含库存管理、支付处理、物流配送等功能'

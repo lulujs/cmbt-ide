@@ -2,3 +2,4 @@
  * Copyright (c) 2023 CrossBreeze.
  ********************************************************************************/
 export * from './model-service-rpc';
+export * from './workflow-sync-service';

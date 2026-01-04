@@ -1,0 +1,368 @@
+workflow:
+    id: complete_example
+    name: "完整示例工作流程"
+    metadata:
+        version: "1.0.0"
+        author: "CrossModel Team"
+        description: "展示所有节点类型和功能的完整示例"
+        tags:
+            - "示例"
+            - "完整功能"
+            - "图形编辑器"
+    
+    nodes:
+        # 开始节点
+        - begin:
+            id: start_process
+            name: "开始流程"
+            description: "工作流程的入口点"
+            position:
+                x: 100
+                y: 300
+            testData:
+                - name: "正常启动"
+                  inputData: {}
+                  expectedOutput: { status: "started" }
+        
+        # 处理节点
+        - process:
+            id: validate_input
+            name: "验证输入"
+            description: "验证用户输入数据"
+            position:
+                x: 300
+                y: 300
+            testData:
+                - name: "有效输入"
+                  inputData: { data: "valid" }
+                  expectedOutput: { valid: true }
+                - name: "无效输入"
+                  inputData: { data: "invalid" }
+                  expectedOutput: { valid: false }
+        
+        # 决策节点
+        - decision:
+            id: input_validation_check
+            name: "输入验证检查"
+            description: "检查输入是否有效"
+            position:
+                x: 500
+                y: 300
+            branches:
+                - id: valid_branch
+                  value: "valid"
+                  condition: "input.valid == true"
+                - id: invalid_branch
+                  value: "invalid"
+                  condition: "input.valid == false"
+                  isDefault: true
+        
+        # 决策表节点
+        - decision_table:
+            id: priority_assessment
+            name: "优先级评估"
+            description: "根据多个条件评估处理优先级"
+            position:
+                x: 700
+                y: 200
+            table:
+                inputColumns:
+                    - name: "用户等级"
+                      type: "string"
+                    - name: "紧急程度"
+                      type: "string"
+                    - name: "业务影响"
+                      type: "string"
+                outputColumns:
+                    - name: "优先级"
+                      type: "string"
+                    - name: "处理时间"
+                      type: "number"
+                decisionColumns:
+                    - name: "处理策略"
+                      type: "string"
+                rows:
+                    - inputs: ["VIP", "高", "高"]
+                      outputs: ["紧急", 1]
+                      decisions: ["立即处理"]
+                    - inputs: ["普通", "低", "低"]
+                      outputs: ["普通", 24]
+                      decisions: ["正常处理"]
+                    - inputs: ["VIP", "中", "中"]
+                      outputs: ["高", 4]
+                      decisions: ["优先处理"]
+        
+        # 并发节点开始
+        - concurrent:
+            id: parallel_start
+            name: "并行开始"
+            description: "开始并行处理"
+            position:
+                x: 900
+                y: 200
+            type: "fork"
+        
+        # 并行处理分支1
+        - process:
+            id: process_branch_1
+            name: "数据处理"
+            description: "处理业务数据"
+            position:
+                x: 1100
+                y: 100
+            automationActions:
+                - name: "数据转换"
+                  actionType: "script"
+                  configuration:
+                    script: "transform_data.py"
+                    parameters: { format: "json" }
+        
+        # 并行处理分支2
+        - process:
+            id: process_branch_2
+            name: "通知发送"
+            description: "发送通知消息"
+            position:
+                x: 1100
+                y: 200
+            automationActions:
+                - name: "邮件通知"
+                  actionType: "api_call"
+                  configuration:
+                    url: "https://api.email.com/send"
+                    method: "POST"
+        
+        # API节点
+        - api:
+            id: external_service_call
+            name: "外部服务调用"
+            description: "调用外部API服务"
+            position:
+                x: 1100
+                y: 300
+            configuration:
+                endpoint: "https://api.external.com/process"
+                method: "POST"
+                headers:
+                    Content-Type: "application/json"
+                    Authorization: "Bearer ${token}"
+                timeout: 30000
+        
+        # 并发节点结束
+        - concurrent:
+            id: parallel_end
+            name: "并行结束"
+            description: "等待所有并行分支完成"
+            position:
+                x: 1300
+                y: 200
+            type: "join"
+        
+        # 子流程节点
+        - subprocess:
+            id: cleanup_subprocess
+            name: "清理子流程"
+            description: "执行清理操作的子流程"
+            position:
+                x: 1500
+                y: 200
+            referencePath: "./subprocesses/cleanup.workflow.cm"
+            parameters:
+                cleanup_level: "full"
+                retain_logs: true
+        
+        # 自动化节点
+        - auto:
+            id: automated_reporting
+            name: "自动化报告"
+            description: "生成自动化处理报告"
+            position:
+                x: 1700
+                y: 200
+            automationActions:
+                - name: "生成报告"
+                  actionType: "script"
+                  configuration:
+                    script: "generate_report.py"
+                    output_format: "pdf"
+                - name: "上传报告"
+                  actionType: "api_call"
+                  configuration:
+                    url: "https://storage.api.com/upload"
+                    method: "PUT"
+        
+        # 正常结束节点
+        - end:
+            id: success_end
+            name: "成功完成"
+            description: "流程成功完成"
+            expectedValue: "success"
+            position:
+                x: 1900
+                y: 200
+        
+        # 异常处理节点
+        - process:
+            id: error_handling
+            name: "错误处理"
+            description: "处理验证失败的情况"
+            position:
+                x: 700
+                y: 400
+        
+        # 异常结束节点
+        - exception:
+            id: error_end
+            name: "处理失败"
+            description: "流程因错误而终止"
+            expectedValue: "error"
+            position:
+                x: 900
+                y: 400
+    
+    edges:
+        # 主流程边
+        - edge:
+            id: edge_start_to_validate
+            source: start_process
+            target: validate_input
+            
+        - edge:
+            id: edge_validate_to_check
+            source: validate_input
+            target: input_validation_check
+            
+        # 有效分支
+        - edge:
+            id: edge_valid_to_priority
+            source: input_validation_check
+            target: priority_assessment
+            value: "valid"
+            
+        - edge:
+            id: edge_priority_to_parallel
+            source: priority_assessment
+            target: parallel_start
+            
+        # 并行分支
+        - edge:
+            id: edge_parallel_to_data
+            source: parallel_start
+            target: process_branch_1
+            
+        - edge:
+            id: edge_parallel_to_notify
+            source: parallel_start
+            target: process_branch_2
+            
+        - edge:
+            id: edge_parallel_to_api
+            source: parallel_start
+            target: external_service_call
+            
+        # 并行汇聚
+        - edge:
+            id: edge_data_to_join
+            source: process_branch_1
+            target: parallel_end
+            
+        - edge:
+            id: edge_notify_to_join
+            source: process_branch_2
+            target: parallel_end
+            
+        - edge:
+            id: edge_api_to_join
+            source: external_service_call
+            target: parallel_end
+            
+        # 后续处理
+        - edge:
+            id: edge_join_to_subprocess
+            source: parallel_end
+            target: cleanup_subprocess
+            
+        - edge:
+            id: edge_subprocess_to_auto
+            source: cleanup_subprocess
+            target: automated_reporting
+            
+        - edge:
+            id: edge_auto_to_success
+            source: automated_reporting
+            target: success_end
+            
+        # 错误处理分支
+        - edge:
+            id: edge_invalid_to_error
+            source: input_validation_check
+            target: error_handling
+            value: "invalid"
+            
+        - edge:
+            id: edge_error_to_end
+            source: error_handling
+            target: error_end
+    
+    swimlanes:
+        # 用户操作泳道
+        - swimlane:
+            id: user_lane
+            name: "用户操作"
+            position:
+                x: 50
+                y: 250
+            width: 400
+            height: 150
+            color: "#E3F2FD"
+            containedNodes:
+                - ref: start_process
+                - ref: validate_input
+        
+        # 系统处理泳道
+        - swimlane:
+            id: system_lane
+            name: "系统处理"
+            position:
+                x: 450
+                y: 150
+            width: 900
+            height: 200
+            color: "#FFF3E0"
+            containedNodes:
+                - ref: input_validation_check
+                - ref: priority_assessment
+                - ref: parallel_start
+                - ref: process_branch_1
+                - ref: process_branch_2
+                - ref: external_service_call
+                - ref: parallel_end
+        
+        # 后处理泳道
+        - swimlane:
+            id: post_processing_lane
+            name: "后处理"
+            position:
+                x: 1450
+                y: 150
+            width: 500
+            height: 150
+            color: "#E8F5E9"
+            containedNodes:
+                - ref: cleanup_subprocess
+                - ref: automated_reporting
+                - ref: success_end
+        
+        # 错误处理泳道
+        - swimlane:
+            id: error_lane
+            name: "错误处理"
+            position:
+                x: 650
+                y: 350
+            width: 300
+            height: 150
+            color: "#FFEBEE"
+            containedNodes:
+                - ref: error_handling
+                - ref: error_end

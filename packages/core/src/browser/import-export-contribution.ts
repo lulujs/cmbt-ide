@@ -364,6 +364,9 @@ export class ImportExportContribution implements CommandContribution, MenuContri
       if (modelType === 'Mapping') {
          return ModelStructure.Mapping.FOLDER + '/';
       }
+      if (modelType === 'WorkflowDiagram') {
+         return ModelStructure.WorkflowDiagram.FOLDER + '/';
+      }
       return ''; // Generic files (including datamodel.cm) go in the root directory
    }
 

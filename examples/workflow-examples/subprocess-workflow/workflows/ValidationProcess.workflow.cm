@@ -1,0 +1,107 @@
+workflow:
+    id: validation_process
+    name: "数据验证子流程"
+    metadata:
+        version: "1.0.0"
+        author: "CrossModel Team"
+        tags:
+            - "示例"
+            - "子流程"
+            - "验证"
+    nodes:
+        - begin:
+            id: start_validation
+            name: "开始验证"
+            description: "开始数据验证"
+            position:
+                x: 100
+                y: 200
+        - process:
+            id: check_format
+            name: "检查格式"
+            description: "检查数据格式是否正确"
+            position:
+                x: 300
+                y: 200
+        - decision:
+            id: format_result
+            name: "格式检查结果"
+            description: "格式是否正确"
+            position:
+                x: 500
+                y: 200
+            branches:
+                - id: format_ok
+                  value: "ok"
+                - id: format_error
+                  value: "error"
+                  isDefault: true
+        - process:
+            id: check_business_rules
+            name: "检查业务规则"
+            description: "检查数据是否符合业务规则"
+            position:
+                x: 700
+                y: 100
+        - decision:
+            id: rules_result
+            name: "规则检查结果"
+            description: "是否符合业务规则"
+            position:
+                x: 900
+                y: 100
+            branches:
+                - id: rules_ok
+                  value: "ok"
+                - id: rules_error
+                  value: "error"
+                  isDefault: true
+        - end:
+            id: validation_passed
+            name: "验证通过"
+            description: "所有验证通过"
+            expectedValue: "valid"
+            position:
+                x: 1100
+                y: 100
+        - end:
+            id: validation_failed
+            name: "验证失败"
+            description: "验证未通过"
+            expectedValue: "invalid"
+            position:
+                x: 700
+                y: 350
+    edges:
+        - edge:
+            id: edge_1
+            source: start_validation
+            target: check_format
+        - edge:
+            id: edge_2
+            source: check_format
+            target: format_result
+        - edge:
+            id: edge_3
+            source: format_result
+            target: check_business_rules
+            value: "ok"
+        - edge:
+            id: edge_4
+            source: format_result
+            target: validation_failed
+            value: "error"
+        - edge:
+            id: edge_5
+            source: check_business_rules
+            target: rules_result
+        - edge:
+            id: edge_6
+            source: rules_result
+            target: validation_passed
+            value: "ok"
+        - edge:
+            id: edge_7
+            source: rules_result
+            target: validation_failed
+            value: "error"

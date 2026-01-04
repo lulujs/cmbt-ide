@@ -1,0 +1,6 @@
+datamodel:
+    id: decision_table_workflow_example
+    name: "决策表工作流程示例"
+    type: logical
+    version: 1.0.0
+    description: "这是一个决策表工作流程示例项目，展示了决策表节点的使用"

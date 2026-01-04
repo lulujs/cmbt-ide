@@ -1,0 +1,496 @@
+workflow:
+    id: ecommerce_order_process
+    name: "电商订单处理流程"
+    metadata:
+        version: "1.0.0"
+        author: "CrossModel Team"
+        tags:
+            - "电商"
+            - "订单处理"
+            - "复杂流程"
+            - "决策表"
+            - "并行处理"
+    nodes:
+        # 开始节点
+        - begin:
+            id: receive_order
+            name: "接收订单"
+            description: "客户提交订单"
+            position:
+                x: 100
+                y: 300
+        
+        # 订单验证
+        - process:
+            id: validate_order
+            name: "订单验证"
+            description: "验证订单信息完整性"
+            position:
+                x: 300
+                y: 300
+        
+        # 客户等级决策表
+        - decision_table:
+            id: customer_level_check
+            name: "客户等级评估"
+            description: "根据客户历史和订单金额评估客户等级"
+            position:
+                x: 500
+                y: 300
+            tableData:
+                inputColumns:
+                    - id: order_amount
+                      name: "订单金额"
+                      dataType: "number"
+                    - id: customer_history
+                      name: "客户历史"
+                      dataType: "string"
+                    - id: membership_level
+                      name: "会员等级"
+                      dataType: "string"
+                outputColumns:
+                    - id: discount_rate
+                      name: "折扣率"
+                      dataType: "number"
+                    - id: priority_level
+                      name: "优先级"
+                      dataType: "string"
+                decisionColumns:
+                    - id: customer_category
+                      name: "客户分类"
+                      dataType: "string"
+                rows:
+                    - id: vip_large_order
+                      values:
+                          - column: order_amount
+                            value: ">=2000"
+                          - column: customer_history
+                            value: "excellent"
+                          - column: membership_level
+                            value: "VIP"
+                          - column: discount_rate
+                            value: "20"
+                          - column: priority_level
+                            value: "high"
+                          - column: customer_category
+                            value: "vip_customer"
+                    - id: vip_normal_order
+                      values:
+                          - column: order_amount
+                            value: "<2000"
+                          - column: customer_history
+                            value: "excellent"
+                          - column: membership_level
+                            value: "VIP"
+                          - column: discount_rate
+                            value: "15"
+                          - column: priority_level
+                            value: "high"
+                          - column: customer_category
+                            value: "vip_customer"
+                    - id: gold_large_order
+                      values:
+                          - column: order_amount
+                            value: ">=1000"
+                          - column: customer_history
+                            value: "good"
+                          - column: membership_level
+                            value: "Gold"
+                          - column: discount_rate
+                            value: "10"
+                          - column: priority_level
+                            value: "medium"
+                          - column: customer_category
+                            value: "gold_customer"
+                    - id: regular_customer
+                      values:
+                          - column: order_amount
+                            value: "*"
+                          - column: customer_history
+                            value: "normal"
+                          - column: membership_level
+                            value: "Regular"
+                          - column: discount_rate
+                            value: "5"
+                          - column: priority_level
+                            value: "normal"
+                          - column: customer_category
+                            value: "regular_customer"
+        
+        # 库存检查决策
+        - decision:
+            id: inventory_check
+            name: "库存检查"
+            description: "检查商品库存状态"
+            position:
+                x: 700
+                y: 300
+            branches:
+                - id: in_stock
+                  value: "in_stock"
+                - id: low_stock
+                  value: "low_stock"
+                - id: out_of_stock
+                  value: "out_of_stock"
+                  isDefault: true
+        
+        # 并行处理开始
+        - concurrent:
+            id: parallel_processing_start
+            name: "并行处理开始"
+            description: "开始并行处理订单相关任务"
+            position:
+                x: 900
+                y: 200
+            parallelBranches:
+                - id: payment_branch
+                  name: "支付处理分支"
+                - id: logistics_branch
+                  name: "物流准备分支"
+                - id: notification_branch
+                  name: "通知处理分支"
+        
+        # 支付处理分支
+        - process:
+            id: process_payment
+            name: "处理支付"
+            description: "处理客户支付请求"
+            position:
+                x: 1100
+                y: 100
+        
+        - decision:
+            id: payment_result
+            name: "支付结果"
+            description: "检查支付是否成功"
+            position:
+                x: 1300
+                y: 100
+            branches:
+                - id: payment_success
+                  value: "success"
+                - id: payment_failed
+                  value: "failed"
+                  isDefault: true
+        
+        # 物流准备分支
+        - process:
+            id: prepare_logistics
+            name: "准备物流"
+            description: "准备商品包装和配送"
+            position:
+                x: 1100
+                y: 200
+        
+        - process:
+            id: assign_courier
+            name: "分配快递员"
+            description: "根据地址分配合适的快递员"
+            position:
+                x: 1300
+                y: 200
+        
+        # 通知处理分支
+        - process:
+            id: send_confirmation
+            name: "发送确认"
+            description: "发送订单确认通知"
+            position:
+                x: 1100
+                y: 300
+        
+        - process:
+            id: update_systems
+            name: "更新系统"
+            description: "更新ERP和CRM系统"
+            position:
+                x: 1300
+                y: 300
+        
+        # 并行处理结束
+        - concurrent:
+            id: parallel_processing_end
+            name: "并行处理结束"
+            description: "等待所有并行任务完成"
+            position:
+                x: 1500
+                y: 200
+        
+        # 最终处理
+        - process:
+            id: finalize_order
+            name: "订单完成"
+            description: "完成订单处理流程"
+            position:
+                x: 1700
+                y: 200
+        
+        # 库存不足处理
+        - process:
+            id: handle_stock_shortage
+            name: "处理库存不足"
+            description: "联系供应商或推荐替代商品"
+            position:
+                x: 700
+                y: 500
+        
+        - decision:
+            id: stock_solution
+            name: "库存解决方案"
+            description: "选择库存不足的解决方案"
+            position:
+                x: 900
+                y: 500
+            branches:
+                - id: restock_available
+                  value: "restock"
+                - id: substitute_product
+                  value: "substitute"
+                - id: cancel_order
+                  value: "cancel"
+                  isDefault: true
+        
+        # 结束节点
+        - end:
+            id: order_completed
+            name: "订单成功完成"
+            description: "订单处理成功完成"
+            expectedValue: "completed"
+            position:
+                x: 1900
+                y: 200
+        
+        - end:
+            id: order_cancelled
+            name: "订单已取消"
+            description: "由于库存或其他问题订单被取消"
+            expectedValue: "cancelled"
+            position:
+                x: 1100
+                y: 600
+        
+        # 异常处理节点
+        - exception:
+            id: payment_failed_end
+            name: "支付失败"
+            description: "支付处理失败"
+            expectedValue: "payment_failed"
+            errorCode: "ERR_PAYMENT"
+            position:
+                x: 1500
+                y: 50
+        
+        - exception:
+            id: system_error
+            name: "系统错误"
+            description: "系统处理过程中发生错误"
+            expectedValue: "system_error"
+            errorCode: "ERR_SYSTEM"
+            position:
+                x: 500
+                y: 500
+    
+    edges:
+        # 主流程边
+        - edge:
+            id: edge_1
+            source: receive_order
+            target: validate_order
+        
+        - edge:
+            id: edge_2
+            source: validate_order
+            target: customer_level_check
+        
+        - edge:
+            id: edge_3
+            source: customer_level_check
+            target: inventory_check
+            value: "vip_customer"
+        
+        - edge:
+            id: edge_4
+            source: customer_level_check
+            target: inventory_check
+            value: "gold_customer"
+        
+        - edge:
+            id: edge_5
+            source: customer_level_check
+            target: inventory_check
+            value: "regular_customer"
+        
+        # 库存充足流程
+        - edge:
+            id: edge_6
+            source: inventory_check
+            target: parallel_processing_start
+            value: "in_stock"
+        
+        - edge:
+            id: edge_7
+            source: inventory_check
+            target: parallel_processing_start
+            value: "low_stock"
+        
+        # 并行处理 - 支付分支
+        - edge:
+            id: edge_8
+            source: parallel_processing_start
+            target: process_payment
+        
+        - edge:
+            id: edge_9
+            source: process_payment
+            target: payment_result
+        
+        - edge:
+            id: edge_10
+            source: payment_result
+            target: parallel_processing_end
+            value: "success"
+        
+        - edge:
+            id: edge_11
+            source: payment_result
+            target: payment_failed_end
+            value: "failed"
+        
+        # 并行处理 - 物流分支
+        - edge:
+            id: edge_12
+            source: parallel_processing_start
+            target: prepare_logistics
+        
+        - edge:
+            id: edge_13
+            source: prepare_logistics
+            target: assign_courier
+        
+        - edge:
+            id: edge_14
+            source: assign_courier
+            target: parallel_processing_end
+        
+        # 并行处理 - 通知分支
+        - edge:
+            id: edge_15
+            source: parallel_processing_start
+            target: send_confirmation
+        
+        - edge:
+            id: edge_16
+            source: send_confirmation
+            target: update_systems
+        
+        - edge:
+            id: edge_17
+            source: update_systems
+            target: parallel_processing_end
+        
+        # 最终完成
+        - edge:
+            id: edge_18
+            source: parallel_processing_end
+            target: finalize_order
+        
+        - edge:
+            id: edge_19
+            source: finalize_order
+            target: order_completed
+        
+        # 库存不足处理流程
+        - edge:
+            id: edge_20
+            source: inventory_check
+            target: handle_stock_shortage
+            value: "out_of_stock"
+        
+        - edge:
+            id: edge_21
+            source: handle_stock_shortage
+            target: stock_solution
+        
+        - edge:
+            id: edge_22
+            source: stock_solution
+            target: parallel_processing_start
+            value: "restock"
+        
+        - edge:
+            id: edge_23
+            source: stock_solution
+            target: parallel_processing_start
+            value: "substitute"
+        
+        - edge:
+            id: edge_24
+            source: stock_solution
+            target: order_cancelled
+            value: "cancel"
+        
+        # 错误处理
+        - edge:
+            id: edge_25
+            source: validate_order
+            target: system_error
+    
+    swimlanes:
+        - swimlane:
+            id: customer_lane
+            name: "客户"
+            position:
+                x: 50
+                y: 250
+            width: 200
+            height: 100
+            color: "#E3F2FD"
+            containedNodes:
+                - ref: receive_order
+        
+        - swimlane:
+            id: order_processing_lane
+            name: "订单处理"
+            position:
+                x: 250
+                y: 250
+            width: 500
+            height: 100
+            color: "#FFF3E0"
+            containedNodes:
+                - ref: validate_order
+                - ref: customer_level_check
+                - ref: inventory_check
+        
+        - swimlane:
+            id: fulfillment_lane
+            name: "订单履行"
+            position:
+                x: 800
+                y: 50
+            width: 800
+            height: 200
+            color: "#E8F5E9"
+            containedNodes:
+                - ref: parallel_processing_start
+                - ref: process_payment
+                - ref: payment_result
+                - ref: prepare_logistics
+                - ref: assign_courier
+                - ref: send_confirmation
+                - ref: update_systems
+                - ref: parallel_processing_end
+                - ref: finalize_order
+        
+        - swimlane:
+            id: inventory_management_lane
+            name: "库存管理"
+            position:
+                x: 650
+                y: 450
+            width: 400
+            height: 150
+            color: "#FCE4EC"
+            containedNodes:
+                - ref: handle_stock_shortage
+                - ref: stock_solution

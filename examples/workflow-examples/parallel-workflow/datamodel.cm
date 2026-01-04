@@ -1,0 +1,6 @@
+datamodel:
+    id: parallel_workflow_example
+    name: "并行工作流程示例"
+    type: logical
+    version: 1.0.0
+    description: "这是一个并行工作流程示例项目，展示了并发处理和同步的使用"

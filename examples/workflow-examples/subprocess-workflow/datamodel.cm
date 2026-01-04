@@ -1,0 +1,6 @@
+datamodel:
+    id: subprocess_workflow_example
+    name: "子流程工作流程示例"
+    type: logical
+    version: 1.0.0
+    description: "这是一个子流程工作流程示例项目，展示了子流程节点的使用和流程模块化"

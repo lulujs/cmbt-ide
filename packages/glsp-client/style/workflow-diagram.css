@@ -1,0 +1,636 @@
+/********************************************************************************
+ * Copyright (c) 2023 CrossBreeze.
+ * Workflow Diagram Styles - 工作流程图样式
+ * 需求 8.1-8.3: 统一的用户界面主题
+ ********************************************************************************/
+
+/* ============================================
+ * Workflow Node Base Styles - 工作流程节点基础样式
+ * ============================================ */
+
+:root {
+   /* Workflow color palette */
+   --workflow-primary: var(--theia-focusBorder, #c69a2c);
+   --workflow-background: var(--theia-editor-background);
+   --workflow-foreground: var(--theia-editor-foreground);
+   --workflow-border: var(--theia-panel-border);
+
+   /* Node type colors */
+   --workflow-begin: var(--workflow-beginNode, #9effbf);
+   --workflow-end: var(--workflow-endNode, #ff6f61);
+   --workflow-process: var(--workflow-processNode, #6c8ebf);
+   --workflow-decision: var(--workflow-decisionNode, #ffc940);
+   --workflow-exception: var(--workflow-exceptionNode, #ff867a);
+   --workflow-subprocess: var(--workflow-subprocessNode, #d484e4);
+   --workflow-concurrent: var(--workflow-concurrentNode, #80cbc4);
+   --workflow-auto: var(--workflow-autoNode, #c69a2c);
+   --workflow-api: var(--workflow-apiNode, #ffd480);
+
+   /* Edge colors */
+   --workflow-sequence-flow: var(--workflow-sequenceFlow, #cccccc);
+   --workflow-data-flow: var(--workflow-dataFlow, #80cbc4);
+   --workflow-conditional-flow: var(--workflow-conditionalFlow, #ffc940);
+   --workflow-exception-flow: var(--workflow-exceptionFlow, #ff6f61);
+}
+
+/* Base workflow node styles */
+.workflow-node {
+   cursor: pointer;
+   font-family: var(--theia-ui-font-family);
+}
+
+.workflow-node .node-body {
+   fill: var(--workflow-background);
+   stroke-width: 2px;
+   transition: all 0.2s ease;
+}
+
+.workflow-node.selected .node-body {
+   stroke: var(--workflow-primary);
+   stroke-width: 2px;
+   stroke-dasharray: 6px 3px;
+}
+
+.workflow-node.mouseover:not(.selected) .node-body {
+   stroke: var(--workflow-primary);
+   stroke-width: 2px;
+   filter: brightness(1.05);
+}
+
+.workflow-node .node-label {
+   fill: var(--workflow-foreground);
+   font-size: 12px;
+   text-anchor: middle;
+   dominant-baseline: middle;
+   font-weight: 500;
+}
+
+.workflow-node.selected .node-label {
+   fill: var(--workflow-primary);
+   font-weight: 600;
+}
+
+/* ============================================
+ * Specific Node Type Styles - 特定节点类型样式
+ * ============================================ */
+
+/* Begin Node - 开始节点 */
+.begin-node .node-body {
+   stroke: var(--workflow-begin);
+   fill: var(--workflow-background);
+}
+
+.begin-node .node-icon {
+   fill: var(--workflow-begin);
+   stroke: none;
+}
+
+.begin-node .node-symbol {
+   fill: none;
+   stroke: var(--workflow-begin);
+   stroke-width: 2px;
+   stroke-linecap: round;
+}
+
+/* End Node - 结束节点 */
+.end-node .node-body {
+   stroke: var(--workflow-end);
+   fill: var(--workflow-background);
+}
+
+.end-node .node-icon {
+   fill: var(--workflow-end);
+   stroke: none;
+}
+
+.end-node .node-symbol {
+   fill: var(--workflow-end);
+   stroke: none;
+}
+
+/* Exception Node - 异常节点 */
+.exception-node .node-body {
+   stroke: var(--workflow-exception);
+   fill: var(--workflow-background);
+}
+
+.exception-node .node-icon {
+   fill: var(--workflow-exception);
+   stroke: none;
+}
+
+.exception-node .node-symbol {
+   fill: none;
+   stroke: var(--workflow-exception);
+   stroke-width: 2px;
+}
+
+/* Process Node - 过程节点 */
+.process-node .node-body {
+   stroke: var(--workflow-process);
+   fill: var(--workflow-background);
+   rx: 8;
+   ry: 8;
+}
+
+.process-node .node-icon {
+   fill: var(--workflow-process);
+   stroke: none;
+}
+
+/* Decision Node - 分支节点 */
+.decision-node .node-body {
+   stroke: var(--workflow-decision);
+   fill: var(--workflow-background);
+}
+
+.decision-node .node-icon {
+   fill: var(--workflow-decision);
+   stroke: none;
+}
+
+.decision-node .node-symbol {
+   fill: none;
+   stroke: var(--workflow-decision);
+   stroke-width: 2px;
+}
+
+/* Decision Table Node - 决策表节点 */
+.decision-table-node .node-body {
+   stroke: var(--workflow-decision);
+   fill: var(--workflow-background);
+   rx: 4;
+   ry: 4;
+}
+
+.decision-table-node .table-icon {
+   fill: var(--workflow-decision);
+   stroke: none;
+}
+
+.decision-table-node .table-grid {
+   fill: none;
+   stroke: var(--workflow-decision);
+   stroke-width: 1px;
+   opacity: 0.6;
+}
+
+/* Subprocess Node - 子流程节点 */
+.subprocess-node .node-body {
+   stroke: var(--workflow-subprocess);
+   fill: var(--workflow-background);
+   rx: 8;
+   ry: 8;
+   stroke-dasharray: 5, 3;
+}
+
+.subprocess-node .node-icon {
+   fill: var(--workflow-subprocess);
+   stroke: none;
+}
+
+.subprocess-node .subprocess-indicator {
+   fill: none;
+   stroke: var(--workflow-subprocess);
+   stroke-width: 1.5px;
+}
+
+/* Concurrent Node - 并发节点 */
+.concurrent-node .node-body {
+   stroke: var(--workflow-concurrent);
+   fill: var(--workflow-background);
+}
+
+.concurrent-node .node-icon {
+   fill: var(--workflow-concurrent);
+   stroke: none;
+}
+
+.concurrent-node .concurrent-symbol {
+   fill: none;
+   stroke: var(--workflow-concurrent);
+   stroke-width: 2px;
+   stroke-linecap: round;
+}
+
+/* Auto Node - 自动化节点 */
+.auto-node .node-body {
+   stroke: var(--workflow-auto);
+   fill: var(--workflow-background);
+   rx: 6;
+   ry: 6;
+}
+
+.auto-node .node-icon {
+   fill: var(--workflow-auto);
+   stroke: none;
+}
+
+.auto-node .auto-symbol {
+   fill: var(--workflow-auto);
+   stroke: none;
+}
+
+/* API Node - API节点 */
+.api-node .node-body {
+   stroke: var(--workflow-api);
+   fill: var(--workflow-background);
+   rx: 6;
+   ry: 6;
+}
+
+.api-node .node-icon {
+   fill: var(--workflow-api);
+   stroke: none;
+}
+
+.api-node .api-symbol {
+   fill: none;
+   stroke: var(--workflow-api);
+   stroke-width: 2px;
+}
+
+/* ============================================
+ * Edge Styles - 边样式
+ * ============================================ */
+
+/* Sequence Flow - 顺序流 */
+.sequence-flow {
+   fill: none;
+   stroke: var(--workflow-sequence-flow);
+   stroke-width: 2px;
+   marker-end: url(#sequence-flow-arrow);
+}
+
+.sequence-flow.selected {
+   stroke: var(--workflow-primary);
+   stroke-width: 2px;
+   stroke-dasharray: 6px 3px;
+}
+
+.sequence-flow.mouseover:not(.selected) {
+   stroke: var(--workflow-primary);
+   stroke-width: 2px;
+}
+
+/* Data Flow - 数据流 */
+.data-flow {
+   fill: none;
+   stroke: var(--workflow-data-flow);
+   stroke-width: 2px;
+   stroke-dasharray: 4, 2;
+   marker-end: url(#data-flow-arrow);
+}
+
+.data-flow.selected {
+   stroke: var(--workflow-primary);
+   stroke-width: 2px;
+   stroke-dasharray: 6px 3px;
+}
+
+/* Conditional Flow - 条件流 */
+.conditional-flow {
+   fill: none;
+   stroke: var(--workflow-conditional-flow);
+   stroke-width: 2px;
+   marker-end: url(#conditional-flow-arrow);
+}
+
+.conditional-flow.selected {
+   stroke: var(--workflow-primary);
+   stroke-width: 2px;
+   stroke-dasharray: 6px 3px;
+}
+
+/* Exception Flow - 异常流 */
+.exception-flow {
+   fill: none;
+   stroke: var(--workflow-exception-flow);
+   stroke-width: 2px;
+   stroke-dasharray: 3, 3;
+   marker-end: url(#exception-flow-arrow);
+}
+
+.exception-flow.selected {
+   stroke: var(--workflow-primary);
+   stroke-width: 2px;
+   stroke-dasharray: 6px 3px;
+}
+
+/* Edge Labels - 边标签 */
+.edge-label {
+   fill: var(--workflow-foreground);
+   font-family: var(--theia-ui-font-family);
+   font-size: 10px;
+   text-anchor: middle;
+   dominant-baseline: middle;
+}
+
+.edge-label.selected {
+   fill: var(--workflow-primary);
+   font-weight: 600;
+}
+
+/* ============================================
+ * Port Styles - 端口样式
+ * ============================================ */
+
+.workflow-port {
+   fill: var(--workflow-primary);
+   stroke: var(--workflow-background);
+   stroke-width: 2px;
+   cursor: crosshair;
+   opacity: 0;
+   transition: opacity 0.2s ease;
+}
+
+.workflow-node.mouseover .workflow-port,
+.workflow-node.selected .workflow-port {
+   opacity: 1;
+}
+
+.workflow-port:hover {
+   fill: var(--workflow-primary);
+   transform: scale(1.2);
+}
+
+.workflow-port.input-port {
+   fill: var(--workflow-data-flow);
+}
+
+.workflow-port.output-port {
+   fill: var(--workflow-sequence-flow);
+}
+
+/* ============================================
+ * Validation Styles - 验证样式
+ * ============================================ */
+
+.validation-error {
+   stroke: var(--workflow-validationError, #ff6f61) !important;
+   stroke-width: 2px !important;
+}
+
+.validation-warning {
+   stroke: var(--workflow-validationWarning, #ffc940) !important;
+   stroke-width: 2px !important;
+}
+
+.validation-info {
+   stroke: var(--workflow-validationInfo, #6c8ebf) !important;
+   stroke-width: 2px !important;
+}
+
+.validation-success {
+   stroke: var(--workflow-validationSuccess, #9effbf) !important;
+   stroke-width: 2px !important;
+}
+
+/* Validation markers */
+.validation-marker {
+   pointer-events: none;
+}
+
+.validation-marker.error {
+   fill: var(--workflow-validationError, #ff6f61);
+}
+
+.validation-marker.warning {
+   fill: var(--workflow-validationWarning, #ffc940);
+}
+
+.validation-marker.info {
+   fill: var(--workflow-validationInfo, #6c8ebf);
+}
+
+.validation-marker.success {
+   fill: var(--workflow-validationSuccess, #9effbf);
+}
+
+/* ============================================
+ * Tool Palette Styles - 工具面板样式
+ * ============================================ */
+
+.workflow-tool-palette {
+   background: var(--theia-sideBar-background);
+   border: 1px solid var(--theia-panel-border);
+   border-radius: 8px;
+   padding: 8px;
+   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.workflow-tool-palette .tool-group {
+   margin-bottom: 12px;
+}
+
+.workflow-tool-palette .tool-group-header {
+   font-family: var(--theia-ui-font-family);
+   font-size: 11px;
+   font-weight: 600;
+   color: var(--theia-sideBarSectionHeader-foreground);
+   text-transform: uppercase;
+   letter-spacing: 0.5px;
+   margin-bottom: 6px;
+   padding: 4px 0;
+   border-bottom: 1px solid var(--theia-panel-border);
+}
+
+.workflow-tool-palette .tool-button {
+   display: flex;
+   align-items: center;
+   width: 100%;
+   padding: 8px 12px;
+   margin: 2px 0;
+   background: transparent;
+   border: 1px solid transparent;
+   border-radius: 6px;
+   color: var(--theia-sideBar-foreground);
+   font-family: var(--theia-ui-font-family);
+   font-size: 12px;
+   cursor: pointer;
+   transition: all 0.2s ease;
+}
+
+.workflow-tool-palette .tool-button:hover {
+   background: var(--theia-list-hoverBackground);
+   border-color: var(--theia-focusBorder);
+}
+
+.workflow-tool-palette .tool-button.active {
+   background: var(--theia-list-activeSelectionBackground);
+   color: var(--theia-list-activeSelectionForeground);
+   border-color: var(--theia-focusBorder);
+}
+
+.workflow-tool-palette .tool-icon {
+   width: 16px;
+   height: 16px;
+   margin-right: 8px;
+   flex-shrink: 0;
+}
+
+.workflow-tool-palette .tool-label {
+   flex: 1;
+   text-align: left;
+}
+
+/* ============================================
+ * Context Menu Styles - 上下文菜单样式
+ * ============================================ */
+
+.workflow-context-menu {
+   background: var(--theia-menu-background);
+   border: 1px solid var(--theia-menu-border);
+   border-radius: 6px;
+   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+   padding: 4px 0;
+   min-width: 180px;
+}
+
+.workflow-context-menu .menu-item {
+   display: flex;
+   align-items: center;
+   padding: 8px 16px;
+   color: var(--theia-menu-foreground);
+   font-family: var(--theia-ui-font-family);
+   font-size: 12px;
+   cursor: pointer;
+   transition: background-color 0.2s ease;
+}
+
+.workflow-context-menu .menu-item:hover {
+   background: var(--theia-menu-selectionBackground);
+   color: var(--theia-menu-selectionForeground);
+}
+
+.workflow-context-menu .menu-item.disabled {
+   color: var(--theia-menu-foreground);
+   opacity: 0.5;
+   cursor: not-allowed;
+}
+
+.workflow-context-menu .menu-separator {
+   height: 1px;
+   background: var(--theia-menu-separatorBackground);
+   margin: 4px 0;
+}
+
+.workflow-context-menu .menu-icon {
+   width: 16px;
+   height: 16px;
+   margin-right: 8px;
+   flex-shrink: 0;
+}
+
+/* ============================================
+ * Animation and Transitions - 动画和过渡效果
+ * ============================================ */
+
+.workflow-node,
+.workflow-edge {
+   transition: all 0.2s ease;
+}
+
+.workflow-node.creating {
+   animation: node-create 0.3s ease-out;
+}
+
+@keyframes node-create {
+   0% {
+      opacity: 0;
+      transform: scale(0.8);
+   }
+   100% {
+      opacity: 1;
+      transform: scale(1);
+   }
+}
+
+.workflow-edge.creating {
+   animation: edge-create 0.3s ease-out;
+}
+
+@keyframes edge-create {
+   0% {
+      stroke-dasharray: 0, 1000;
+   }
+   100% {
+      stroke-dasharray: 1000, 0;
+   }
+}
+
+/* Hover effects */
+.workflow-node:hover {
+   filter: brightness(1.05);
+}
+
+.workflow-edge:hover {
+   filter: brightness(1.1);
+}
+
+/* ============================================
+ * Responsive Design - 响应式设计
+ * ============================================ */
+
+@media (max-width: 768px) {
+   .workflow-tool-palette {
+      width: 100%;
+      max-width: 300px;
+   }
+
+   .workflow-tool-palette .tool-button {
+      padding: 12px;
+   }
+
+   .workflow-node .node-label {
+      font-size: 10px;
+   }
+
+   .edge-label {
+      font-size: 9px;
+   }
+}
+
+/* ============================================
+ * Accessibility - 可访问性
+ * ============================================ */
+
+.workflow-node:focus,
+.workflow-edge:focus {
+   outline: 2px solid var(--theia-focusBorder);
+   outline-offset: 2px;
+}
+
+.workflow-tool-palette .tool-button:focus {
+   outline: 2px solid var(--theia-focusBorder);
+   outline-offset: -2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+   .workflow-node .node-body {
+      stroke-width: 3px;
+   }
+
+   .workflow-edge {
+      stroke-width: 3px;
+   }
+
+   .workflow-tool-palette .tool-button {
+      border-width: 2px;
+   }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+   .workflow-node,
+   .workflow-edge,
+   .workflow-tool-palette .tool-button {
+      transition: none;
+   }
+
+   .workflow-node.creating,
+   .workflow-edge.creating {
+      animation: none;
+   }
+}

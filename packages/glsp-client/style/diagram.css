@@ -325,3 +325,454 @@
    color: var(--theia-list-hoverForeground) !important;
    outline: none !important;
 }
+
+/* ============================================
+ * Swimlane Styles - 泳道样式
+ * 需求 3.1-3.4: 泳道功能的图形表示
+ * ============================================ */
+
+/* 泳道节点基础样式 */
+.swimlane-node {
+   cursor: move;
+}
+
+.swimlane-node .swimlane-background {
+   fill: var(--theia-editor-background);
+   fill-opacity: 0.3;
+   stroke: none;
+}
+
+.swimlane-node .swimlane-border {
+   fill: none;
+   stroke: var(--theia-panel-border);
+   stroke-width: 1px;
+}
+
+.swimlane-node.selected .swimlane-border {
+   stroke: var(--theia-focusBorder);
+   stroke-width: 2px;
+   stroke-dasharray: 6px 3px;
+}
+
+.swimlane-node.mouseover:not(.selected) .swimlane-border {
+   stroke: var(--theia-focusBorder);
+   stroke-width: 2px;
+}
+
+/* 泳道头部样式 */
+.swimlane-header {
+   cursor: pointer;
+}
+
+.swimlane-header-background {
+   fill: var(--theia-sideBar-background);
+   fill-opacity: 0.8;
+}
+
+.swimlane-header-separator {
+   stroke: var(--theia-panel-border);
+   stroke-width: 1px;
+}
+
+/* 泳道标签样式 */
+.swimlane-label {
+   font-family: var(--theia-ui-font-family);
+   font-size: 12px;
+   font-weight: 600;
+   fill: var(--theia-editor-foreground);
+   text-anchor: middle;
+   dominant-baseline: middle;
+}
+
+.swimlane-label.selected {
+   fill: var(--theia-focusBorder);
+}
+
+/* 泳道内容区域样式 */
+.swimlane-content {
+   pointer-events: all;
+}
+
+.swimlane-content-background {
+   fill: transparent;
+}
+
+/* 泳道拖放高亮样式 */
+.swimlane-node.drop-target .swimlane-content-background {
+   fill: var(--theia-list-dropBackground);
+   fill-opacity: 0.3;
+}
+
+.swimlane-node.drop-target .swimlane-border {
+   stroke: var(--theia-focusBorder);
+   stroke-width: 2px;
+   stroke-dasharray: 4px 2px;
+}
+
+/* 水平泳道样式 */
+.swimlane-node.horizontal .swimlane-header {
+   writing-mode: horizontal-tb;
+}
+
+/* 垂直泳道样式 */
+.swimlane-node.vertical .swimlane-header {
+   writing-mode: vertical-rl;
+   text-orientation: mixed;
+}
+
+.swimlane-node.vertical .swimlane-label {
+   writing-mode: vertical-rl;
+   text-orientation: mixed;
+}
+
+/* 泳道调整大小手柄 */
+.swimlane-resize-handle {
+   fill: var(--theia-focusBorder);
+   stroke: none;
+   cursor: nwse-resize;
+   opacity: 0;
+}
+
+.swimlane-node.selected .swimlane-resize-handle,
+.swimlane-node.mouseover .swimlane-resize-handle {
+   opacity: 1;
+}
+
+/* 泳道内节点样式调整 */
+.swimlane-content .sprotty-node {
+   /* 泳道内的节点保持正常样式 */
+}
+
+/* 泳道折叠状态 */
+.swimlane-node.collapsed .swimlane-content {
+   display: none;
+}
+
+.swimlane-node.collapsed .swimlane-border {
+   height: 30px;
+}
+
+/* ============================================
+ * Reference Node Styles - 引用节点样式
+ * 需求 4.1-4.5: 引用节点的图形表示和视觉指示
+ * ============================================ */
+
+/* 引用节点基础样式 */
+.reference-node {
+   cursor: pointer;
+}
+
+.reference-node rect.reference,
+.reference-node .node-body.reference {
+   stroke: #6366f1;
+   stroke-width: 2px;
+   stroke-dasharray: 5, 3;
+   fill: #f0f0ff;
+}
+
+.reference-node.selected rect.reference,
+.reference-node.selected .node-body.reference {
+   stroke: var(--theia-focusBorder);
+   stroke-width: 2px;
+   stroke-dasharray: 6px 3px;
+}
+
+.reference-node.mouseover:not(.selected) rect.reference,
+.reference-node.mouseover:not(.selected) .node-body.reference {
+   stroke: var(--theia-focusBorder);
+   stroke-width: 2px;
+   fill: #e8e8ff;
+}
+
+/* 引用标记样式 */
+.reference-badge {
+   pointer-events: none;
+}
+
+.reference-badge .badge-background {
+   fill: #6366f1;
+   stroke: white;
+   stroke-width: 1px;
+}
+
+.reference-badge .badge-icon {
+   fill: white;
+   font-size: 10px;
+}
+
+/* 链接指示器样式 */
+.link-indicator {
+   pointer-events: none;
+}
+
+.link-indicator .link-text {
+   fill: #666;
+   font-style: italic;
+   font-size: 8px;
+}
+
+/* 引用节点悬停效果 */
+.reference-node:hover {
+   filter: brightness(1.05);
+}
+
+/* 引用关系连线样式 */
+.reference-relationship-edge {
+   stroke: #6366f1;
+   stroke-width: 1px;
+   stroke-dasharray: 3, 2;
+   stroke-opacity: 0.5;
+}
+
+.reference-relationship-edge.selected,
+.reference-relationship-edge.mouseover {
+   stroke-opacity: 1;
+   stroke-width: 2px;
+}
+
+/* 引用节点工具提示 */
+.reference-node-tooltip {
+   background: #6366f1;
+   color: white;
+   padding: 4px 8px;
+   border-radius: 4px;
+   font-size: 12px;
+   pointer-events: none;
+}
+
+/* 引用节点上下文菜单样式 */
+.context-menu .reference-menu-item {
+   color: #6366f1;
+}
+
+.context-menu .reference-menu-item::before {
+   content: '🔗 ';
+}
+
+/* 引用节点在泳道中的样式 */
+.swimlane-content .reference-node rect.reference {
+   stroke: #6366f1;
+   stroke-dasharray: 5, 3;
+}
+
+/* 引用节点禁用编辑指示 */
+.reference-node .readonly-indicator {
+   fill: #9ca3af;
+   font-size: 10px;
+}
+
+/* 引用节点源节点高亮 */
+.source-node-highlight {
+   stroke: #6366f1 !important;
+   stroke-width: 3px !important;
+   stroke-dasharray: none !important;
+   filter: drop-shadow(0 0 4px rgba(99, 102, 241, 0.5));
+}
+
+/* ============================================
+ * Concurrent Process Styles - 并发流程样式
+ * 需求 6.1-6.4: 并发流程的图形表示
+ * ============================================ */
+
+/* 并发开始节点样式 */
+.concurrent-start-node {
+   cursor: pointer;
+}
+
+.concurrent-start-node .concurrent-start-background {
+   fill: var(--theia-editor-background);
+   stroke: var(--theia-charts-green, #4ade80);
+   stroke-width: 1.5px;
+}
+
+.concurrent-start-node.selected .concurrent-start-background {
+   stroke: var(--theia-focusBorder);
+   stroke-width: 2px;
+   stroke-dasharray: 6px 3px;
+}
+
+.concurrent-start-node.mouseover:not(.selected) .concurrent-start-background {
+   stroke: var(--theia-focusBorder);
+   stroke-width: 2px;
+}
+
+.concurrent-start-node .concurrent-start-symbol {
+   fill: none;
+   stroke: var(--theia-charts-green, #4ade80);
+   stroke-width: 2px;
+   stroke-linecap: round;
+}
+
+/* 并发结束节点样式 */
+.concurrent-end-node {
+   cursor: pointer;
+}
+
+.concurrent-end-node .concurrent-end-background {
+   fill: var(--theia-editor-background);
+   stroke: var(--theia-charts-orange, #fb923c);
+   stroke-width: 1.5px;
+}
+
+.concurrent-end-node.selected .concurrent-end-background {
+   stroke: var(--theia-focusBorder);
+   stroke-width: 2px;
+   stroke-dasharray: 6px 3px;
+}
+
+.concurrent-end-node.mouseover:not(.selected) .concurrent-end-background {
+   stroke: var(--theia-focusBorder);
+   stroke-width: 2px;
+}
+
+.concurrent-end-node .concurrent-end-symbol {
+   fill: none;
+   stroke: var(--theia-charts-orange, #fb923c);
+   stroke-width: 2px;
+   stroke-linecap: round;
+}
+
+/* 并发容器样式 */
+.concurrent-container {
+   pointer-events: all;
+}
+
+.concurrent-container-background {
+   fill: var(--theia-editor-background);
+   fill-opacity: 0.3;
+   stroke: var(--theia-panel-border);
+   stroke-width: 1px;
+   stroke-dasharray: 5, 5;
+}
+
+.concurrent-container.selected .concurrent-container-background {
+   stroke: var(--theia-focusBorder);
+   stroke-width: 2px;
+}
+
+.concurrent-container.mouseover:not(.selected) .concurrent-container-background {
+   stroke: var(--theia-focusBorder);
+   stroke-width: 1.5px;
+}
+
+/* 并发分支边样式 */
+.concurrent-branch-edge {
+   fill: none;
+   stroke: var(--theia-charts-blue, #60a5fa);
+   stroke-width: 1.5px;
+   stroke-dasharray: 4, 2;
+}
+
+.concurrent-branch-edge.selected {
+   stroke: var(--theia-focusBorder);
+   stroke-width: 2px;
+   stroke-dasharray: 6px 3px;
+}
+
+.concurrent-branch-edge.mouseover:not(.selected) {
+   stroke: var(--theia-focusBorder);
+   stroke-width: 2px;
+}
+
+.concurrent-branch-arrow {
+   fill: none;
+   stroke: var(--theia-charts-blue, #60a5fa);
+   stroke-width: 1.5px;
+}
+
+/* 并发标签样式 */
+.concurrent-label {
+   font-family: var(--theia-ui-font-family);
+   font-size: 12px;
+   fill: var(--theia-editor-foreground);
+   text-anchor: middle;
+   dominant-baseline: middle;
+}
+
+.concurrent-label.selected {
+   fill: var(--theia-focusBorder);
+}
+
+/* 并发流程验证错误样式 */
+.concurrent-validation-error {
+   stroke: var(--theia-errorForeground, #f87171) !important;
+   stroke-width: 2px !important;
+}
+
+.concurrent-validation-error .concurrent-start-background,
+.concurrent-validation-error .concurrent-end-background {
+   stroke: var(--theia-errorForeground, #f87171) !important;
+}
+
+/* 并发流程环路警告样式 */
+.concurrent-cycle-warning {
+   stroke: var(--theia-warningForeground, #fbbf24) !important;
+   stroke-width: 2px !important;
+   animation: cycle-warning-pulse 1s ease-in-out infinite;
+}
+
+@keyframes cycle-warning-pulse {
+   0%,
+   100% {
+      stroke-opacity: 1;
+   }
+   50% {
+      stroke-opacity: 0.5;
+   }
+}
+
+/* 并发流程拖放高亮样式 */
+.concurrent-container.drop-target .concurrent-container-background {
+   fill: var(--theia-list-dropBackground);
+   fill-opacity: 0.3;
+   stroke: var(--theia-focusBorder);
+   stroke-width: 2px;
+   stroke-dasharray: 4px 2px;
+}
+
+/* 并发流程内节点样式 */
+.concurrent-container .sprotty-node {
+   /* 并发流程内的节点保持正常样式 */
+}
+
+/* 并发流程工具提示 */
+.concurrent-tooltip {
+   background: var(--theia-charts-blue, #60a5fa);
+   color: white;
+   padding: 4px 8px;
+   border-radius: 4px;
+   font-size: 12px;
+   pointer-events: none;
+}
+
+/* 并发流程分支指示器 */
+.concurrent-branch-indicator {
+   fill: var(--theia-charts-blue, #60a5fa);
+   font-size: 10px;
+   font-weight: bold;
+}
+
+/* 并发流程连接点样式 */
+.concurrent-connection-point {
+   fill: var(--theia-charts-blue, #60a5fa);
+   stroke: white;
+   stroke-width: 1px;
+   cursor: crosshair;
+}
+
+.concurrent-connection-point:hover {
+   fill: var(--theia-focusBorder);
+   transform: scale(1.2);
+}
+
+/* 并发流程禁用状态 */
+.concurrent-disabled {
+   opacity: 0.5;
+   pointer-events: none;
+}
+
+.concurrent-disabled .concurrent-start-background,
+.concurrent-disabled .concurrent-end-background,
+.concurrent-disabled .concurrent-container-background {
+   stroke: var(--theia-disabledForeground, #9ca3af) !important;
+}

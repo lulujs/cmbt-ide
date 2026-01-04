@@ -86,5 +86,7 @@
     "typescript",
     "typescriptreact"
   ],
-  "cSpell.ignoreRegExpList": ["/^\\s*import.*from.*/gm"]
+  "cSpell.ignoreRegExpList": [
+    "/^\\s*import.*from.*/gm"
+  ]
 }

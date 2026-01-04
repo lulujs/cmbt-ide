@@ -25,3 +25,12 @@ export * from './concurrent';
 
 // Workflow model types and utilities
 export * from './model';
+
+// Reference node management
+export * from './reference-manager';
+
+// Test data management
+export * from './test-data-manager';
+
+// Automation action management
+export * from './automation-action-manager';

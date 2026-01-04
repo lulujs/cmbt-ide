@@ -18,10 +18,32 @@ export const TARGET_OBJECT_NODE_TYPE = DefaultTypes.NODE + ':target-object';
 export const TARGET_ATTRIBUTE_MAPPING_EDGE_TYPE = DefaultTypes.EDGE + ':target-attribute-mapping';
 export const ATTRIBUTE_COMPARTMENT_TYPE = DefaultTypes.COMPARTMENT + ':attribute';
 
+// Workflow Diagram - Swimlane Types
+export const SWIMLANE_NODE_TYPE = DefaultTypes.NODE + ':swimlane';
+export const SWIMLANE_HEADER_TYPE = DefaultTypes.COMPARTMENT + ':swimlane-header';
+export const SWIMLANE_CONTENT_TYPE = DefaultTypes.COMPARTMENT + ':swimlane-content';
+export const SWIMLANE_LABEL_TYPE = DefaultTypes.LABEL + ':swimlane';
+
+// Workflow Diagram - Concurrent Process Types
+export const CONCURRENT_START_NODE_TYPE = DefaultTypes.NODE + ':concurrent-start';
+export const CONCURRENT_END_NODE_TYPE = DefaultTypes.NODE + ':concurrent-end';
+export const CONCURRENT_BRANCH_EDGE_TYPE = DefaultTypes.EDGE + ':concurrent-branch';
+export const CONCURRENT_CONTAINER_TYPE = DefaultTypes.COMPARTMENT + ':concurrent-container';
+export const CONCURRENT_LABEL_TYPE = DefaultTypes.LABEL + ':concurrent';
+
+// Concurrent Process Args
+export const CONCURRENT_BRANCH_COUNT = 'concurrent-branch-count';
+export const CONCURRENT_PROCESS_ID = 'concurrent-process-id';
+export const CONCURRENT_BRANCH_ID = 'concurrent-branch-id';
+
 // Args
 export const REFERENCE_CONTAINER_TYPE = 'reference-container-type';
 export const REFERENCE_PROPERTY = 'reference-property';
 export const REFERENCE_VALUE = 'reference-value';
+
+// Swimlane Args
+export const SWIMLANE_ORIENTATION = 'swimlane-orientation';
+export const SWIMLANE_COLOR = 'swimlane-color';
 
 export type RenderProps = Record<string, string | number | boolean | undefined> & {
    theme: 'light' | 'dark' | 'hc' | 'hcLight'; // supported ThemeType of Theia

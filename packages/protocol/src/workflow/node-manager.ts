@@ -2,6 +2,7 @@
  * Copyright (c) 2024 CrossBreeze.
  ********************************************************************************/
 
+import { DecisionTableData, DecisionTableManager } from './decision-table';
 import {
    AnyWorkflowNode,
    ApiNode,
@@ -19,6 +20,9 @@ import {
    WorkflowNode
 } from './node';
 import { NodeType, Position } from './types';
+
+// Re-export DecisionTableManager for convenience
+export { DecisionTableManager } from './decision-table';
 
 /**
  * 节点验证结果接口
@@ -905,6 +909,26 @@ export class NodeFactory {
    }
 
    /**
+    * 创建决策表节点管理器
+    * Create decision table node manager
+    * 需求 2.1: 创建决策表节点时提供默认的决策表数据
+    */
+   static createDecisionTableNode(
+      name: string,
+      position: Position,
+      tableData?: DecisionTableData,
+      properties?: NodeProperties
+   ): DecisionTableManager {
+      return new DecisionTableManager({
+         id: this.generateNodeId('decision_table'),
+         name,
+         position,
+         properties,
+         tableData
+      });
+   }
+
+   /**
     * 创建子流程节点管理器
     * Create subprocess node manager
     */
@@ -1011,6 +1035,8 @@ export class NodeFactory {
             return this.createProcessNode(name, position, properties);
          case NodeType.DECISION:
             return this.createDecisionNode(name, position, undefined, properties);
+         case NodeType.DECISION_TABLE:
+            return this.createDecisionTableNode(name, position, undefined, properties) as unknown as BaseNodeManager<AnyWorkflowNode>;
          case NodeType.SUBPROCESS:
             return this.createSubprocessNode(name, position, undefined, properties);
          case NodeType.CONCURRENT:

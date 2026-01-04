@@ -734,7 +734,7 @@ table[style*='position: fixed'] * {
 }
 
 .p-inputnumber-input {
-   padding-right: 1.5rem !important; 
+   padding-right: 1.5rem !important;
 }
 
 .grid-cell-container {
@@ -753,4 +753,58 @@ table[style*='position: fixed'] * {
 
 .p-datatable .p-datatable-tbody > tr > td {
    vertical-align: top !important;
+}
+
+/* Decision Table Editor Styles */
+.decision-table-editor {
+   padding: 1rem;
+}
+
+.decision-table-editor .column-header-input {
+   background-color: rgba(59, 130, 246, 0.1) !important;
+}
+
+.decision-table-editor .column-header-decision {
+   background-color: rgba(245, 158, 11, 0.1) !important;
+}
+
+.decision-table-editor .column-header-output {
+   background-color: rgba(34, 197, 94, 0.1) !important;
+}
+
+.decision-table-editor .column-type-input {
+   color: #3b82f6;
+}
+
+.decision-table-editor .column-type-decision {
+   color: #f59e0b;
+}
+
+.decision-table-editor .column-type-output {
+   color: #22c55e;
+}
+
+.decision-table-editor .p-highlight-error {
+   background-color: rgba(239, 68, 68, 0.1) !important;
+}
+
+.decision-table-editor .p-datatable .p-datatable-tbody > tr.p-highlight-error:hover {
+   background-color: rgba(239, 68, 68, 0.15) !important;
+}
+
+/* Dark theme adjustments for decision table */
+.crossmodel-dark .decision-table-editor .column-header-input {
+   background-color: rgba(59, 130, 246, 0.2) !important;
+}
+
+.crossmodel-dark .decision-table-editor .column-header-decision {
+   background-color: rgba(245, 158, 11, 0.2) !important;
+}
+
+.crossmodel-dark .decision-table-editor .column-header-output {
+   background-color: rgba(34, 197, 94, 0.2) !important;
+}
+
+.crossmodel-dark .decision-table-editor .p-highlight-error {
+   background-color: rgba(239, 68, 68, 0.2) !important;
 }

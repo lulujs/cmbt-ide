@@ -30,64 +30,50 @@ export class WorkflowDiagramApplyLabelEditOperationHandler extends JsonOperation
       const labelId = operation.labelId;
       const newText = operation.text;
 
+      console.log(`[DEBUG] Applying label edit: labelId=${labelId}, newText=${newText}`);
+
       // 从标签ID中提取元素ID（格式: elementId_label）
       const elementId = labelId.replace(/_label$/, '');
+      console.log(`[DEBUG] Extracted elementId: ${elementId}`);
 
-      let currentText = this.modelState.semanticText();
       let hasChanges = false;
 
-      // 尝试更新节点名称
+      // 尝试更新节点名称 - 直接修改AST节点
       const node = this.modelState.index.findWorkflowNode(elementId);
       if (node) {
-         currentText = this.updateNodeName(currentText, node.id!, newText);
-         hasChanges = true;
+         console.log(`[DEBUG] Found node: ${node.id}, current name: ${node.name}`);
+         if (node.name !== newText) {
+            // 直接修改AST节点的名称属性
+            (node as any).name = newText;
+            hasChanges = true;
+            console.log(`[DEBUG] Node name updated in AST: ${node.name}`);
+         }
+      } else {
+         console.log(`[DEBUG] Node not found for elementId: ${elementId}`);
       }
 
-      // 尝试更新泳道名称
+      // 尝试更新泳道名称 - 直接修改AST节点
       const swimlane = this.modelState.index.findSwimlane(elementId);
       if (swimlane) {
-         currentText = this.updateSwimlaneName(currentText, swimlane.id!, newText);
-         hasChanges = true;
+         console.log(`[DEBUG] Found swimlane: ${swimlane.id}, current name: ${swimlane.name}`);
+         if (swimlane.name !== newText) {
+            // 直接修改AST节点的名称属性
+            (swimlane as any).name = newText;
+            hasChanges = true;
+            console.log(`[DEBUG] Swimlane name updated in AST: ${swimlane.name}`);
+         }
       }
 
       if (hasChanges) {
-         this.modelState.updateSourceModel({ text: currentText });
+         console.log(`[DEBUG] Updating source model with modified AST`);
+         // 使用修改后的AST重新序列化
+         const updatedText = this.modelState.semanticText();
+         console.log(`[DEBUG] Updated text preview:`, updatedText.substring(0, 200) + '...');
+         this.modelState.updateSourceModel({ text: updatedText });
+         console.log(`[DEBUG] Source model updated`);
+      } else {
+         console.log(`[DEBUG] No changes made - source model not updated`);
       }
    }
 
-   /**
-    * 更新节点名称
-    * Update node name
-    */
-   private updateNodeName(text: string, nodeId: string, newName: string): string {
-      // 查找节点的name属性并更新
-      const namePattern = new RegExp(`(${this.escapeRegExp(nodeId)}\\s*\\{[\\s\\S]*?name\\s*:\\s*)"[^"]*"`, 'g');
-      return text.replace(namePattern, `$1"${this.escapeQuotes(newName)}"`);
-   }
-
-   /**
-    * 更新泳道名称
-    * Update swimlane name
-    */
-   private updateSwimlaneName(text: string, swimlaneId: string, newName: string): string {
-      // 查找泳道的name属性并更新
-      const namePattern = new RegExp(`(${this.escapeRegExp(swimlaneId)}\\s*\\{[\\s\\S]*?name\\s*:\\s*)"[^"]*"`, 'g');
-      return text.replace(namePattern, `$1"${this.escapeQuotes(newName)}"`);
-   }
-
-   /**
-    * 转义正则表达式特殊字符
-    * Escape regex special characters
-    */
-   private escapeRegExp(string: string): string {
-      return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-   }
-
-   /**
-    * 转义引号
-    * Escape quotes
-    */
-   private escapeQuotes(string: string): string {
-      return string.replace(/"/g, '\\"');
-   }
 }

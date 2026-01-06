@@ -6,7 +6,6 @@
 
 import { CommandService, MessageService } from '@theia/core';
 import { PreferenceService } from '@theia/core/lib/browser';
-import { WindowService } from '@theia/core/lib/browser/window/window-service';
 import { inject, injectable } from '@theia/core/shared/inversify';
 
 export interface TutorialStep {
@@ -48,8 +47,7 @@ export class WorkflowTutorialService {
    constructor(
       @inject(MessageService) private readonly messageService: MessageService,
       @inject(CommandService) private readonly commandService: CommandService,
-      @inject(PreferenceService) private readonly preferenceService: PreferenceService,
-      @inject(WindowService) private readonly windowService: WindowService
+      @inject(PreferenceService) private readonly preferenceService: PreferenceService
    ) {
       this.initializeTutorials();
    }

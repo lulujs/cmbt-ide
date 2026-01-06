@@ -6,26 +6,26 @@ import { Grammar, isReference } from 'langium';
 import { collectAst } from 'langium/grammar';
 import { Serializer } from '../../model-server/serializer.js';
 import {
-   ApiNode,
-   Swimlane as AstSwimlane,
-   WorkflowEdge as AstWorkflowEdge,
-   WorkflowModel as AstWorkflowModel,
-   WorkflowNode as AstWorkflowNode,
-   AutoNode,
-   ConcurrentNode,
-   DecisionNode,
-   DecisionTableNode,
-   EndNode,
-   ExceptionNode,
-   isApiNode,
-   isAutoNode,
-   isConcurrentNode,
-   isDecisionNode,
-   isDecisionTableNode,
-   isEndNode,
-   isExceptionNode,
-   isSubprocessNode,
-   SubprocessNode
+    ApiNode,
+    Swimlane as AstSwimlane,
+    WorkflowEdge as AstWorkflowEdge,
+    WorkflowModel as AstWorkflowModel,
+    WorkflowNode as AstWorkflowNode,
+    AutoNode,
+    ConcurrentNode,
+    DecisionNode,
+    DecisionTableNode,
+    EndNode,
+    ExceptionNode,
+    isApiNode,
+    isAutoNode,
+    isConcurrentNode,
+    isDecisionNode,
+    isDecisionTableNode,
+    isEndNode,
+    isExceptionNode,
+    isSubprocessNode,
+    SubprocessNode
 } from '../generated/ast.js';
 
 /**
@@ -126,19 +126,19 @@ export class WorkflowSerializer implements Serializer<AstWorkflowModel> {
          lines.push(this.indent(3) + `description: "${node.description}"`);
       }
 
-      // 序列化位置 (Serialize position)
-      if (node.position) {
-         lines.push(this.indent(3) + 'position:');
-         lines.push(this.indent(4) + `x: ${node.position.x}`);
-         lines.push(this.indent(4) + `y: ${node.position.y}`);
-      }
-
       // 序列化特定节点类型的属性 (Serialize type-specific properties)
       if (isEndNode(node) || isExceptionNode(node)) {
          const endNode = node as EndNode | ExceptionNode;
          if (endNode.expectedValue) {
             lines.push(this.indent(3) + `expectedValue: "${endNode.expectedValue}"`);
          }
+      }
+
+      // 序列化位置 (Serialize position)
+      if (node.position) {
+         lines.push(this.indent(3) + 'position:');
+         lines.push(this.indent(4) + `x: ${node.position.x}`);
+         lines.push(this.indent(4) + `y: ${node.position.y}`);
       }
 
       if (isDecisionNode(node)) {

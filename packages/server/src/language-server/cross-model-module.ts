@@ -32,12 +32,12 @@ import { CrossModelLanguageServer } from './cross-model-language-server.js';
 import { DefaultIdProvider } from './cross-model-naming.js';
 import { CrossModelScopeProvider } from './cross-model-scope-provider.js';
 import { CrossModelScopeComputation } from './cross-model-scope.js';
-import { CrossModelSerializer } from './cross-model-serializer.js';
 import { CrossModelValidator, registerValidationChecks } from './cross-model-validator.js';
 import { CrossModelWorkspaceManager } from './cross-model-workspace-manager.js';
 import { CrossModelGeneratedModule, CrossModelGeneratedSharedModule } from './generated/module.js';
 import { CrossModelTokenBuilder } from './parser/cross-model-indentation-aware.js';
 import { CrossModelLinker } from './references/cross-model-linker.js';
+import { SmartSerializer } from './smart-serializer.js';
 
 /***************************
  * Shared Module
@@ -146,7 +146,7 @@ export interface CrossModelAddedServices {
       CrossModelValidator: CrossModelValidator;
    };
    serializer: {
-      Serializer: CrossModelSerializer;
+      Serializer: SmartSerializer;
    };
    parser: {
       TokenBuilder: CrossModelTokenBuilder;
@@ -190,7 +190,7 @@ export function createCrossModelModule(
          Formatter: () => new CrossModelModelFormatter()
       },
       serializer: {
-         Serializer: services => new CrossModelSerializer(services.Grammar)
+         Serializer: services => new SmartSerializer(services.Grammar)
       },
       parser: {
          TokenBuilder: () => new CrossModelTokenBuilder(),

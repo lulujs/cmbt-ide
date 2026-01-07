@@ -6,26 +6,18 @@ import { Grammar, isReference } from 'langium';
 import { collectAst } from 'langium/grammar';
 import { Serializer } from '../../model-server/serializer.js';
 import {
-    ApiNode,
-    Swimlane as AstSwimlane,
-    WorkflowEdge as AstWorkflowEdge,
-    WorkflowModel as AstWorkflowModel,
-    WorkflowNode as AstWorkflowNode,
-    AutoNode,
-    ConcurrentNode,
-    DecisionNode,
-    DecisionTableNode,
-    EndNode,
-    ExceptionNode,
-    isApiNode,
-    isAutoNode,
-    isConcurrentNode,
-    isDecisionNode,
-    isDecisionTableNode,
-    isEndNode,
-    isExceptionNode,
-    isSubprocessNode,
-    SubprocessNode
+   ApiNode,
+   Swimlane as AstSwimlane,
+   WorkflowEdge as AstWorkflowEdge,
+   WorkflowModel as AstWorkflowModel,
+   WorkflowNode as AstWorkflowNode,
+   AutoNode,
+   ConcurrentNode,
+   DecisionNode,
+   DecisionTableNode,
+   EndNode,
+   ExceptionNode,
+   SubprocessNode
 } from '../generated/ast.js';
 
 /**
@@ -110,8 +102,8 @@ export class WorkflowSerializer implements Serializer<AstWorkflowModel> {
     */
    private serializeNode(node: AstWorkflowNode): string[] {
       const lines: string[] = [];
+      
       const nodeType = node.nodeType;
-
       lines.push(this.indent(2) + `- ${nodeType}:`);
 
       if (node.id) {
@@ -127,7 +119,7 @@ export class WorkflowSerializer implements Serializer<AstWorkflowModel> {
       }
 
       // 序列化特定节点类型的属性 (Serialize type-specific properties)
-      if (isEndNode(node) || isExceptionNode(node)) {
+      if (node.$type === 'EndNode' || node.$type === 'ExceptionNode') {
          const endNode = node as EndNode | ExceptionNode;
          if (endNode.expectedValue) {
             lines.push(this.indent(3) + `expectedValue: "${endNode.expectedValue}"`);
@@ -141,37 +133,40 @@ export class WorkflowSerializer implements Serializer<AstWorkflowModel> {
          lines.push(this.indent(4) + `y: ${node.position.y}`);
       }
 
-      if (isDecisionNode(node)) {
+      if (node.$type === 'DecisionNode') {
          const decisionNode = node as DecisionNode;
+         
          if (decisionNode.branches && decisionNode.branches.length > 0) {
             lines.push(this.indent(3) + 'branches:');
             for (const branch of decisionNode.branches) {
                lines.push(this.indent(4) + `- id: ${branch.id ?? ''}`);
+               
                if (branch.value) {
-                  lines.push(this.indent(5) + `value: "${branch.value}"`);
+                  lines.push(this.indent(4) + `  value: "${branch.value}"`);
                }
+               
                if (branch.isDefault) {
-                  lines.push(this.indent(5) + 'isDefault: true');
+                  lines.push(this.indent(4) + `  isDefault: true`);
                }
             }
          }
       }
 
-      if (isDecisionTableNode(node)) {
+      if (node.$type === 'DecisionTableNode') {
          const tableNode = node as DecisionTableNode;
          if (tableNode.tableData) {
             lines.push(...this.serializeDecisionTableData(tableNode.tableData));
          }
       }
 
-      if (isSubprocessNode(node)) {
+      if (node.$type === 'SubprocessNode') {
          const subprocessNode = node as SubprocessNode;
          if (subprocessNode.referencePath) {
             lines.push(this.indent(3) + `referencePath: "${subprocessNode.referencePath}"`);
          }
       }
 
-      if (isConcurrentNode(node)) {
+      if (node.$type === 'ConcurrentNode') {
          const concurrentNode = node as ConcurrentNode;
          if (concurrentNode.parallelBranches && concurrentNode.parallelBranches.length > 0) {
             lines.push(this.indent(3) + 'parallelBranches:');
@@ -184,7 +179,7 @@ export class WorkflowSerializer implements Serializer<AstWorkflowModel> {
          }
       }
 
-      if (isAutoNode(node)) {
+      if (node.$type === 'AutoNode') {
          const autoNode = node as AutoNode;
          if (autoNode.automationConfig && autoNode.automationConfig.length > 0) {
             lines.push(this.indent(3) + 'automationConfig:');
@@ -199,7 +194,7 @@ export class WorkflowSerializer implements Serializer<AstWorkflowModel> {
          }
       }
 
-      if (isApiNode(node)) {
+      if (node.$type === 'ApiNode') {
          const apiNode = node as ApiNode;
          if (apiNode.apiEndpoint) {
             lines.push(this.indent(3) + `apiEndpoint: "${apiNode.apiEndpoint}"`);

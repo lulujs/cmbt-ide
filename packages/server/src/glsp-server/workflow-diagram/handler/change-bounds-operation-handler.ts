@@ -27,7 +27,8 @@ export class WorkflowDiagramChangeBoundsOperationHandler extends JsonOperationHa
    }
 
    protected changeBounds(operation: ChangeBoundsOperation): void {
-      let currentText = this.modelState.semanticText();
+      console.log(`[DEBUG] ChangeBounds operation with ${operation.newBounds.length} elements`);
+
       let hasChanges = false;
 
       for (const elementAndBounds of operation.newBounds) {
@@ -35,75 +36,54 @@ export class WorkflowDiagramChangeBoundsOperationHandler extends JsonOperationHa
          const newPosition = elementAndBounds.newPosition;
          const newSize = elementAndBounds.newSize;
 
+         console.log(`[DEBUG] Processing element: ${elementId}, position: ${newPosition?.x}, ${newPosition?.y}`);
+
          // 查找节点或泳道
          const node = this.modelState.index.findWorkflowNode(elementId);
          const swimlane = this.modelState.index.findSwimlane(elementId);
 
          if (node && newPosition) {
-            currentText = this.updateNodePosition(currentText, node.id!, newPosition.x, newPosition.y);
+            console.log(`[DEBUG] Found node: ${node.id}, updating position to (${newPosition.x}, ${newPosition.y})`);
+            
+            // 直接修改AST节点的位置属性
+            if (!node.position) {
+               (node as any).position = { x: 0, y: 0 };
+            }
+            (node.position as any).x = Math.round(newPosition.x);
+            (node.position as any).y = Math.round(newPosition.y);
             hasChanges = true;
+            
+            console.log(`[DEBUG] Node position updated in AST: (${node.position!.x}, ${node.position!.y})`);
          } else if (swimlane && newPosition) {
-            currentText = this.updateSwimlanePosition(
-               currentText,
-               swimlane.id!,
-               newPosition.x,
-               newPosition.y,
-               newSize.width,
-               newSize.height
-            );
+            console.log(`[DEBUG] Found swimlane: ${swimlane.id}, updating position and size`);
+            
+            // 直接修改AST泳道的位置和大小属性
+            if (!swimlane.position) {
+               (swimlane as any).position = { x: 0, y: 0 };
+            }
+            (swimlane.position as any).x = Math.round(newPosition.x);
+            (swimlane.position as any).y = Math.round(newPosition.y);
+            
+            if (newSize) {
+               (swimlane as any).width = Math.round(newSize.width);
+               (swimlane as any).height = Math.round(newSize.height);
+            }
             hasChanges = true;
+            
+            console.log(`[DEBUG] Swimlane updated in AST: position (${swimlane.position!.x}, ${swimlane.position!.y}), size (${swimlane.width}, ${swimlane.height})`);
+         } else {
+            console.log(`[DEBUG] Element not found: ${elementId}`);
          }
       }
 
       if (hasChanges) {
-         this.modelState.updateSourceModel({ text: currentText });
+         console.log(`[DEBUG] Updating source model with modified AST`);
+         // 使用修改后的AST重新序列化
+         const updatedText = this.modelState.semanticText();
+         this.modelState.updateSourceModel({ text: updatedText });
+      } else {
+         console.log(`[DEBUG] No changes made - source model not updated`);
       }
    }
 
-   /**
-    * 更新节点位置
-    * Update node position
-    */
-   private updateNodePosition(text: string, nodeId: string, x: number, y: number): string {
-      // 查找节点的position属性并更新
-      const positionPattern = new RegExp(
-         `(${this.escapeRegExp(nodeId)}\\s*\\{[\\s\\S]*?position\\s*:\\s*\\{\\s*x\\s*:\\s*)\\d+(\\.\\d+)?(\\s*,\\s*y\\s*:\\s*)\\d+(\\.\\d+)?(\\s*\\})`,
-         'g'
-      );
-
-      return text.replace(positionPattern, `$1${Math.round(x)}$3${Math.round(y)}$5`);
-   }
-
-   /**
-    * 更新泳道位置和大小
-    * Update swimlane position and size
-    */
-   private updateSwimlanePosition(text: string, swimlaneId: string, x: number, y: number, width: number, height: number): string {
-      let result = text;
-
-      // 更新位置
-      const positionPattern = new RegExp(
-         `(${this.escapeRegExp(swimlaneId)}\\s*\\{[\\s\\S]*?position\\s*:\\s*\\{\\s*x\\s*:\\s*)\\d+(\\.\\d+)?(\\s*,\\s*y\\s*:\\s*)\\d+(\\.\\d+)?(\\s*\\})`,
-         'g'
-      );
-      result = result.replace(positionPattern, `$1${Math.round(x)}$3${Math.round(y)}$5`);
-
-      // 更新宽度
-      const widthPattern = new RegExp(`(${this.escapeRegExp(swimlaneId)}\\s*\\{[\\s\\S]*?width\\s*:\\s*)\\d+(\\.\\d+)?`, 'g');
-      result = result.replace(widthPattern, `$1${Math.round(width)}`);
-
-      // 更新高度
-      const heightPattern = new RegExp(`(${this.escapeRegExp(swimlaneId)}\\s*\\{[\\s\\S]*?height\\s*:\\s*)\\d+(\\.\\d+)?`, 'g');
-      result = result.replace(heightPattern, `$1${Math.round(height)}`);
-
-      return result;
-   }
-
-   /**
-    * 转义正则表达式特殊字符
-    * Escape regex special characters
-    */
-   private escapeRegExp(string: string): string {
-      return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-   }
 }

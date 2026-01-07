@@ -3,19 +3,19 @@
  ********************************************************************************/
 
 import {
-   CloseModelArgs,
-   CrossReference,
-   CrossReferenceContext,
-   DATAMODEL_FILE,
-   DataModelInfo,
-   DataModelInfoArgs,
-   DataModelUpdatedEvent,
-   ModelSavedEvent,
-   ModelUpdatedEvent,
-   OpenModelArgs,
-   ReferenceableElement,
-   SaveModelArgs,
-   UpdateModelArgs
+    CloseModelArgs,
+    CrossReference,
+    CrossReferenceContext,
+    DATAMODEL_FILE,
+    DataModelInfo,
+    DataModelInfoArgs,
+    DataModelUpdatedEvent,
+    ModelSavedEvent,
+    ModelUpdatedEvent,
+    OpenModelArgs,
+    ReferenceableElement,
+    SaveModelArgs,
+    UpdateModelArgs
 } from '@crossmodel/protocol';
 import { AstNode, Deferred, DocumentState, UriUtils, isAstNode } from 'langium';
 import { basename } from 'path';
@@ -172,7 +172,7 @@ export class ModelService {
          setTimeout(() => {
             listener.dispose();
             reject('Update timed out.');
-         }, 5000)
+         }, 15000) // 增加到15秒
       );
       await this.documentManager.update(args.uri, newVersion, text, args.clientId);
       return Promise.race([pendingUpdate.promise, timeout]);

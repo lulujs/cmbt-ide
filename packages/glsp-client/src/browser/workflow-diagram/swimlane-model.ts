@@ -29,6 +29,7 @@ import {
    Selectable,
    WithEditableLabel
 } from '@eclipse-glsp/client';
+import { Deletable } from 'sprotty';
 
 /**
  * 泳道方向类型
@@ -41,7 +42,7 @@ export type SwimlaneOrientation = 'horizontal' | 'vertical';
  * Swimlane node - container that can hold other nodes
  * 需求 3.1: 创建一个可容纳节点的泳道容器
  */
-export class SwimlaneNode extends RectangularNode implements WithEditableLabel, ArgsAware {
+export class SwimlaneNode extends RectangularNode implements WithEditableLabel, ArgsAware, Deletable {
    static readonly DEFAULT_WIDTH = 400;
    static readonly DEFAULT_HEIGHT = 300;
    static readonly HEADER_HEIGHT = 30;
@@ -114,8 +115,8 @@ export class SwimlaneNode extends RectangularNode implements WithEditableLabel, 
  * Swimlane header compartment - displays swimlane name
  */
 export class SwimlaneHeaderCompartment extends GCompartment implements Hoverable, Selectable {
-   hoverFeedback: boolean = false;
-   selected: boolean = false;
+   hoverFeedback = false;
+   selected = false;
 
    static is(element?: GModelElement): element is SwimlaneHeaderCompartment {
       return !!element && element.type === SWIMLANE_HEADER_TYPE;
@@ -128,8 +129,8 @@ export class SwimlaneHeaderCompartment extends GCompartment implements Hoverable
  * 需求 3.2: 将节点归属到该泳道
  */
 export class SwimlaneContentCompartment extends GCompartment implements Hoverable, Selectable {
-   hoverFeedback: boolean = false;
-   selected: boolean = false;
+   hoverFeedback = false;
+   selected = false;
 
    /**
     * 检查点是否在内容区域内

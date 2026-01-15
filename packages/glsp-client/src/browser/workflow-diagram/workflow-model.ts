@@ -36,13 +36,14 @@ import {
    Selectable,
    WithEditableLabel
 } from '@eclipse-glsp/client';
+import { Deletable } from 'sprotty';
 import { findElementBy } from './swimlane-model';
 
 /**
  * 工作流程节点基类
  * Base class for workflow nodes
  */
-abstract class BaseWorkflowNode extends RectangularNode implements WithEditableLabel, ArgsAware {
+abstract class BaseWorkflowNode extends RectangularNode implements WithEditableLabel, ArgsAware, Deletable {
    args?: Args;
 
    get nodeType(): string | undefined {
@@ -157,7 +158,7 @@ export class WorkflowApiNode extends BaseWorkflowNode {
 }
 
 // ============= 工作流程边 =============
-export class WorkflowEdge extends GEdge implements ArgsAware {
+export class WorkflowEdge extends GEdge implements ArgsAware, Deletable {
    override args?: Args;
 
    get edgeValue(): string | undefined {
@@ -199,8 +200,8 @@ export class WorkflowNodeLabel extends GLabel implements EditableLabel {
 
 // ============= 工作流程边标签 =============
 export class WorkflowEdgeLabel extends GLabel implements Hoverable, Selectable {
-   hoverFeedback: boolean = false;
-   override selected: boolean = false;
+   hoverFeedback = false;
+   override selected = false;
 
    static is(element?: GModelElement): element is WorkflowEdgeLabel {
       return !!element && element.type === WORKFLOW_EDGE_LABEL_TYPE;

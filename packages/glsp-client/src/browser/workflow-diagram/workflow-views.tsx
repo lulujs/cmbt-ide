@@ -67,7 +67,7 @@ export class WorkflowBeginNodeView extends ShapeView {
       const radius = Math.min(node.size.width, node.size.height) / 2;
       const vnode: any = (
          <g class-workflow-node={true} class-begin-node={true} class-selected={node.selected} class-mouseover={node.hoverFeedback}>
-            <circle cx={radius} cy={radius} r={radius} class-node-circle={true} style={{ fill: '#4CAF50', stroke: '#388E3C' }} />
+            <circle cx={radius} cy={radius} r={radius} class-node-circle={true} style={{ fill: '#FFF2CC', stroke: '#D6B656' }} />
             {context.renderChildren(node) as ReactNode}
          </g>
       );
@@ -88,7 +88,7 @@ export class WorkflowEndNodeView extends ShapeView {
       const radius = Math.min(node.size.width, node.size.height) / 2;
       const vnode: any = (
          <g class-workflow-node={true} class-end-node={true} class-selected={node.selected} class-mouseover={node.hoverFeedback}>
-            <circle cx={radius} cy={radius} r={radius} class-node-circle={true} style={{ fill: '#F44336', stroke: '#D32F2F' }} />
+            <circle cx={radius} cy={radius} r={radius} class-node-circle={true} style={{ fill: '#FFF2CC"', stroke: '#D6B656' }} />
             <circle cx={radius} cy={radius} r={radius - 5} class-node-inner-circle={true} style={{ fill: '#D32F2F' }} />
             {context.renderChildren(node) as ReactNode}
          </g>

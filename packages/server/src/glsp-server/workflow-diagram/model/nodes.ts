@@ -58,6 +58,40 @@ function createNodeHeader(text: string, containerId: string, labelType = WORKFLO
 }
 
 /**
+ * 计算文本所需的宽度
+ * Calculate required width for text
+ */
+function calculateTextWidth(text: string, fontSize = 12): number {
+   // 估算字符宽度：中文字符约为字体大小，英文字符约为字体大小的0.6倍
+   let width = 0;
+   for (const char of text) {
+      // 检查是否为中文字符（Unicode范围）
+      const code = char.charCodeAt(0);
+      if (
+         (code >= 0x4e00 && code <= 0x9fff) || // CJK统一汉字
+         (code >= 0x3400 && code <= 0x4dbf) || // CJK扩展A
+         (code >= 0xf900 && code <= 0xfaff)
+      ) {
+         // CJK兼容汉字
+         width += fontSize;
+      } else {
+         width += fontSize * 0.6;
+      }
+   }
+   return width;
+}
+
+/**
+ * 计算节点的自适应大小
+ * Calculate adaptive size for node
+ */
+function calculateNodeSize(text: string, minWidth: number, minHeight: number, padding = 20): { width: number; height: number } {
+   const textWidth = calculateTextWidth(text);
+   const width = Math.max(minWidth, textWidth + padding * 2);
+   return { width, height: minHeight };
+}
+
+/**
  * 基础工作流程节点构建器
  * Base workflow node builder
  */
@@ -156,9 +190,14 @@ export class GProcessNodeBuilder extends BaseWorkflowNodeBuilder<GProcessNode> {
    set(node: ProcessNode, index: WorkflowModelIndex): this {
       this.setBaseProperties(node, index);
       this.addCssClasses('workflow-node', 'process-node');
-      this.size(120, 60);
+
+      // 计算自适应大小
+      const nodeName = node.name || '过程';
+      const size = calculateNodeSize(nodeName, 80, 60);
+      this.size(size.width, size.height);
+
       this.layout('vbox').addArgs(ArgsUtil.cornerRadius(5));
-      this.add(createNodeHeader(node.name || '过程', this.proxy.id));
+      this.add(createNodeHeader(nodeName, this.proxy.id));
       return this;
    }
 }
@@ -196,9 +235,14 @@ export class GDecisionTableNodeBuilder extends BaseWorkflowNodeBuilder<GDecision
    set(node: DecisionTableNode, index: WorkflowModelIndex): this {
       this.setBaseProperties(node, index);
       this.addCssClasses('workflow-node', 'decision-table-node');
-      this.size(200, 120);
+
+      // 计算自适应大小
+      const nodeName = node.name || '决策表';
+      const size = calculateNodeSize(nodeName, 120, 80);
+      this.size(size.width, size.height);
+
       this.layout('vbox').addArgs(ArgsUtil.cornerRadius(5));
-      this.add(createNodeHeader(node.name || '决策表', this.proxy.id));
+      this.add(createNodeHeader(nodeName, this.proxy.id));
 
       // 添加表格预览区域
       const tablePreview = GCompartment.builder()
@@ -227,9 +271,14 @@ export class GSubprocessNodeBuilder extends BaseWorkflowNodeBuilder<GSubprocessN
    set(node: SubprocessNode, index: WorkflowModelIndex): this {
       this.setBaseProperties(node, index);
       this.addCssClasses('workflow-node', 'subprocess-node');
-      this.size(140, 80);
+
+      // 计算自适应大小
+      const nodeName = node.name || '子流程';
+      const size = calculateNodeSize(nodeName, 100, 60);
+      this.size(size.width, size.height);
+
       this.layout('vbox').addArgs(ArgsUtil.cornerRadius(5));
-      this.add(createNodeHeader(node.name || '子流程', this.proxy.id));
+      this.add(createNodeHeader(nodeName, this.proxy.id));
       if (node.referencePath) {
          this.addArg(WORKFLOW_REFERENCE_PATH_ARG, node.referencePath);
       }
@@ -250,9 +299,14 @@ export class GConcurrentNodeBuilder extends BaseWorkflowNodeBuilder<GConcurrentN
    set(node: ConcurrentNode, index: WorkflowModelIndex): this {
       this.setBaseProperties(node, index);
       this.addCssClasses('workflow-node', 'concurrent-node');
-      this.size(160, 100);
+
+      // 计算自适应大小
+      const nodeName = node.name || '并发';
+      const size = calculateNodeSize(nodeName, 100, 60);
+      this.size(size.width, size.height);
+
       this.layout('vbox').addArgs(ArgsUtil.cornerRadius(5));
-      this.add(createNodeHeader(node.name || '并发', this.proxy.id));
+      this.add(createNodeHeader(nodeName, this.proxy.id));
       return this;
    }
 }
@@ -270,9 +324,14 @@ export class GAutoNodeBuilder extends BaseWorkflowNodeBuilder<GAutoNode> {
    set(node: AutoNode, index: WorkflowModelIndex): this {
       this.setBaseProperties(node, index);
       this.addCssClasses('workflow-node', 'auto-node');
-      this.size(120, 60);
+
+      // 计算自适应大小
+      const nodeName = node.name || '自动化';
+      const size = calculateNodeSize(nodeName, 80, 60);
+      this.size(size.width, size.height);
+
       this.layout('vbox').addArgs(ArgsUtil.cornerRadius(5));
-      this.add(createNodeHeader(node.name || '自动化', this.proxy.id));
+      this.add(createNodeHeader(nodeName, this.proxy.id));
       return this;
    }
 }
@@ -290,9 +349,14 @@ export class GApiNodeBuilder extends BaseWorkflowNodeBuilder<GApiNode> {
    set(node: ApiNode, index: WorkflowModelIndex): this {
       this.setBaseProperties(node, index);
       this.addCssClasses('workflow-node', 'api-node');
-      this.size(120, 60);
+
+      // 计算自适应大小
+      const nodeName = node.name || 'API';
+      const size = calculateNodeSize(nodeName, 80, 60);
+      this.size(size.width, size.height);
+
       this.layout('vbox').addArgs(ArgsUtil.cornerRadius(5));
-      this.add(createNodeHeader(node.name || 'API', this.proxy.id));
+      this.add(createNodeHeader(nodeName, this.proxy.id));
       return this;
    }
 }

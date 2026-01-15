@@ -2,8 +2,9 @@
  * Copyright (c) 2024 CrossBreeze.
  ********************************************************************************/
 import { WORKFLOW_EDGE_TYPE } from '@crossmodel/protocol';
-import { Command, CreateEdgeOperation, JsonOperationHandler, MaybePromise } from '@eclipse-glsp/server';
-import { injectable } from 'inversify';
+import { ActionDispatcher, Command, CreateEdgeOperation, JsonCreateEdgeOperationHandler, SelectAction } from '@eclipse-glsp/server';
+import { inject, injectable } from 'inversify';
+import { WorkflowEdge } from '../../../language-server/generated/ast.js';
 import { CrossModelCommand } from '../../common/cross-model-command.js';
 import { WorkflowModelState } from '../model/workflow-model-state.js';
 
@@ -13,40 +14,53 @@ import { WorkflowModelState } from '../model/workflow-model-state.js';
  * 需求 8.2: 提供可视化的流程图编辑器
  */
 @injectable()
-export class WorkflowDiagramCreateEdgeOperationHandler extends JsonOperationHandler {
-   override operationType = CreateEdgeOperation.KIND;
+export class WorkflowDiagramCreateEdgeOperationHandler extends JsonCreateEdgeOperationHandler {
+   override label = 'Workflow Edge';
+   elementTypeIds = [WORKFLOW_EDGE_TYPE];
 
    declare protected modelState: WorkflowModelState;
+   @inject(ActionDispatcher) protected actionDispatcher: ActionDispatcher;
 
-   override createCommand(operation: CreateEdgeOperation): MaybePromise<Command | undefined> {
-      if (operation.elementTypeId !== WORKFLOW_EDGE_TYPE) {
-         return undefined;
-      }
+   createCommand(operation: CreateEdgeOperation): Command {
+      return new CrossModelCommand(this.modelState, () => this.createEdge(operation));
+   }
 
-      const workflowModel = this.modelState.workflowModel;
-      if (!workflowModel) {
-         return undefined;
-      }
-
+   protected async createEdge(operation: CreateEdgeOperation): Promise<void> {
       const sourceNode = this.modelState.index.findWorkflowNode(operation.sourceElementId);
       const targetNode = this.modelState.index.findWorkflowNode(operation.targetElementId);
 
       if (!sourceNode || !targetNode) {
-         return undefined;
+         return;
       }
 
-      return new CrossModelCommand(this.modelState, () => this.createEdge(sourceNode.id!, targetNode.id!));
-   }
+      const workflowModel = this.modelState.workflowModel;
+      if (!workflowModel) {
+         return;
+      }
 
-   protected createEdge(sourceId: string, targetId: string): void {
+      // 创建边对象
       const edgeId = this.generateEdgeId();
-      const edgeText = this.generateEdgeDSL(edgeId, sourceId, targetId);
+      const edge: WorkflowEdge = {
+         $type: 'WorkflowEdge',
+         $container: workflowModel,
+         id: edgeId,
+         source: {
+            ref: sourceNode,
+            $refText: sourceNode.id || ''
+         },
+         target: {
+            ref: targetNode,
+            $refText: targetNode.id || ''
+         },
+         automationActions: [],
+         testData: []
+      };
 
-      // 更新语义模型
-      const currentText = this.modelState.semanticText();
-      const updatedText = this.insertEdgeIntoModel(currentText, edgeText);
+      // 添加到模型
+      workflowModel.edges.push(edge);
 
-      this.modelState.updateSourceModel({ text: updatedText });
+      // 选中新创建的边
+      this.actionDispatcher.dispatchAfterNextUpdate(SelectAction.create({ selectedElementsIDs: [this.modelState.index.createId(edge)] }));
    }
 
    /**
@@ -56,44 +70,5 @@ export class WorkflowDiagramCreateEdgeOperationHandler extends JsonOperationHand
    private generateEdgeId(): string {
       const timestamp = Date.now();
       return `edge_${timestamp}`;
-   }
-
-   /**
-    * 生成边DSL文本
-    * Generate edge DSL text
-    */
-   private generateEdgeDSL(edgeId: string, sourceId: string, targetId: string): string {
-      let dsl = `    edge ${edgeId} {\n`;
-      dsl += `        source: ${sourceId}\n`;
-      dsl += `        target: ${targetId}\n`;
-      dsl += `    }\n`;
-      return dsl;
-   }
-
-   /**
-    * 将边插入到模型中
-    * Insert edge into model
-    */
-   private insertEdgeIntoModel(currentText: string, edgeText: string): string {
-      // 查找edges块的结束位置
-      const edgesEndPattern = /(\s*edges\s*\{[\s\S]*?)(\s*\}\s*(?:swimlanes|\}))/;
-      const match = currentText.match(edgesEndPattern);
-
-      if (match) {
-         const insertPosition = match.index! + match[1].length;
-         return currentText.slice(0, insertPosition) + '\n' + edgeText + currentText.slice(insertPosition);
-      }
-
-      // 如果没有找到edges块，在nodes块后添加
-      const nodesEndPattern = /(\s*nodes\s*\{[\s\S]*?\}\s*)/;
-      const nodesMatch = currentText.match(nodesEndPattern);
-
-      if (nodesMatch) {
-         const insertPosition = nodesMatch.index! + nodesMatch[1].length;
-         const edgesBlock = `\n    edges {\n${edgeText}    }\n`;
-         return currentText.slice(0, insertPosition) + edgesBlock + currentText.slice(insertPosition);
-      }
-
-      return currentText;
    }
 }

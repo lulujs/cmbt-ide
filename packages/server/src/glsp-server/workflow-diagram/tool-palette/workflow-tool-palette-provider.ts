@@ -158,7 +158,7 @@ export class WorkflowToolPaletteProvider extends ToolPaletteItemProvider {
                   label: '流程连接',
                   sortString: 'A',
                   icon: 'arrow-right',
-                  actions: [TriggerEdgeCreationAction.create(WORKFLOW_EDGE_TYPE)]
+                  actions: [TriggerEdgeCreationAction.create(WORKFLOW_EDGE_TYPE, { args: { type: 'create' } })]
                }
             ]
          }

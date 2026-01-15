@@ -13,8 +13,21 @@ import {
    WORKFLOW_PROCESS_NODE_TYPE,
    WORKFLOW_SUBPROCESS_NODE_TYPE
 } from '@crossmodel/protocol';
-import { Command, CreateNodeOperation, JsonOperationHandler, MaybePromise } from '@eclipse-glsp/server';
+import { Command, CreateNodeOperation, JsonCreateNodeOperationHandler, MaybePromise, Point } from '@eclipse-glsp/server';
 import { injectable } from 'inversify';
+import {
+   ApiNode,
+   AutoNode,
+   BeginNode,
+   ConcurrentNode,
+   DecisionNode,
+   DecisionTableNode,
+   EndNode,
+   ExceptionNode,
+   ProcessNode,
+   SubprocessNode,
+   WorkflowNode
+} from '../../../language-server/generated/ast.js';
 import { CrossModelCommand } from '../../common/cross-model-command.js';
 import { WorkflowModelState } from '../model/workflow-model-state.js';
 
@@ -24,8 +37,20 @@ import { WorkflowModelState } from '../model/workflow-model-state.js';
  * 需求 8.2: 提供可视化的流程图编辑器
  */
 @injectable()
-export class WorkflowDiagramCreateNodeOperationHandler extends JsonOperationHandler {
-   override operationType = CreateNodeOperation.KIND;
+export class WorkflowDiagramCreateNodeOperationHandler extends JsonCreateNodeOperationHandler {
+   override label = 'Create Workflow Node';
+   elementTypeIds = [
+      WORKFLOW_BEGIN_NODE_TYPE,
+      WORKFLOW_END_NODE_TYPE,
+      WORKFLOW_EXCEPTION_NODE_TYPE,
+      WORKFLOW_PROCESS_NODE_TYPE,
+      WORKFLOW_DECISION_NODE_TYPE,
+      WORKFLOW_DECISION_TABLE_NODE_TYPE,
+      WORKFLOW_SUBPROCESS_NODE_TYPE,
+      WORKFLOW_CONCURRENT_NODE_TYPE,
+      WORKFLOW_AUTO_NODE_TYPE,
+      WORKFLOW_API_NODE_TYPE
+   ];
 
    declare protected modelState: WorkflowModelState;
 
@@ -35,34 +60,73 @@ export class WorkflowDiagramCreateNodeOperationHandler extends JsonOperationHand
          return undefined;
       }
 
-      const nodeType = this.getNodeTypeFromElementType(operation.elementTypeId);
-      if (!nodeType) {
-         return undefined;
-      }
-
-      return new CrossModelCommand(this.modelState, () => this.createNode(operation, nodeType));
+      return new CrossModelCommand(this.modelState, () => this.createNode(operation));
    }
 
-   protected createNode(operation: CreateNodeOperation, nodeType: string): void {
-      const nodeId = this.generateNodeId(nodeType);
-      const nodeName = this.getDefaultNodeName(nodeType);
+   protected createNode(operation: CreateNodeOperation): void {
+      const workflowModel = this.modelState.workflowModel;
+      if (!workflowModel) {
+         return;
+      }
 
-      // 创建新节点的DSL文本
-      const position = operation.location || { x: 100, y: 100 };
-      const nodeText = this.generateNodeDSL(nodeType, nodeId, nodeName, position);
+      const location = this.getLocation(operation) ?? Point.ORIGIN;
+      const node = this.createNodeByType(operation.elementTypeId, location);
 
-      // 更新语义模型
-      const currentText = this.modelState.semanticText();
-      const updatedText = this.insertNodeIntoModel(currentText, nodeText);
-
-      this.modelState.updateSourceModel({ text: updatedText });
+      if (node) {
+         workflowModel.nodes.push(node);
+      } else {
+         console.log('[WorkflowDiagramCreateNodeOperationHandler] Failed to create node');
+      }
    }
 
    /**
-    * 从元素类型ID获取节点类型
-    * Get node type from element type ID
+    * 根据元素类型创建对应的节点
+    * Create node by element type
     */
-   private getNodeTypeFromElementType(elementTypeId: string): string | undefined {
+   protected createNodeByType(elementTypeId: string, location: Point): WorkflowNode | undefined {
+      const workflowModel = this.modelState.workflowModel;
+      if (!workflowModel) {
+         return undefined;
+      }
+
+      const baseId = this.generateNodeId(elementTypeId);
+      const documentUri = this.modelState.semanticRoot.$document?.uri;
+      if (!documentUri) {
+         return undefined;
+      }
+      const id = this.modelState.idProvider.findNextLocalId('WorkflowNode', baseId, documentUri);
+
+      switch (elementTypeId) {
+         case WORKFLOW_BEGIN_NODE_TYPE:
+            return this.createBeginNode(id, location, workflowModel);
+         case WORKFLOW_END_NODE_TYPE:
+            return this.createEndNode(id, location, workflowModel);
+         case WORKFLOW_EXCEPTION_NODE_TYPE:
+            return this.createExceptionNode(id, location, workflowModel);
+         case WORKFLOW_PROCESS_NODE_TYPE:
+            return this.createProcessNode(id, location, workflowModel);
+         case WORKFLOW_DECISION_NODE_TYPE:
+            return this.createDecisionNode(id, location, workflowModel);
+         case WORKFLOW_DECISION_TABLE_NODE_TYPE:
+            return this.createDecisionTableNode(id, location, workflowModel);
+         case WORKFLOW_SUBPROCESS_NODE_TYPE:
+            return this.createSubprocessNode(id, location, workflowModel);
+         case WORKFLOW_CONCURRENT_NODE_TYPE:
+            return this.createConcurrentNode(id, location, workflowModel);
+         case WORKFLOW_AUTO_NODE_TYPE:
+            return this.createAutoNode(id, location, workflowModel);
+         case WORKFLOW_API_NODE_TYPE:
+            return this.createApiNode(id, location, workflowModel);
+         default:
+            return undefined;
+      }
+   }
+
+   /**
+    * 生成节点ID
+    * Generate node ID
+    */
+   protected generateNodeId(elementTypeId: string): string {
       const typeMap: Record<string, string> = {
          [WORKFLOW_BEGIN_NODE_TYPE]: 'begin',
          [WORKFLOW_END_NODE_TYPE]: 'end',
@@ -75,86 +139,181 @@ export class WorkflowDiagramCreateNodeOperationHandler extends JsonOperationHand
          [WORKFLOW_AUTO_NODE_TYPE]: 'auto',
          [WORKFLOW_API_NODE_TYPE]: 'api'
       };
-      return typeMap[elementTypeId];
+      const nodeType = typeMap[elementTypeId] || 'node';
+      return `${nodeType}_${Date.now()}`;
    }
 
    /**
-    * 获取默认节点名称
-    * Get default node name
+    * 创建位置对象
+    * Create position object
     */
-   private getDefaultNodeName(nodeType: string): string {
-      const nameMap: Record<string, string> = {
-         begin: '开始',
-         end: '结束',
-         exception: '异常',
-         process: '过程',
-         decision: '分支',
-         decision_table: '决策表',
-         subprocess: '子流程',
-         concurrent: '并发',
-         auto: '自动化',
-         api: 'API'
+   protected createPosition(location: Point, container: any): any {
+      return {
+         $type: 'Position',
+         $container: container,
+         x: Math.round(location.x),
+         y: Math.round(location.y)
       };
-      return nameMap[nodeType] || '节点';
    }
 
-   /**
-    * 生成节点ID
-    * Generate node ID
-    */
-   private generateNodeId(nodeType: string): string {
-      const timestamp = Date.now();
-      return `${nodeType}_${timestamp}`;
+   protected createBeginNode(id: string, location: Point, container: any): BeginNode {
+      const node: any = {
+         $type: 'BeginNode',
+         $container: container,
+         id,
+         name: '开始',
+         nodeType: 'begin',
+         automationActions: [],
+         testData: []
+      };
+      node.position = this.createPosition(location, node);
+      return node;
    }
 
-   /**
-    * 生成节点DSL文本
-    * Generate node DSL text
-    */
-   private generateNodeDSL(nodeType: string, nodeId: string, nodeName: string, position: { x: number; y: number }): string {
-      let dsl = `    ${nodeType} ${nodeId} {\n`;
-      dsl += `        name: "${nodeName}"\n`;
-      dsl += `        position: { x: ${Math.round(position.x)}, y: ${Math.round(position.y)} }\n`;
-
-      // 为特定节点类型添加额外属性
-      if (nodeType === 'end' || nodeType === 'exception') {
-         dsl += `        expectedValue: ""\n`;
-      }
-      if (nodeType === 'decision') {
-         dsl += `        branches: [\n`;
-         dsl += `            { id: "branch_1", value: "是", isDefault: true }\n`;
-         dsl += `            { id: "branch_2", value: "否" }\n`;
-         dsl += `        ]\n`;
-      }
-
-      dsl += `    }\n`;
-      return dsl;
+   protected createEndNode(id: string, location: Point, container: any): EndNode {
+      const node: any = {
+         $type: 'EndNode',
+         $container: container,
+         id,
+         name: '结束',
+         nodeType: 'end',
+         expectedValue: '',
+         automationActions: [],
+         testData: []
+      };
+      node.position = this.createPosition(location, node);
+      return node;
    }
 
-   /**
-    * 将节点插入到模型中
-    * Insert node into model
-    */
-   private insertNodeIntoModel(currentText: string, nodeText: string): string {
-      // 查找nodes块的结束位置
-      const nodesEndPattern = /(\s*nodes\s*\{[\s\S]*?)(\s*\}\s*(?:edges|swimlanes|\}))/;
-      const match = currentText.match(nodesEndPattern);
+   protected createExceptionNode(id: string, location: Point, container: any): ExceptionNode {
+      const node: any = {
+         $type: 'ExceptionNode',
+         $container: container,
+         id,
+         name: '异常',
+         nodeType: 'exception',
+         expectedValue: '',
+         automationActions: [],
+         testData: []
+      };
+      node.position = this.createPosition(location, node);
+      return node;
+   }
 
-      if (match) {
-         const insertPosition = match.index! + match[1].length;
-         return currentText.slice(0, insertPosition) + '\n' + nodeText + currentText.slice(insertPosition);
-      }
+   protected createProcessNode(id: string, location: Point, container: any): ProcessNode {
+      const node: any = {
+         $type: 'ProcessNode',
+         $container: container,
+         id,
+         name: '过程',
+         nodeType: 'process',
+         automationActions: [],
+         testData: []
+      };
+      node.position = this.createPosition(location, node);
+      return node;
+   }
 
-      // 如果没有找到nodes块，在workflow块末尾添加
-      const workflowEndPattern = /(\s*workflow\s+\w+\s*\{[\s\S]*?)(\s*\})\s*$/;
-      const workflowMatch = currentText.match(workflowEndPattern);
+   protected createDecisionNode(id: string, location: Point, container: any): DecisionNode {
+      const node: any = {
+         $type: 'DecisionNode',
+         $container: container,
+         id,
+         name: '分支',
+         nodeType: 'decision',
+         branches: [],
+         automationActions: [],
+         testData: []
+      };
+      node.position = this.createPosition(location, node);
 
-      if (workflowMatch) {
-         const insertPosition = workflowMatch.index! + workflowMatch[1].length;
-         const nodesBlock = `\n    nodes {\n${nodeText}    }\n`;
-         return currentText.slice(0, insertPosition) + nodesBlock + currentText.slice(insertPosition);
-      }
+      // 添加分支条件
+      node.branches.push({
+         $type: 'BranchCondition',
+         $container: node,
+         id: 'branch_1',
+         value: '是',
+         isDefault: true
+      });
+      node.branches.push({
+         $type: 'BranchCondition',
+         $container: node,
+         id: 'branch_2',
+         value: '否',
+         isDefault: false
+      });
 
-      return currentText;
+      return node;
+   }
+
+   protected createDecisionTableNode(id: string, location: Point, container: any): DecisionTableNode {
+      const node: any = {
+         $type: 'DecisionTableNode',
+         $container: container,
+         id,
+         name: '决策表',
+         nodeType: 'decision_table',
+         automationActions: [],
+         testData: []
+      };
+      node.position = this.createPosition(location, node);
+      return node;
+   }
+
+   protected createSubprocessNode(id: string, location: Point, container: any): SubprocessNode {
+      const node: any = {
+         $type: 'SubprocessNode',
+         $container: container,
+         id,
+         name: '子流程',
+         nodeType: 'subprocess',
+         automationActions: [],
+         testData: []
+      };
+      node.position = this.createPosition(location, node);
+      return node;
+   }
+
+   protected createConcurrentNode(id: string, location: Point, container: any): ConcurrentNode {
+      const node: any = {
+         $type: 'ConcurrentNode',
+         $container: container,
+         id,
+         name: '并发',
+         nodeType: 'concurrent',
+         parallelBranches: [],
+         automationActions: [],
+         testData: []
+      };
+      node.position = this.createPosition(location, node);
+      return node;
+   }
+
+   protected createAutoNode(id: string, location: Point, container: any): AutoNode {
+      const node: any = {
+         $type: 'AutoNode',
+         $container: container,
+         id,
+         name: '自动化',
+         nodeType: 'auto',
+         automationActions: [],
+         testData: []
+      };
+      node.position = this.createPosition(location, node);
+      return node;
+   }
+
+   protected createApiNode(id: string, location: Point, container: any): ApiNode {
+      const node: any = {
+         $type: 'ApiNode',
+         $container: container,
+         id,
+         name: 'API',
+         nodeType: 'api',
+         automationActions: [],
+         testData: []
+      };
+      node.position = this.createPosition(location, node);
+      return node;
    }
 }

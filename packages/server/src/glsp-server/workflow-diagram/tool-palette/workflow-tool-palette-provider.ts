@@ -33,12 +33,11 @@ import { injectable } from 'inversify';
 @injectable()
 export class WorkflowToolPaletteProvider extends ToolPaletteItemProvider {
    override getItems(_args?: Args): MaybePromise<PaletteItem[]> {
-      return [
-         // 基础节点组
+      const items = [
          {
             id: 'workflow-basic-nodes',
             label: '基础节点',
-            sortString: 'A',
+            sortString: 'B',
             actions: [],
             children: [
                {
@@ -75,7 +74,7 @@ export class WorkflowToolPaletteProvider extends ToolPaletteItemProvider {
          {
             id: 'workflow-decision-nodes',
             label: '分支节点',
-            sortString: 'B',
+            sortString: 'C',
             actions: [],
             children: [
                {
@@ -98,7 +97,7 @@ export class WorkflowToolPaletteProvider extends ToolPaletteItemProvider {
          {
             id: 'workflow-advanced-nodes',
             label: '高级节点',
-            sortString: 'C',
+            sortString: 'D',
             actions: [],
             children: [
                {
@@ -135,7 +134,7 @@ export class WorkflowToolPaletteProvider extends ToolPaletteItemProvider {
          {
             id: 'workflow-containers',
             label: '容器',
-            sortString: 'D',
+            sortString: 'E',
             actions: [],
             children: [
                {
@@ -151,7 +150,7 @@ export class WorkflowToolPaletteProvider extends ToolPaletteItemProvider {
          {
             id: 'workflow-edges',
             label: '连接',
-            sortString: 'E',
+            sortString: 'F',
             actions: [],
             children: [
                {
@@ -164,5 +163,6 @@ export class WorkflowToolPaletteProvider extends ToolPaletteItemProvider {
             ]
          }
       ];
+      return items;
    }
 }

@@ -51,6 +51,7 @@ import {
    ConcurrentStartNode
 } from './concurrent-model';
 import { ConcurrentBranchEdgeView, ConcurrentEndNodeView, ConcurrentLabelView, ConcurrentStartNodeView } from './concurrent-views';
+import { workflowNodeCreationModule } from './node-creation-tool/workflow-node-creation-tool-module';
 import { SwimlaneContentCompartment, SwimlaneHeaderCompartment, SwimlaneLabel, SwimlaneNode } from './swimlane-model';
 import { SwimlaneContentView, SwimlaneHeaderView, SwimlaneLabelView, SwimlaneNodeView } from './swimlane-views';
 import {
@@ -94,7 +95,14 @@ export class WorkflowDiagramConfiguration extends GLSPDiagramConfiguration {
    diagramType: string = WorkflowDiagramLanguage.diagramType;
 
    configureContainer(container: Container, ...containerConfiguration: ContainerConfiguration): Container {
-      return initializeDiagramContainer(container, ...containerConfiguration, libAvoidModule, gridModule, workflowDiagramModule);
+      return initializeDiagramContainer(
+         container,
+         ...containerConfiguration,
+         libAvoidModule,
+         gridModule,
+         workflowNodeCreationModule,
+         workflowDiagramModule
+      );
    }
 }
 

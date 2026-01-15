@@ -4,6 +4,8 @@
 
 export * from './concurrent-model';
 export * from './concurrent-views';
+export * from './node-creation-tool/workflow-node-creation-tool';
+export * from './node-creation-tool/workflow-node-creation-tool-module';
 export * from './reference-node-context-menu';
 export * from './reference-node-views';
 export * from './swimlane-model';

@@ -50,7 +50,17 @@ export class WorkflowGraphView extends GGraphView {
             <g transform={transform}>{context.renderChildren(model, { edgeRouting }) as ReactNode}</g>
          </svg>
       );
+      // 应用网格样式和渲染样式
+      if (graph.data) {
+         graph.data.style = { ...graph.data.style, ...this.getGridStyle(model, context), ...this.renderStyle(context) };
+      }
       return graph;
+   }
+
+   protected renderStyle(context: RenderingContext): any {
+      return {
+         height: '100%'
+      };
    }
 }
 
